@@ -56,7 +56,7 @@ import java.util.concurrent.TimeUnit
  */
 class Camera2BasicFragment : Fragment() {
     private var sharedPreferences: SharedPreferences? = null
-    private val statistiques = ArrayList<Exercice>()
+    private val rawStats = ArrayList<Exercice>()
 
     private val lock = Any()
     private var runClassifier = false
@@ -895,6 +895,16 @@ class Camera2BasicFragment : Fragment() {
             }
         }
 
+        drawView!!.exercice!!.updateTimeStamp()
+
+        drawView!!.exercice!!.movementList.forEach() {
+            it.BodyPart0_X = drawView!!.mDrawPoint[it.bodyPart0_Index].x
+            it.BodyPart0_Y = drawView!!.mDrawPoint[it.bodyPart0_Index].y
+            it.BodyPart1_X = drawView!!.mDrawPoint[it.bodyPart1_Index].x
+            it.BodyPart1_Y = drawView!!.mDrawPoint[it.bodyPart1_Index].y
+            it.BodyPart2_X = drawView!!.mDrawPoint[it.bodyPart2_Index].x
+            it.BodyPart2_Y = drawView!!.mDrawPoint[it.bodyPart2_Index].y
+        }
 
         //if not initialized yet
         if (drawView!!.exercice?.isInit == false) {
@@ -941,8 +951,9 @@ class Camera2BasicFragment : Fragment() {
         }
         // Done -> exit exercise
         else if (drawView!!.exercice!!.exitStateReached && !isClosing ) {
-
             isClosing = true
+
+            adjustStats(rawStats)
 
             val activity = activity
 
@@ -985,9 +996,44 @@ class Camera2BasicFragment : Fragment() {
 
             retroaction(drawView!!.exercice!!)
 
-            statistiques.add(drawView!!.exercice!!.copy())
+            rawStats.add(drawView!!.exercice!!.copy())
         }
     }
+
+    fun adjustStats(s: ArrayList<Exercice>) {
+        var cleanStats = ExerciceStatistique()
+
+        // initialize the movements list
+        var tmpMovStats = MovementStatistics()
+        drawView!!.exercice!!.movementList.forEach() {
+            cleanStats.movements.add(tmpMovStats)
+        }
+
+        // Add all infos
+        s.forEachIndexed() { id, e ->
+            cleanStats.timeStamp.add(e.timeStamp)
+            cleanStats.numberOfRepetition.add(e.numberOfRepetition)
+            cleanStats.speedOfRepetition.add(e.mouvementSpeedTime)
+            cleanStats.holdTime.add(e.holdTime)
+            cleanStats.notMovingInitList.add(e.notMovingInitList)
+
+            for (i in 0..e.movementList.count()-1) {
+                cleanStats.movements[i].angleAvg.add(e.movementList[i].angleAvg)
+                cleanStats.movements[i].position0_X.add(e.movementList[i].BodyPart0_X)
+                cleanStats.movements[i].position0_Y.add(e.movementList[i].BodyPart0_Y)
+                cleanStats.movements[i].position1_X.add(e.movementList[i].BodyPart1_X)
+                cleanStats.movements[i].position1_Y.add(e.movementList[i].BodyPart1_Y)
+                cleanStats.movements[i].position2_X.add(e.movementList[i].BodyPart2_X)
+                cleanStats.movements[i].position2_Y.add(e.movementList[i].BodyPart2_Y)
+            }
+        }
+
+        var cpt = s.count()
+        cleanStats.initStartTime = s[cpt-1].initStartTimer
+        cleanStats.exerciceStartTime = s[cpt-1].exerciceStartTime
+        cleanStats.exerciceEndTime = s[cpt-1].exerciceEndTime
+    }
+
 
     private fun showDebugUI(text: String) {
         val activity = activity

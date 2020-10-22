@@ -14,10 +14,12 @@ class Exercice() : Parcelable {
     var mouvementStartTimer: Long? = null
     var mouvementSpeedTime: Float? = null
 
+    var timeStamp: Long? = null
+
     var numberOfRepetitionToDo: Int? = null
     var numberOfRepetition: Int = 0
     var exitStateReached: Boolean = false
-    var numberOfRepetitionReachedTimer: Long? = null
+    //var numberOfRepetitionReachedTimer: Long? = null
 
     var movementList = ArrayList<Movement>()
 
@@ -25,18 +27,18 @@ class Exercice() : Parcelable {
     var initList = ArrayList<ArrayList<PointF>>()
     var notMovingInitList = ArrayList<Boolean>()
     var isInit: Boolean = false
-    var initDoneTimer: Long? = null
+    var exerciceStartTime: Long? = null
     var notMovingStartTime: Long? = null
     var notMovingTimer: Int = 0
     var targetTime: Long = 4000
     var stdMax: Int = 100
+    var exerciceEndTime: Long? = null
 
     var exerciceType: ExerciceType? = null
 
     //Variable for type CHRONO
     var chronoTime: Int? = 0
     var allowedTimeForExercice: Int? = null
-    var exerciceStartTime: Long? = null
 
     //Variable for type HOLD
     var targetHoldTime: Int? = null
@@ -79,6 +81,10 @@ class Exercice() : Parcelable {
         holdingStartTime = parcel.readValue(Long::class.java.classLoader) as? Long
         currentHoldTime = parcel.readLong()
         warningCanBeDisplayed = parcel.readByte() != 0.toByte()
+    }
+
+    fun updateTimeStamp () {
+        timeStamp = System.currentTimeMillis()
     }
 
     fun initialisationVerification(drawView: DrawView) {
@@ -165,7 +171,7 @@ class Exercice() : Parcelable {
                     targetTime.toInt() / 1000 - ((currentTime - notMovingStartTime!!) / 1000).toInt()
                 if (currentTime - notMovingStartTime!! >= targetTime) {
                     isInit = true
-                    initDoneTimer = System.currentTimeMillis()
+                    exerciceStartTime = System.currentTimeMillis()
                 }
             }
         } else {
@@ -185,11 +191,6 @@ class Exercice() : Parcelable {
 
     //Verify the state for an exercice type in CHRONO
     fun exerciceVerificationChrono(drawView: DrawView) {
-        //Sets the start time of the exercice if not started
-        if (exerciceStartTime == null) {
-            exerciceStartTime = System.currentTimeMillis() / 1000
-        }
-
         movementList.forEach()
         {
 
@@ -250,15 +251,11 @@ class Exercice() : Parcelable {
         //If no time is left, then the exercice is done
         if (chronoTime!! == 0) {
             exitStateReached = true
+            exerciceEndTime = System.currentTimeMillis()
         }
     }
 
     fun exerciceVerificationHold(drawView: DrawView) {
-        //Sets the start time of the exercice if not started
-        if (exerciceStartTime == null) {
-            exerciceStartTime = System.currentTimeMillis() / 1000
-        }
-
         movementList.forEach()
         {
 
@@ -306,7 +303,7 @@ class Exercice() : Parcelable {
 
             if (((holdTime + currentHoldTime) / 1000).toInt() >= targetHoldTime!!) {
                 exitStateReached = true
-                numberOfRepetitionReachedTimer = System.currentTimeMillis()
+                exerciceEndTime = System.currentTimeMillis()
                 holdTime += currentHoldTime
             }
         }
@@ -381,7 +378,7 @@ class Exercice() : Parcelable {
         if (numberOfRepetitionToDo != null) {
             if (numberOfRepetitionToDo == numberOfRepetition) {
                 exitStateReached = true
-                numberOfRepetitionReachedTimer = System.currentTimeMillis()
+                exerciceEndTime = System.currentTimeMillis()
             }
         }
     }
@@ -579,16 +576,42 @@ class Exercice() : Parcelable {
         exercices.numberOfRepetitionToDo = numberOfRepetitionToDo
         exercices.numberOfRepetition = numberOfRepetition
         exercices.exitStateReached = exitStateReached
-        exercices.numberOfRepetitionReachedTimer = numberOfRepetitionReachedTimer
-        exercices.movementList = movementList
+        exercices.exerciceEndTime = exerciceEndTime
+
+        movementList.forEach() {
+            var tmpMovement = Movement(it.bodyPart0_Index, it.bodyPart1_Index, it.bodyPart2_Index)
+            tmpMovement.startingAngle = it.startingAngle
+            tmpMovement.endingAngle = it.endingAngle
+            tmpMovement.isAngleAntiClockWise = it.isAngleAntiClockWise
+            tmpMovement.angleAvg = it.angleAvg
+            tmpMovement.BodyPart0_X = it.BodyPart0_X
+            tmpMovement.BodyPart0_Y = it.BodyPart0_Y
+            tmpMovement.BodyPart1_X = it.BodyPart1_X
+            tmpMovement.BodyPart1_Y = it.BodyPart1_Y
+            tmpMovement.BodyPart2_X = it.BodyPart2_X
+            tmpMovement.BodyPart2_Y = it.BodyPart2_Y
+            tmpMovement.member1Length = it.member1Length
+            tmpMovement.member2Length = it.member2Length
+            tmpMovement.angleOffset = it.angleOffset
+            tmpMovement.movementState = it.movementState
+            tmpMovement.member1LengthLastFrames = it.member1LengthLastFrames
+            tmpMovement.member2LengthLastFrames = it.member2LengthLastFrames
+            tmpMovement.angleOffsetLastFrames = it.angleOffsetLastFrames
+            tmpMovement.angleValuesLastFrames = it.angleValuesLastFrames
+
+            exercices.movementList.add(tmpMovement)
+        }
+
         exercices.initList = initList
         exercices.notMovingInitList = notMovingInitList
         exercices.isInit = isInit
-        exercices.initDoneTimer = initDoneTimer
+        exercices.exerciceStartTime = exerciceStartTime
         exercices.notMovingStartTime = notMovingStartTime
         exercices.notMovingTimer = notMovingTimer
         exercices.initStartTimer = initStartTimer
         exercices.targetTime = targetTime
+        exercices.timeStamp = timeStamp
+
         return exercices
     }
 

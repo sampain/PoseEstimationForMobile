@@ -150,56 +150,60 @@ class DrawView : View {
     fun movementIndicator(canvas: Canvas) {
         this.exercice!!.movementList.forEach()
         {
-            var pX = mDrawPoint[it.bodyPart1_Index].x
-            var pY = mDrawPoint[it.bodyPart1_Index].y
+            if (mDrawPoint[it.bodyPart1_Index] != null) {
+                var pX = mDrawPoint[it.bodyPart1_Index].x
+                var pY = mDrawPoint[it.bodyPart1_Index].y
 
-            var angleDeg: Int? = null
+                var angleDeg: Int? = null
 
-            when (it.movementState) {
-                MovementState.INIT, MovementState.ENDING_ANGLE_REACHED -> {
-                    angleDeg = it.startingAngle!! + (180 - it.startingAngle!!) * 2
-                    outlinePaint.color = 0xfffc0303.toInt()
+                when (it.movementState) {
+                    MovementState.INIT, MovementState.ENDING_ANGLE_REACHED -> {
+                        angleDeg = it.startingAngle!! + (180 - it.startingAngle!!) * 2
+                        outlinePaint.color = 0xfffc0303.toInt()
+                    }
+
+                    MovementState.STARTING_ANGLE_REACHED -> {
+                        angleDeg = it.endingAngle!! + (180 - it.endingAngle!!) * 2
+                        outlinePaint.color = 0xfffc0303.toInt()
+                    }
+
+                    MovementState.WAITING_FOR_OTHER_MOVEMENT_ENDING_ANGLE -> {
+                        angleDeg = it.endingAngle!! + (180 - it.endingAngle!!) * 2
+                        outlinePaint.color = 0xff1cb833.toInt()
+                    }
+
+                    MovementState.WAITING_FOR_OTHER_MOVEMENT_STARTING_ANGLE -> {
+                        angleDeg = it.startingAngle!! + (180 - it.startingAngle!!) * 2
+                        outlinePaint.color = 0xff1cb833.toInt()
+                    }
                 }
 
-                MovementState.STARTING_ANGLE_REACHED -> {
-                    angleDeg = it.endingAngle!! + (180 - it.endingAngle!!) * 2
-                    outlinePaint.color = 0xfffc0303.toInt()
+                this.exercice!!.calculateAngleHorizontalOffset(
+                    it,
+                    this,
+                    it.bodyPart1_Index,
+                    it.bodyPart0_Index
+                )
+
+                if (it.angleOffset != null) {
+
+                    var bottom = pY.toInt()
+                    var top = bottom + it.member2Length!!
+
+                    var angleVariationRad = it.acceptableAngleVariation * PI / 180
+
+                    var left =
+                        (pX - (it.member2Length!! * kotlin.math.sin(angleVariationRad))).toInt()
+                    var right =
+                        (pX + (it.member2Length!! * kotlin.math.sin(angleVariationRad))).toInt()
+
+                    var rect = Rect(left, top, right, bottom)
+
+                    canvas.save()
+                    canvas.rotate((it.angleOffset!! + angleDeg - 90).toFloat(), pX, pY)
+                    canvas.drawRect(rect, outlinePaint)
+                    canvas.restore()
                 }
-
-                MovementState.WAITING_FOR_OTHER_MOVEMENT_ENDING_ANGLE -> {
-                    angleDeg = it.endingAngle!! + (180 - it.endingAngle!!) * 2
-                    outlinePaint.color = 0xff1cb833.toInt()
-                }
-
-                MovementState.WAITING_FOR_OTHER_MOVEMENT_STARTING_ANGLE -> {
-                    angleDeg = it.startingAngle!! + (180 - it.startingAngle!!) * 2
-                    outlinePaint.color = 0xff1cb833.toInt()
-                }
-            }
-
-            this.exercice!!.calculateAngleHorizontalOffset(
-                it,
-                this,
-                it.bodyPart1_Index,
-                it.bodyPart0_Index
-            )
-
-            if (it.angleOffset != null) {
-
-                var bottom = pY.toInt()
-                var top = bottom + it.member2Length!!
-
-                var angleVariationRad = it.acceptableAngleVariation * PI / 180
-
-                var left = (pX - (it.member2Length!! * kotlin.math.sin(angleVariationRad))).toInt()
-                var right = (pX + (it.member2Length!! * kotlin.math.sin(angleVariationRad))).toInt()
-
-                var rect = Rect(left, top, right, bottom)
-
-                canvas.save()
-                canvas.rotate((it.angleOffset!! + angleDeg - 90).toFloat(), pX, pY)
-                canvas.drawRect(rect, outlinePaint)
-                canvas.restore()
             }
         }
     }
