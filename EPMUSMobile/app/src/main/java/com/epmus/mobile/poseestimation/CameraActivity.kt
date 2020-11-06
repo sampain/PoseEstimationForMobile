@@ -50,8 +50,7 @@ class CameraActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
-        var bundle: Bundle? = intent.extras
-        var exercice = bundle!!.getSerializable("exercice")
+        val exercice: Exercice? = intent.extras?.getParcelable("exercice")
         if (null == savedInstanceState) {
             supportFragmentManager
                 .beginTransaction()

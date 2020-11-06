@@ -1,12 +1,13 @@
 package com.epmus.mobile.poseestimation
 
 import android.graphics.PointF
+import android.os.Parcel
+import android.os.Parcelable
 import android.widget.Chronometer
-import java.io.Serializable
 import java.util.ArrayList
 import kotlin.math.*
 
-class Exercice : Serializable {
+class Exercice() : Parcelable {
     // add to fun .copy() if there is a modif
     var maxExecutionTime: Float? = null
     var minExecutionTime: Float? = null
@@ -47,6 +48,38 @@ class Exercice : Serializable {
 
     //This is used to make sure that a warning cannot be spammed
     var warningCanBeDisplayed: Boolean = true
+
+    constructor(parcel: Parcel) : this() {
+        maxExecutionTime = parcel.readValue(Float::class.java.classLoader) as? Float
+        minExecutionTime = parcel.readValue(Float::class.java.classLoader) as? Float
+        mouvementStartTimer = parcel.readValue(Long::class.java.classLoader) as? Long
+        mouvementSpeedTime = parcel.readValue(Float::class.java.classLoader) as? Float
+        numberOfRepetitionToDo = parcel.readValue(Int::class.java.classLoader) as? Int
+        numberOfRepetition = parcel.readInt()
+        exitStateReached = parcel.readByte() != 0.toByte()
+        numberOfRepetitionReachedTimer = parcel.readValue(Long::class.java.classLoader) as? Long
+        movementList = parcel.readSerializable() as ArrayList<Movement>
+        initStartTimer = parcel.readValue(Long::class.java.classLoader) as? Long
+        initList = parcel.readSerializable() as ArrayList<ArrayList<PointF>>
+        notMovingInitList = parcel.readSerializable() as ArrayList<Boolean>
+        isInit = parcel.readByte() != 0.toByte()
+        initDoneTimer = parcel.readValue(Long::class.java.classLoader) as? Long
+        notMovingStartTime = parcel.readValue(Long::class.java.classLoader) as? Long
+        notMovingTimer = parcel.readInt()
+        targetTime = parcel.readLong()
+        stdMax = parcel.readInt()
+        exerciceType = parcel.readSerializable() as ExerciceType?
+        chronoTime = parcel.readValue(Int::class.java.classLoader) as? Int
+        allowedTimeForExercice = parcel.readValue(Int::class.java.classLoader) as? Int
+        exerciceStartTime = parcel.readValue(Long::class.java.classLoader) as? Long
+        targetHoldTime = parcel.readValue(Int::class.java.classLoader) as? Int
+        holdTime = parcel.readLong()
+        wasHolding = parcel.readByte() != 0.toByte()
+        isHolding = parcel.readByte() != 0.toByte()
+        holdingStartTime = parcel.readValue(Long::class.java.classLoader) as? Long
+        currentHoldTime = parcel.readLong()
+        warningCanBeDisplayed = parcel.readByte() != 0.toByte()
+    }
 
     fun initialisationVerification(drawView: DrawView) {
         //For Each body part
@@ -557,6 +590,52 @@ class Exercice : Serializable {
         exercices.initStartTimer = initStartTimer
         exercices.targetTime = targetTime
         return exercices
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeValue(maxExecutionTime)
+        parcel.writeValue(minExecutionTime)
+        parcel.writeValue(mouvementStartTimer)
+        parcel.writeValue(mouvementSpeedTime)
+        parcel.writeValue(numberOfRepetitionToDo)
+        parcel.writeInt(numberOfRepetition)
+        parcel.writeByte(if (exitStateReached) 1 else 0)
+        parcel.writeValue(numberOfRepetitionReachedTimer)
+        parcel.writeSerializable(movementList)
+        parcel.writeValue(initStartTimer)
+        parcel.writeSerializable(initList)
+        parcel.writeSerializable(notMovingInitList)
+        parcel.writeByte(if (isInit) 1 else 0)
+        parcel.writeValue(initDoneTimer)
+        parcel.writeValue(notMovingStartTime)
+        parcel.writeInt(notMovingTimer)
+        parcel.writeLong(targetTime)
+        parcel.writeInt(stdMax)
+        parcel.writeSerializable(exerciceType)
+        parcel.writeValue(chronoTime)
+        parcel.writeValue(allowedTimeForExercice)
+        parcel.writeValue(exerciceStartTime)
+        parcel.writeValue(targetHoldTime)
+        parcel.writeLong(holdTime)
+        parcel.writeByte(if (wasHolding) 1 else 0)
+        parcel.writeByte(if (isHolding) 1 else 0)
+        parcel.writeValue(holdingStartTime)
+        parcel.writeLong(currentHoldTime)
+        parcel.writeByte(if (warningCanBeDisplayed) 1 else 0)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<Exercice> {
+        override fun createFromParcel(parcel: Parcel): Exercice {
+            return Exercice(parcel)
+        }
+
+        override fun newArray(size: Int): Array<Exercice?> {
+            return arrayOfNulls(size)
+        }
     }
 }
 

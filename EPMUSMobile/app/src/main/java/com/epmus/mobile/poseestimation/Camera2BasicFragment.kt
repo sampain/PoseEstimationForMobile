@@ -29,6 +29,7 @@ import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
+import android.os.Parcelable
 import android.text.Html
 import android.util.Log
 import android.util.Size
@@ -45,7 +46,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.IOException
-import java.io.Serializable
 import java.util.*
 import java.util.concurrent.Semaphore
 import java.util.concurrent.TimeUnit
@@ -474,7 +474,7 @@ class Camera2BasicFragment : Fragment() {
         drawView = view.findViewById(R.id.drawview)
         layoutBottom = view.findViewById(R.id.layout_bottom)
 
-        drawView!!.exercice = arguments?.getSerializable("exercice") as Exercice
+        drawView!!.exercice = activity?.intent?.extras?.getParcelable("exercice")
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.context)
     }
 
@@ -1131,11 +1131,11 @@ class Camera2BasicFragment : Fragment() {
             }
         }
 
-        fun newInstance(exerice: Serializable?): Camera2BasicFragment {
+        fun newInstance(exerice: Parcelable?): Camera2BasicFragment {
             val myFragment = Camera2BasicFragment()
 
             val args = Bundle()
-            args.putSerializable("exercice", exerice)
+            args.putParcelable("exercice", exerice)
             myFragment.arguments = args
 
             return myFragment

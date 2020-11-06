@@ -1,6 +1,8 @@
 package com.epmus.mobile.poseestimation
 
-enum class ExerciceType {
+import java.io.Serializable
+
+enum class ExerciceType: Serializable {
     CHRONO,
     REPETITION,
     HOLD

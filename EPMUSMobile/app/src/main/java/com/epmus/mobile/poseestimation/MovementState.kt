@@ -1,6 +1,8 @@
 package com.epmus.mobile.poseestimation
 
-enum class MovementState {
+import java.io.Serializable
+
+enum class MovementState: Serializable {
     INIT,
     STARTING_ANGLE_REACHED,
     ENDING_ANGLE_REACHED,
