@@ -19,6 +19,7 @@ import android.annotation.SuppressLint
 import android.app.*
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.*
@@ -37,6 +38,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import androidx.preference.PreferenceManager
 import com.epmus.mobile.R
 import com.epmus.mobile.program.ProgramListActivity
 import kotlinx.coroutines.GlobalScope
@@ -53,7 +55,7 @@ import java.util.concurrent.TimeUnit
  * Basic fragments for the Camera.
  */
 class Camera2BasicFragment : Fragment() {
-
+    private var sharedPreferences: SharedPreferences? = null
     private val statistiques = ArrayList<Exercice>()
 
     private val lock = Any()
@@ -310,7 +312,10 @@ class Camera2BasicFragment : Fragment() {
             GlobalScope.launch {
                 //Play the audio file
                 var mediaPlayer: MediaPlayer? = MediaPlayer.create(context, audioFile)
-                mediaPlayer?.start()
+
+                if(!sharedPreferences?.getBoolean("audio_setting", true)!!) {
+                    mediaPlayer?.start()
+                }
 
                 //Display the warning message
                 val activity = activity
@@ -470,6 +475,7 @@ class Camera2BasicFragment : Fragment() {
         layoutBottom = view.findViewById(R.id.layout_bottom)
 
         drawView!!.exercice = arguments?.getSerializable("exercice") as Exercice
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.context)
     }
 
     /**
@@ -957,17 +963,17 @@ class Camera2BasicFragment : Fragment() {
                 GlobalScope.launch {
 
                     //Play the audio file
-                    var mediaPlayer: MediaPlayer? = MediaPlayer.create(context, R.raw.termine)
-                    mediaPlayer?.start()
+                    if(!sharedPreferences?.getBoolean("audio_setting", true)!!) {
+                        var mediaPlayer: MediaPlayer? = MediaPlayer.create(context, R.raw.termine)
+                        mediaPlayer?.start()
+                    }
 
                     delay(2000L)
 
                     //EXIT !
-                    activity.let {
-                        val intent = Intent(it, ProgramListActivity::class.java)
-                        it.startActivity(intent)
-                        it.finish()
-                    }
+                    val intent = Intent(getActivity(), ProgramListActivity::class.java)
+                    startActivity(intent)
+                    getActivity()?.finish();
                 }
             }
         }
