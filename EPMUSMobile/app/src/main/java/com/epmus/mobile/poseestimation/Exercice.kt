@@ -1,5 +1,6 @@
 package com.epmus.mobile.poseestimation
 
+import android.graphics.Point
 import android.graphics.PointF
 import android.os.Parcel
 import android.os.Parcelable
@@ -83,8 +84,40 @@ class Exercice() : Parcelable {
         warningCanBeDisplayed = parcel.readByte() != 0.toByte()
     }
 
-    fun updateTimeStamp () {
+    // Track all bodypart (mostly used for statistics)
+    var bp : BodyPartPos = BodyPartPos()
+
+    fun updateTimeStamp (dv : DrawView) {
         timeStamp = System.currentTimeMillis()
+
+        bp.HEAD.X = round(dv!!.mDrawPoint[BodyPart.HEAD.ordinal].x).toInt()
+        bp.HEAD.Y = round(dv!!.mDrawPoint[BodyPart.HEAD.ordinal].y).toInt()
+        bp.NECK.X = round(dv!!.mDrawPoint[BodyPart.NECK.ordinal].x).toInt()
+        bp.NECK.Y = round(dv!!.mDrawPoint[BodyPart.NECK.ordinal].y).toInt()
+        bp.L_SHOULDER.X = round(dv!!.mDrawPoint[BodyPart.L_SHOULDER.ordinal].x).toInt()
+        bp.L_SHOULDER.Y = round(dv!!.mDrawPoint[BodyPart.L_SHOULDER.ordinal].y).toInt()
+        bp.L_ELBOW.X = round(dv!!.mDrawPoint[BodyPart.L_ELBOW.ordinal].x).toInt()
+        bp.L_ELBOW.Y = round(dv!!.mDrawPoint[BodyPart.L_ELBOW.ordinal].y).toInt()
+        bp.L_WRIST.X = round(dv!!.mDrawPoint[BodyPart.L_WRIST.ordinal].x).toInt()
+        bp.L_WRIST.Y = round(dv!!.mDrawPoint[BodyPart.L_WRIST.ordinal].y).toInt()
+        bp.R_SHOULDER.X = round(dv!!.mDrawPoint[BodyPart.R_SHOULDER.ordinal].x).toInt()
+        bp.R_SHOULDER.Y = round(dv!!.mDrawPoint[BodyPart.R_SHOULDER.ordinal].y).toInt()
+        bp.R_ELBOW.X = round(dv!!.mDrawPoint[BodyPart.R_ELBOW.ordinal].x).toInt()
+        bp.R_ELBOW.Y = round(dv!!.mDrawPoint[BodyPart.R_ELBOW.ordinal].y).toInt()
+        bp.R_WRIST.X = round(dv!!.mDrawPoint[BodyPart.R_WRIST.ordinal].x).toInt()
+        bp.R_WRIST.Y = round(dv!!.mDrawPoint[BodyPart.R_WRIST.ordinal].y).toInt()
+        bp.L_HIP.X = round(dv!!.mDrawPoint[BodyPart.L_HIP.ordinal].x).toInt()
+        bp.L_HIP.Y = round(dv!!.mDrawPoint[BodyPart.L_HIP.ordinal].y).toInt()
+        bp.L_KNEE.X = round(dv!!.mDrawPoint[BodyPart.L_KNEE.ordinal].x).toInt()
+        bp.L_KNEE.Y = round(dv!!.mDrawPoint[BodyPart.L_KNEE.ordinal].y).toInt()
+        bp.L_ANKLE.X = round(dv!!.mDrawPoint[BodyPart.L_ANKLE.ordinal].x).toInt()
+        bp.L_ANKLE.Y = round(dv!!.mDrawPoint[BodyPart.L_ANKLE.ordinal].y).toInt()
+        bp.R_HIP.X = round(dv!!.mDrawPoint[BodyPart.R_HIP.ordinal].x).toInt()
+        bp.R_HIP.Y = round(dv!!.mDrawPoint[BodyPart.R_HIP.ordinal].y).toInt()
+        bp.R_KNEE.X = round(dv!!.mDrawPoint[BodyPart.R_KNEE.ordinal].x).toInt()
+        bp.R_KNEE.Y = round(dv!!.mDrawPoint[BodyPart.R_KNEE.ordinal].y).toInt()
+        bp.R_ANKLE.X = round(dv!!.mDrawPoint[BodyPart.R_ANKLE.ordinal].x).toInt()
+        bp.R_ANKLE.Y = round(dv!!.mDrawPoint[BodyPart.R_ANKLE.ordinal].y).toInt()
     }
 
     fun initialisationVerification(drawView: DrawView) {
@@ -578,18 +611,41 @@ class Exercice() : Parcelable {
         exercices.exitStateReached = exitStateReached
         exercices.exerciceEndTime = exerciceEndTime
 
+        exercices.bp.HEAD.X = bp.HEAD.X
+        exercices.bp.HEAD.Y = bp.HEAD.Y
+        exercices.bp.NECK.X = bp.NECK.X
+        exercices.bp.NECK.Y = bp.NECK.Y
+        exercices.bp.L_SHOULDER.X = bp.L_SHOULDER.X
+        exercices.bp.L_SHOULDER.Y = bp.L_SHOULDER.Y
+        exercices.bp.L_ELBOW.X = bp.L_ELBOW.X
+        exercices.bp.L_ELBOW.Y = bp.L_ELBOW.Y
+        exercices.bp.L_WRIST.X = bp.L_WRIST.X
+        exercices.bp.L_WRIST.Y = bp.L_WRIST.Y
+        exercices.bp.R_SHOULDER.X = bp.R_SHOULDER.X
+        exercices.bp.R_SHOULDER.Y = bp.R_SHOULDER.Y
+        exercices.bp.R_ELBOW.X = bp.R_ELBOW.X
+        exercices.bp.R_ELBOW.Y = bp.R_ELBOW.Y
+        exercices.bp.R_WRIST.X = bp.R_WRIST.X
+        exercices.bp.R_WRIST.Y = bp.R_WRIST.Y
+        exercices.bp.L_HIP.X = bp.L_HIP.X
+        exercices.bp.L_HIP.Y = bp.L_HIP.Y
+        exercices.bp.L_KNEE.X = bp.L_KNEE.X
+        exercices.bp.L_KNEE.Y = bp.L_KNEE.Y
+        exercices.bp.L_ANKLE.X = bp.L_ANKLE.X
+        exercices.bp.L_ANKLE.Y = bp.L_ANKLE.Y
+        exercices.bp.R_HIP.X = bp.R_HIP.X
+        exercices.bp.R_HIP.Y = bp.R_HIP.Y
+        exercices.bp.R_KNEE.X = bp.R_KNEE.X
+        exercices.bp.R_KNEE.Y = bp.R_KNEE.Y
+        exercices.bp.R_ANKLE.X = bp.R_ANKLE.X
+        exercices.bp.R_ANKLE.Y = bp.R_ANKLE.Y
+
         movementList.forEach() {
             var tmpMovement = Movement(it.bodyPart0_Index, it.bodyPart1_Index, it.bodyPart2_Index)
             tmpMovement.startingAngle = it.startingAngle
             tmpMovement.endingAngle = it.endingAngle
             tmpMovement.isAngleAntiClockWise = it.isAngleAntiClockWise
             tmpMovement.angleAvg = it.angleAvg
-            tmpMovement.BodyPart0_X = it.BodyPart0_X
-            tmpMovement.BodyPart0_Y = it.BodyPart0_Y
-            tmpMovement.BodyPart1_X = it.BodyPart1_X
-            tmpMovement.BodyPart1_Y = it.BodyPart1_Y
-            tmpMovement.BodyPart2_X = it.BodyPart2_X
-            tmpMovement.BodyPart2_Y = it.BodyPart2_Y
             tmpMovement.member1Length = it.member1Length
             tmpMovement.member2Length = it.member2Length
             tmpMovement.angleOffset = it.angleOffset

@@ -14,13 +14,6 @@ data class Movement(val bodyPart0_Index: Int, val bodyPart1_Index: Int, val body
     var angleAvg: Int? = null
     var angleValuesLastFrames = ArrayList<Double>()
 
-    var BodyPart0_X: Float? = null
-    var BodyPart0_Y: Float? = null
-    var BodyPart1_X: Float? = null
-    var BodyPart1_Y: Float? = null
-    var BodyPart2_X: Float? = null
-    var BodyPart2_Y: Float? = null
-
     var member1Length: Int? = 0
     var member1LengthLastFrames = ArrayList<Double>()
 

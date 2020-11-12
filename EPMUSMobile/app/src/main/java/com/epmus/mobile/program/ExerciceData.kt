@@ -28,6 +28,8 @@ class ExerciceData {
             exercice.minExecutionTime = 1.0f
             exercice.maxExecutionTime = 3.0f
 
+
+
             if (exerciceName == ExerciceNameList.ExerciceBrasRepetition) {
                 movement.startingAngle = 180
                 movement.endingAngle = 90

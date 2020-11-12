@@ -46,6 +46,8 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.IOException
+import java.io.Serializable
+import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.Semaphore
 import java.util.concurrent.TimeUnit
@@ -895,21 +897,14 @@ class Camera2BasicFragment : Fragment() {
             }
         }
 
-        drawView!!.exercice!!.updateTimeStamp()
+        drawView!!.exercice!!.updateTimeStamp(drawView!!)
 
-        drawView!!.exercice!!.movementList.forEach() {
-            it.BodyPart0_X = drawView!!.mDrawPoint[it.bodyPart0_Index].x
-            it.BodyPart0_Y = drawView!!.mDrawPoint[it.bodyPart0_Index].y
-            it.BodyPart1_X = drawView!!.mDrawPoint[it.bodyPart1_Index].x
-            it.BodyPart1_Y = drawView!!.mDrawPoint[it.bodyPart1_Index].y
-            it.BodyPart2_X = drawView!!.mDrawPoint[it.bodyPart2_Index].x
-            it.BodyPart2_Y = drawView!!.mDrawPoint[it.bodyPart2_Index].y
-        }
 
         //if not initialized yet
         if (drawView!!.exercice?.isInit == false) {
             showToast("")
             showDebugUI("")
+            rawStats.add(drawView!!.exercice!!.copy())
 
             drawView!!.exercice?.initialisationVerification(drawView!!)
             //debug
@@ -1000,6 +995,12 @@ class Camera2BasicFragment : Fragment() {
         }
     }
 
+    fun convertLongToTime(time: Long): String {
+        val date = Date(time)
+        val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")
+        return format.format(date)
+    }
+
     fun adjustStats(s: ArrayList<Exercice>) {
         var cleanStats = ExerciceStatistique()
 
@@ -1011,27 +1012,36 @@ class Camera2BasicFragment : Fragment() {
 
         // Add all infos
         s.forEachIndexed() { id, e ->
-            cleanStats.timeStamp.add(e.timeStamp)
+            cleanStats.timeStamp.add(convertLongToTime(e.timeStamp!!))
             cleanStats.numberOfRepetition.add(e.numberOfRepetition)
             cleanStats.speedOfRepetition.add(e.mouvementSpeedTime)
             cleanStats.holdTime.add(e.holdTime)
-            cleanStats.notMovingInitList.add(e.notMovingInitList)
+
+            cleanStats.BodyPartPos.HEAD.add(PointPos(e.bp.HEAD.X, e.bp.HEAD.Y))
+            cleanStats.BodyPartPos.NECK.add(PointPos(e.bp.NECK.X, e.bp.NECK.Y))
+            cleanStats.BodyPartPos.L_SHOULDER.add(PointPos(e.bp.L_SHOULDER.X, e.bp.L_SHOULDER.Y))
+            cleanStats.BodyPartPos.L_ELBOW.add(PointPos(e.bp.L_ELBOW.X, e.bp.L_ELBOW.Y))
+            cleanStats.BodyPartPos.L_WRIST.add(PointPos(e.bp.L_WRIST.X, e.bp.L_WRIST.Y))
+            cleanStats.BodyPartPos.R_SHOULDER.add(PointPos(e.bp.R_SHOULDER.X, e.bp.R_SHOULDER.Y))
+            cleanStats.BodyPartPos.R_ELBOW.add(PointPos(e.bp.R_ELBOW.X, e.bp.R_ELBOW.Y))
+            cleanStats.BodyPartPos.R_WRIST.add(PointPos(e.bp.R_WRIST.X, e.bp.R_WRIST.Y))
+            cleanStats.BodyPartPos.L_HIP.add(PointPos(e.bp.L_HIP.X, e.bp.L_HIP.Y))
+            cleanStats.BodyPartPos.L_KNEE.add(PointPos(e.bp.L_KNEE.X, e.bp.L_KNEE.Y))
+            cleanStats.BodyPartPos.L_ANKLE.add(PointPos(e.bp.L_ANKLE.X, e.bp.L_ANKLE.Y))
+            cleanStats.BodyPartPos.R_HIP.add(PointPos(e.bp.R_HIP.X, e.bp.R_HIP.Y))
+            cleanStats.BodyPartPos.R_KNEE.add(PointPos(e.bp.R_KNEE.X, e.bp.R_KNEE.Y))
+            cleanStats.BodyPartPos.R_ANKLE.add(PointPos(e.bp.R_ANKLE.X, e.bp.R_ANKLE.Y))
 
             for (i in 0..e.movementList.count()-1) {
                 cleanStats.movements[i].angleAvg.add(e.movementList[i].angleAvg)
-                cleanStats.movements[i].position0_X.add(e.movementList[i].BodyPart0_X)
-                cleanStats.movements[i].position0_Y.add(e.movementList[i].BodyPart0_Y)
-                cleanStats.movements[i].position1_X.add(e.movementList[i].BodyPart1_X)
-                cleanStats.movements[i].position1_Y.add(e.movementList[i].BodyPart1_Y)
-                cleanStats.movements[i].position2_X.add(e.movementList[i].BodyPart2_X)
-                cleanStats.movements[i].position2_Y.add(e.movementList[i].BodyPart2_Y)
+                cleanStats.movements[i].state.add(e.movementList[i].movementState)
             }
         }
 
         var cpt = s.count()
-        cleanStats.initStartTime = s[cpt-1].initStartTimer
-        cleanStats.exerciceStartTime = s[cpt-1].exerciceStartTime
-        cleanStats.exerciceEndTime = s[cpt-1].exerciceEndTime
+        cleanStats.initStartTime = convertLongToTime(s[cpt-1].initStartTimer!!)
+        cleanStats.exerciceStartTime = convertLongToTime(s[cpt-1].exerciceStartTime!!)
+        cleanStats.exerciceEndTime = convertLongToTime(s[cpt-1].exerciceEndTime!!)
     }
 
 
