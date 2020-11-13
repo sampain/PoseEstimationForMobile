@@ -544,9 +544,9 @@ class Camera2BasicFragment : Fragment() {
             for (cameraId in manager.cameraIdList) {
                 val characteristics = manager.getCameraCharacteristics(cameraId)
 
-                // We don't use a front facing camera in this sample.
+                // We use a front facing camera in this sample.
                 val facing = characteristics.get(CameraCharacteristics.LENS_FACING)
-                if (facing != null && facing == CameraCharacteristics.LENS_FACING_FRONT) {
+                if (facing != null && facing == CameraCharacteristics.LENS_FACING_BACK) {
                     continue
                 }
 
@@ -655,11 +655,7 @@ class Camera2BasicFragment : Fragment() {
                     }
                 }
 
-                //this.cameraId = cameraId
-                // In my case (razer phone 1)
-                // "0" back camera
-                // "1" front camera
-                this.cameraId = "1"
+                this.cameraId = cameraId
                 return
             }
         } catch (e: CameraAccessException) {
