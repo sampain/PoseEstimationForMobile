@@ -41,6 +41,7 @@
         <activity android:name=".SettingsActivity" />
         <activity
             android:name=".Messaging.MessagingActivity"
+            android:label="@string/title_activity_messaging"
             android:parentActivityName=".MainMenuActivity" />
         <activity
             android:name=".AlertsActivity"
