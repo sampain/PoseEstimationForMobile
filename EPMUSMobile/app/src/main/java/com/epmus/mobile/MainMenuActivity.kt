@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
+import com.epmus.mobile.Messaging.MessagingActivity
 import androidx.appcompat.app.AppCompatActivity
 import com.epmus.mobile.Messaging.NewMessageActivity
 import com.epmus.mobile.MongoDbService.MongoTransactions
@@ -44,7 +45,7 @@ class MainMenuActivity : AppCompatActivity() {
         }
 
         messaging.setOnClickListener {
-            val intent = Intent(this, NewMessageActivity::class.java)
+            val intent = Intent(this, MessagingActivity::class.java)
             startActivity(intent)
         }
 
