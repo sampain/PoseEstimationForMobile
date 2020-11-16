@@ -14,5 +14,8 @@ class ExerciceStatistique : Serializable {
 
     var movements = ArrayList<MovementStatistics>()
 
-    var BodyPartPos : StatsBodyPartPos = StatsBodyPartPos()
+    var bodyPartPos : StatsBodyPartPos = StatsBodyPartPos()
+
+    var patientID : String = ""
+    var exerciceID : String = ""
 }

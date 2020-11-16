@@ -277,8 +277,7 @@ class Exercice() : Parcelable {
         }
 
         //Calculates remaining chrono time
-        var currentTime = System.currentTimeMillis() / 1000
-        chronoTime = (currentTime - exerciceStartTime!!).toInt()
+        chronoTime = ((System.currentTimeMillis() - exerciceStartTime!!)/1000).toInt()
         chronoTime = allowedTimeForExercice!! - chronoTime!!
 
         //If no time is left, then the exercice is done
