@@ -20,7 +20,6 @@ class Exercice() : Parcelable {
     var numberOfRepetitionToDo: Int? = null
     var numberOfRepetition: Int = 0
     var exitStateReached: Boolean = false
-    //var numberOfRepetitionReachedTimer: Long? = null
 
     var movementList = ArrayList<Movement>()
 
@@ -60,13 +59,11 @@ class Exercice() : Parcelable {
         numberOfRepetitionToDo = parcel.readValue(Int::class.java.classLoader) as? Int
         numberOfRepetition = parcel.readInt()
         exitStateReached = parcel.readByte() != 0.toByte()
-        numberOfRepetitionReachedTimer = parcel.readValue(Long::class.java.classLoader) as? Long
         movementList = parcel.readSerializable() as ArrayList<Movement>
         initStartTimer = parcel.readValue(Long::class.java.classLoader) as? Long
         initList = parcel.readSerializable() as ArrayList<ArrayList<PointF>>
         notMovingInitList = parcel.readSerializable() as ArrayList<Boolean>
         isInit = parcel.readByte() != 0.toByte()
-        initDoneTimer = parcel.readValue(Long::class.java.classLoader) as? Long
         notMovingStartTime = parcel.readValue(Long::class.java.classLoader) as? Long
         notMovingTimer = parcel.readInt()
         targetTime = parcel.readLong()
@@ -678,13 +675,11 @@ class Exercice() : Parcelable {
         parcel.writeValue(numberOfRepetitionToDo)
         parcel.writeInt(numberOfRepetition)
         parcel.writeByte(if (exitStateReached) 1 else 0)
-        parcel.writeValue(numberOfRepetitionReachedTimer)
         parcel.writeSerializable(movementList)
         parcel.writeValue(initStartTimer)
         parcel.writeSerializable(initList)
         parcel.writeSerializable(notMovingInitList)
         parcel.writeByte(if (isInit) 1 else 0)
-        parcel.writeValue(initDoneTimer)
         parcel.writeValue(notMovingStartTime)
         parcel.writeInt(notMovingTimer)
         parcel.writeLong(targetTime)
