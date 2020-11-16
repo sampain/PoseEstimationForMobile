@@ -9,6 +9,7 @@ import android.util.Log
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.recyclerview.widget.RecyclerView
 import com.epmus.mobile.R
 import com.epmus.mobile.SettingsActivity
 import com.epmus.mobile.ui.login.LoginActivity
@@ -22,7 +23,6 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_messaging.*
-import kotlinx.android.synthetic.main.activity_new_message.*
 import kotlinx.android.synthetic.main.user_row_message.view.*
 
 class MessagingActivity : AppCompatActivity() {
@@ -35,24 +35,23 @@ class MessagingActivity : AppCompatActivity() {
         setSupportActionBar(findViewById(R.id.toolbar_Messaging))
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        fetchUsers(this)
+
+        fetchUsers()
     }
 
-    private fun fetchUsers(context: Context) {
+    private fun fetchUsers() {
         val ref = FirebaseDatabase.getInstance().getReference("/users")
         ref.addListenerForSingleValueEvent(object: ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
                 val adapter = GroupAdapter<ViewHolder>()
 
-                p0.children.forEach {
-                    //Log.d(TAG, it.toString())
-                    val user = it.getValue(MessagingUser::class.java)
-                    if (user != null){
-                        adapter.add(UserItem(user, context))
+                p0.children.forEach { users ->
+                    users.getValue(MessagingUser::class.java)?.let { user ->
+                        adapter.add(UserItem(user, this@MessagingActivity))
                     }
 
                 }
-                recyclerview_newmessage2.adapter = adapter
+                recyclerview_newmessage.adapter = adapter
             }
 
             override fun onCancelled(p0: DatabaseError) {
@@ -89,14 +88,16 @@ class MessagingActivity : AppCompatActivity() {
     }
 }
 
+
 class UserItem(val user: MessagingUser, val context: Context) : Item<ViewHolder>() {
     override fun bind(viewHolder: ViewHolder, position: Int){
         viewHolder.itemView.username_textview_new_message.text = user.nickname
 
-       // Picasso.get().load(user.profileImageUrl).into(viewHolder.itemView.imageview_new_message)
+        // Picasso.get().load(user.profileImageUrl).into(viewHolder.itemView.imageview_new_message)
     }
 
     override fun getLayout(): Int {
         return R.layout.user_row_message
     }
 }
+

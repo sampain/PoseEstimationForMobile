@@ -11,6 +11,9 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.appcompat.widget.Toolbar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import android.widget.TextView
+import com.epmus.mobile.Messaging.MessagingActivity
+import com.epmus.mobile.R
+import com.epmus.mobile.SettingsActivity
 import com.epmus.mobile.*
 import com.epmus.mobile.Messaging.NewMessageActivity
 import com.epmus.mobile.poseestimation.CameraActivity
@@ -44,7 +47,7 @@ class ProgramListActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         findViewById<FloatingActionButton>(R.id.fab_messaging).setOnClickListener { view ->
-            val intent = Intent(view.context, NewMessageActivity::class.java)
+            val intent = Intent(view.context, MessagingActivity::class.java)
             startActivity(intent)
         }
 
