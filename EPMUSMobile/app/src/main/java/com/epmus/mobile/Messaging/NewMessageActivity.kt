@@ -20,12 +20,12 @@ class NewMessageActivity : AppCompatActivity() {
 
         val adapter = GroupAdapter<ViewHolder>()
 
-        adapter.add(UserItem())
+       // adapter.add(UserItem())
 
         recyclerView_newMessage.adapter = adapter
 
         adapter.setOnItemClickListener { item, view ->
-            val userItem = item as UserItem
+            //val userItem = item as UserItem
 
             val intent = Intent(
                 view.context,
@@ -38,7 +38,7 @@ class NewMessageActivity : AppCompatActivity() {
         }
     }
 }
-
+/*
 class UserItem : Item<ViewHolder>() {
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.Username_textView_newMessage.text = "Physiothérapeute"
@@ -48,3 +48,4 @@ class UserItem : Item<ViewHolder>() {
         return R.layout.user_row_new_message
     }
 }
+*/

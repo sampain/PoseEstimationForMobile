@@ -9,7 +9,6 @@ import android.util.Log
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.epmus.mobile.R
 import com.epmus.mobile.SettingsActivity
 import com.epmus.mobile.ui.login.LoginActivity
@@ -36,10 +35,10 @@ class MessagingActivity : AppCompatActivity() {
         setSupportActionBar(findViewById(R.id.toolbar_Messaging))
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        fetchUsers()
+        fetchUsers(this)
     }
 
-    private fun fetchUsers() {
+    private fun fetchUsers(context: Context) {
         val ref = FirebaseDatabase.getInstance().getReference("/users")
         ref.addListenerForSingleValueEvent(object: ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
@@ -47,13 +46,13 @@ class MessagingActivity : AppCompatActivity() {
 
                 p0.children.forEach {
                     //Log.d(TAG, it.toString())
-                    val user = it.getValue(User::class.java)
+                    val user = it.getValue(MessagingUser::class.java)
                     if (user != null){
-                        adapter.add(UserItem(user))
+                        adapter.add(UserItem(user, context))
                     }
 
                 }
-                recyclerView_newMessage.adapter = adapter
+                recyclerview_newmessage2.adapter = adapter
             }
 
             override fun onCancelled(p0: DatabaseError) {
@@ -90,9 +89,9 @@ class MessagingActivity : AppCompatActivity() {
     }
 }
 
-class UserItem(val user: User, val context: Context) : Item<ViewHolder>() {
+class UserItem(val user: MessagingUser, val context: Context) : Item<ViewHolder>() {
     override fun bind(viewHolder: ViewHolder, position: Int){
-        viewHolder.itemView.username_textview_new_message.text = user.username
+        viewHolder.itemView.username_textview_new_message.text = user.nickname
 
        // Picasso.get().load(user.profileImageUrl).into(viewHolder.itemView.imageview_new_message)
     }

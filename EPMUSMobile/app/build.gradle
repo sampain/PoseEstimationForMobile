@@ -63,7 +63,7 @@ android {
     }
     externalNativeBuild {
         ndkBuild {
-            path file('../openCVLibrary440/native/jni/OpenCV.mk')
+            //path file('../openCVLibrary440/native/jni/OpenCV.mk')
         }
     }
     buildFeatures {
