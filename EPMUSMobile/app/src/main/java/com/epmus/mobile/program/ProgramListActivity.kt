@@ -142,7 +142,7 @@ class ProgramListActivity : AppCompatActivity() {
             holder.idView.text = item.id
             holder.contentView.text = item.content
 
-            with(holder.contentView) {
+            with(holder.itemView) {
                 tag = item
                 setOnClickListener(onClickListenerDetails)
             }
