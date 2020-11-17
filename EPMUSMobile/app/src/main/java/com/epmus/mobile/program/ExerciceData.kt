@@ -33,10 +33,10 @@ class ExerciceData {
             if (exerciceName == ExerciceNameList.ExerciceBrasRepetition) {
                 movement.startingAngle = 180
                 movement.endingAngle = 90
-                movement.isAngleAntiClockWise = true
+                movement.isAngleClockWise = false
                 movement2.startingAngle = 180
                 movement2.endingAngle = 270
-                movement2.isAngleAntiClockWise = false
+                movement2.isAngleClockWise = true
                 exercice.movementList.add(movement)
                 exercice.movementList.add(movement2)
                 exercice.numberOfRepetitionToDo = 5
@@ -44,24 +44,24 @@ class ExerciceData {
             } else if (exerciceName == ExerciceNameList.ExerciceBrasGaucheRepetition) {
                 movement.startingAngle = 170
                 movement.endingAngle = 90
-                movement.isAngleAntiClockWise = true
+                movement.isAngleClockWise = false
                 exercice.movementList.add(movement)
                 exercice.numberOfRepetitionToDo = 5
                 exercice.exerciceType = ExerciceType.REPETITION
             } else if (exerciceName == ExerciceNameList.ExerciceBrasDroitRepetition) {
                 movement2.startingAngle = 180
                 movement2.endingAngle = 270
-                movement2.isAngleAntiClockWise = false
+                movement2.isAngleClockWise = true
                 exercice.movementList.add(movement2)
                 exercice.numberOfRepetitionToDo = 5
                 exercice.exerciceType = ExerciceType.REPETITION
             } else if (exerciceName == ExerciceNameList.ExerciceBrasChrono) {
                 movement.startingAngle = 180
                 movement.endingAngle = 90
-                movement.isAngleAntiClockWise = true
+                movement.isAngleClockWise = false
                 movement2.startingAngle = 180
                 movement2.endingAngle = 270
-                movement2.isAngleAntiClockWise = false
+                movement2.isAngleClockWise = true
                 exercice.movementList.add(movement)
                 exercice.movementList.add(movement2)
                 exercice.exerciceType = ExerciceType.CHRONO
@@ -69,24 +69,24 @@ class ExerciceData {
             } else if (exerciceName == ExerciceNameList.ExerciceBrasGaucheChrono) {
                 movement.startingAngle = 170
                 movement.endingAngle = 90
-                movement.isAngleAntiClockWise = true
+                movement.isAngleClockWise = false
                 exercice.movementList.add(movement)
                 exercice.exerciceType = ExerciceType.CHRONO
                 exercice.allowedTimeForExercice = 15
             } else if (exerciceName == ExerciceNameList.ExerciceBrasDroitChrono) {
                 movement2.startingAngle = 180
                 movement2.endingAngle = 270
-                movement2.isAngleAntiClockWise = false
+                movement2.isAngleClockWise = true
                 exercice.movementList.add(movement2)
                 exercice.exerciceType = ExerciceType.CHRONO
                 exercice.allowedTimeForExercice = 15
             } else if (exerciceName == ExerciceNameList.ExerciceBrasHold) {
                 movement.startingAngle = 180
                 movement.endingAngle = 90
-                movement.isAngleAntiClockWise = true
+                movement.isAngleClockWise = false
                 movement2.startingAngle = 180
                 movement2.endingAngle = 270
-                movement2.isAngleAntiClockWise = false
+                movement2.isAngleClockWise = true
                 exercice.movementList.add(movement)
                 exercice.movementList.add(movement2)
                 exercice.exerciceType = ExerciceType.HOLD
@@ -94,14 +94,14 @@ class ExerciceData {
             } else if (exerciceName == ExerciceNameList.ExerciceBrasGaucheHold) {
                 movement.startingAngle = 170
                 movement.endingAngle = 90
-                movement.isAngleAntiClockWise = true
+                movement.isAngleClockWise = false
                 exercice.movementList.add(movement)
                 exercice.exerciceType = ExerciceType.HOLD
                 exercice.targetHoldTime = 10
             } else if (exerciceName == ExerciceNameList.ExerciceBrasDroitHold) {
                 movement2.startingAngle = 180
                 movement2.endingAngle = 270
-                movement2.isAngleAntiClockWise = false
+                movement2.isAngleClockWise = true
                 exercice.movementList.add(movement2)
                 exercice.exerciceType = ExerciceType.HOLD
                 exercice.targetHoldTime = 10

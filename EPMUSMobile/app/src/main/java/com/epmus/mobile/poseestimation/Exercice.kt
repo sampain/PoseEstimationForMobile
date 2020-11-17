@@ -123,6 +123,7 @@ class Exercice() : Parcelable {
         //For Each body part
         initList.forEachIndexed()
         { index, item ->
+
             // Modify list
             var pointX: Float = drawView.mDrawPoint[index].x
             var pointY: Float = drawView.mDrawPoint[index].y
@@ -518,8 +519,28 @@ class Exercice() : Parcelable {
         return repetitionDone
     }
 
+    fun correctAngle (needToCorrectClockWise: Boolean, isClockWise: Boolean, angles: Double) : Double {
+        if (needToCorrectClockWise) {
+            if (isClockWise) {
+                return 360-angles
+            }
+            else {
+                return angles
+            }
+        }
+        else {
+            if (isClockWise) {
+                return angles
+            }
+            else {
+                return 360-angles
+            }
+        }
+    }
+
     //Calculates the angle between the three points in a movement
     fun calculateAngleV2(movement: Movement, drawView: DrawView) {
+        //*-1 because Y is inverted
         var pointX0: Float = drawView.mDrawPoint[movement.bodyPart0_Index].x
         var pointY0: Float = drawView.mDrawPoint[movement.bodyPart0_Index].y
         var pointX1: Float = drawView.mDrawPoint[movement.bodyPart1_Index].x
@@ -541,16 +562,91 @@ class Exercice() : Parcelable {
         var angleDeg: Double = ((angleRad * 180) / Math.PI)
 
         //Adding anti/clockwise effect
-        var a = Y1ToY0 / X1ToX0
-        var b = pointY0 - (a * pointX0)
-        var tmpPointY2 = (a * pointX2) + b
-        if (movement.isAngleAntiClockWise!!) {
-            if (tmpPointY2 < pointY2) {
-                angleDeg = 360 - angleDeg
+        //vertical PointO-Point1
+        if (X1ToX0 == 0F) {
+            if (pointY2 < pointY1) {
+                if (pointX2 < pointX1) {
+                    angleDeg = correctAngle(true, movement.isAngleClockWise!!, angleDeg)
+                }
+                else {
+                    angleDeg = correctAngle(false, movement.isAngleClockWise!!, angleDeg)
+                }
             }
-        } else {
-            if (tmpPointY2 > pointY2) {
-                angleDeg = 360 - angleDeg
+            else {
+                if (pointX2 < pointX1) {
+                    angleDeg = correctAngle(false, movement.isAngleClockWise!!, angleDeg)
+                }
+                else {
+                    angleDeg = correctAngle(true, movement.isAngleClockWise!!, angleDeg)
+                }
+            }
+        }
+        //horizontal Point0-Point1
+        else if (Y1ToY0 == 0F) {
+            if (pointX2 > pointX1) {
+                if (pointY2 > pointY1) {
+                    angleDeg = correctAngle(false, movement.isAngleClockWise!!, angleDeg)
+                }
+                else {
+                    angleDeg = correctAngle(true, movement.isAngleClockWise!!, angleDeg)
+                }
+            }
+            else {
+                if (pointY2 > pointY1) {
+                    angleDeg = correctAngle(true, movement.isAngleClockWise!!, angleDeg)
+                }
+                else {
+                    angleDeg = correctAngle(false, movement.isAngleClockWise!!, angleDeg)
+                }
+            }
+
+        }
+        else {
+            var a = Y1ToY0 / X1ToX0
+            var b = pointY0 - (a * pointX0)
+            var tmpPointY2 = (a * pointX2) + b
+
+            var dX = pointX1 - pointX0
+            var dY = pointY1 - pointY0
+
+            //Quadrant 1
+            if (dX > 0 && dY < 0) {
+                if (tmpPointY2 > pointY2) {
+                    angleDeg = correctAngle(false, movement.isAngleClockWise!!, angleDeg)
+                }
+                else {
+                    angleDeg = correctAngle(true, movement.isAngleClockWise!!, angleDeg)
+                }
+            }
+            //Quadrant 2
+            else if (dX < 0 && dY < 0) {
+                if (tmpPointY2 > pointY2) {
+                    angleDeg = correctAngle(true, movement.isAngleClockWise!!, angleDeg)
+                }
+                else {
+                    angleDeg = correctAngle(false, movement.isAngleClockWise!!, angleDeg)
+                }
+
+            }
+            //Quadrant 3
+            else if (dX < 0 && dY > 0) {
+                if (tmpPointY2 > pointY2) {
+                    angleDeg = correctAngle(true, movement.isAngleClockWise!!, angleDeg)
+                }
+                else {
+                    angleDeg = correctAngle(false, movement.isAngleClockWise!!, angleDeg)
+                }
+
+            }
+            //Quadrant 4
+            else if (dX > 0 && dY > 0) {
+                if (tmpPointY2 > pointY2) {
+                    angleDeg = correctAngle(false, movement.isAngleClockWise!!, angleDeg)
+                }
+                else {
+                    angleDeg = correctAngle(true, movement.isAngleClockWise!!, angleDeg)
+                }
+
             }
         }
 
@@ -640,7 +736,7 @@ class Exercice() : Parcelable {
             var tmpMovement = Movement(it.bodyPart0_Index, it.bodyPart1_Index, it.bodyPart2_Index)
             tmpMovement.startingAngle = it.startingAngle
             tmpMovement.endingAngle = it.endingAngle
-            tmpMovement.isAngleAntiClockWise = it.isAngleAntiClockWise
+            tmpMovement.isAngleClockWise = it.isAngleClockWise
             tmpMovement.angleAvg = it.angleAvg
             tmpMovement.member1Length = it.member1Length
             tmpMovement.member2Length = it.member2Length

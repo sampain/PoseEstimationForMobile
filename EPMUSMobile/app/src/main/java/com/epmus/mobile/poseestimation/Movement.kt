@@ -9,7 +9,7 @@ data class Movement(val bodyPart0_Index: Int, val bodyPart1_Index: Int, val body
     val acceptableAngleVariation: Int = 10
     var startingAngle: Int? = null
     var endingAngle: Int? = null
-    var isAngleAntiClockWise: Boolean? = null
+    var isAngleClockWise: Boolean? = null
 
     var angleAvg: Int? = null
     var angleValuesLastFrames = ArrayList<Double>()
