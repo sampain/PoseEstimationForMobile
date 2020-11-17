@@ -8,7 +8,7 @@
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <application
-        android:name="com.epmus.mobile.ui.login.TaskTracker"
+        android:name=".ui.login.TaskTracker"
         android:allowBackup="true"
         android:fullBackupContent="@xml/backup_descriptor"
         android:icon="@mipmap/ic_launcher"
@@ -16,6 +16,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".HistoryActivity"
+            android:label="@string/title_program_list"
+            android:parentActivityName=".StatisticsActivity"/>
         <activity
             android:name=".program.ProgramListActivity"
             android:label="@string/title_program_list"
@@ -44,6 +47,7 @@
             android:parentActivityName=".MainMenuActivity" />
         <activity
             android:name=".StatisticsActivity"
+            android:label="@string/title_statistics"
             android:parentActivityName=".MainMenuActivity" />
         <activity android:name=".MainMenuActivity" />
         <activity android:name=".ui.login.LoginActivity">

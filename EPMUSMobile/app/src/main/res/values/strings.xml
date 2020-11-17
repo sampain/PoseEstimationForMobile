@@ -83,6 +83,7 @@
     <string name="send">Envoyer</string>
     <string name="title_program_list">Exercices</string>
     <string name="title_program_detail">Information sur l\'exercice</string>
+    <string name="title_statistics">Statistiques</string>
     <string name="play_button">Play Button</string>
     <string name="instructions">Placez votre appareil debout de façon à ce que la caméra puisse voir votre corps au complet. Mettez vous devant l\'appareil et restez immobile. L\'exercice commencera ensuite.</string>
 </resources>
