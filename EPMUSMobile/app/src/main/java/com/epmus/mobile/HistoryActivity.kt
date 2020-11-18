@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.RecyclerView
+import com.epmus.mobile.MongoDbService.historique
 import java.text.SimpleDateFormat
 
 var historyView: RecyclerView? = null

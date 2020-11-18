@@ -78,8 +78,6 @@ class Camera2BasicFragment : Fragment() {
 
     private var isClosing: Boolean = false
 
-    private var mongoTransactions : MongoTransactions = MongoTransactions()
-
     /**
      * [TextureView.SurfaceTextureListener] handles several lifecycle events on a [ ].
      */
@@ -1078,7 +1076,7 @@ class Camera2BasicFragment : Fragment() {
         cleanStats.exerciceStartTime = convertLongToTime(s[cpt-1].exerciceStartTime!!)
         cleanStats.exerciceEndTime = convertLongToTime(s[cpt-1].exerciceEndTime!!)
 
-        mongoTransactions.insertHistoryEntry(cleanStats)
+        MongoTransactions.insertHistoryEntry(cleanStats)
     }
 
     private fun showDebugUI(text: String) {
