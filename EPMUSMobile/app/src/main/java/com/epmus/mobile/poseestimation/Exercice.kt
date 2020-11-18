@@ -5,6 +5,8 @@ import android.graphics.PointF
 import android.os.Parcel
 import android.os.Parcelable
 import android.widget.Chronometer
+import android.widget.TextView
+import com.epmus.mobile.R
 import java.util.ArrayList
 import kotlin.math.*
 
@@ -29,9 +31,9 @@ class Exercice() : Parcelable {
     var isInit: Boolean = false
     var exerciceStartTime: Long? = null
     var notMovingStartTime: Long? = null
-    var notMovingTimer: Int = 0
+    var notMovingTimer: Int = -1
     var targetTime: Long = 4000
-    var stdMax: Int = 100
+    var stdMax: Int = 150
     var exerciceEndTime: Long? = null
 
     var exerciceType: ExerciceType? = null
@@ -121,9 +123,6 @@ class Exercice() : Parcelable {
         //For Each body part
         initList.forEachIndexed()
         { index, item ->
-
-
-
             // Modify list
             var pointX: Float = drawView.mDrawPoint[index].x
             var pointY: Float = drawView.mDrawPoint[index].y
@@ -194,7 +193,7 @@ class Exercice() : Parcelable {
         if (isNotMoving) {
             if (notMovingStartTime == null) {
                 notMovingStartTime = System.currentTimeMillis()
-                notMovingTimer = 5
+                notMovingTimer = -1
             } else {
                 var currentTime: Long = System.currentTimeMillis()
                 notMovingTimer =
@@ -206,6 +205,7 @@ class Exercice() : Parcelable {
             }
         } else {
             notMovingStartTime = null
+            notMovingTimer = -1
         }
     }
 

@@ -212,11 +212,44 @@
     <TextView
         android:id="@+id/countdown"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="71dp"
+        android:layout_height="304dp"
+        android:layout_gravity="center"
+        android:alpha="0.0"
         android:gravity="center"
-        android:text=""
         android:textColor="#33b6e5"
-        android:textSize="108sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:autoSizeTextType="uniform"
+        android:autoSizeMinTextSize="12sp"
+        android:autoSizeMaxTextSize="100sp"
+        android:autoSizeStepGranularity="2sp"/>
+
+    <TextView
+        android:id="@+id/instructions"
+        android:layout_width="match_parent"
+        android:layout_height="304dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:alpha="0.0"
+        android:text="@string/instructions"
+        android:textColor="#33b6e5"
+        android:textStyle="bold"
+        android:autoSizeTextType="uniform"
+        android:autoSizeMinTextSize="12sp"
+        android:autoSizeMaxTextSize="50sp"
+        android:autoSizeStepGranularity="2sp"/>
+
+    <TextView
+        android:id="@+id/termine"
+        android:layout_width="match_parent"
+        android:layout_height="304dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:alpha="0.0"
+        android:text="Terminé"
+        android:textColor="#33b6e5"
+        android:textStyle="bold"
+        android:autoSizeTextType="uniform"
+        android:autoSizeMinTextSize="12sp"
+        android:autoSizeMaxTextSize="100sp"
+        android:autoSizeStepGranularity="2sp"/>
 </FrameLayout>

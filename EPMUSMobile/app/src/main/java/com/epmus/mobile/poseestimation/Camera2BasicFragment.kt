@@ -911,37 +911,39 @@ class Camera2BasicFragment : Fragment() {
             if (drawView!!.exercice!!.initList[0].count() > 1) {
                 // show timer to start
                 if (drawView!!.exercice!!.notMovingTimer < drawView!!.exercice!!.targetTime.toInt() / 1000 &&
-                    drawView!!.exercice!!.notMovingTimer > 0
+                    drawView!!.exercice!!.notMovingTimer >= 0
                 ) {
                     val activity = activity
                     activity?.runOnUiThread {
-                        var textViewBackground: TextView? =
-                            view?.findViewById(R.id.background_initialize)
-                        textViewBackground!!.alpha = 0.7F
+                        var textViewBackground: TextView? = view?.findViewById(R.id.background_initialize)
+                        textViewBackground!!.alpha = 0.5F
 
                         var textViewCountdown: TextView? = view?.findViewById(R.id.countdown)
                         textViewCountdown!!.text = drawView!!.exercice!!.notMovingTimer.toString()
+                        textViewCountdown!!.alpha = 1.0F
+
+                        var textViewInstruction: TextView? = view?.findViewById(R.id.instructions)
+                        textViewInstruction!!.alpha = 0.0F
 
                         drawView!!.invalidate()
                     }
                 }
 
-                // hide background if moving
                 else {
                     val activity = activity
                     activity?.runOnUiThread {
-                        var textViewBackground: TextView? =
-                            view?.findViewById(R.id.background_initialize)
-                        textViewBackground!!.alpha = 0.0F
+                        var textViewBackground: TextView? = view?.findViewById(R.id.background_initialize)
+                        textViewBackground!!.alpha = 0.5F
+
+                        var textViewInstruction: TextView? = view?.findViewById(R.id.instructions)
+                        textViewInstruction!!.alpha = 1.0F
 
                         var textViewCountdown: TextView? = view?.findViewById(R.id.countdown)
-                        textViewCountdown!!.text = ""
+                        textViewCountdown!!.alpha = 0.0F
 
                         drawView!!.invalidate()
                     }
-
                 }
-
             }
         }
         // Done -> exit exercise
@@ -953,12 +955,11 @@ class Camera2BasicFragment : Fragment() {
             val activity = activity
 
             activity?.runOnUiThread {
-                var textViewBackground: TextView? =
-                    view?.findViewById(R.id.background_initialize)
+                var textViewBackground: TextView? = view?.findViewById(R.id.background_initialize)
                 textViewBackground!!.alpha = 1.0F
 
-                var textViewCountdown: TextView? = view?.findViewById(R.id.countdown)
-                textViewCountdown!!.text = "Terminé"
+                var textViewTermine: TextView? = view?.findViewById(R.id.termine)
+                textViewTermine!!.alpha = 1.0F
                 drawView!!.invalidate()
 
                 // must do a separate thread or the background wont show
@@ -980,6 +981,24 @@ class Camera2BasicFragment : Fragment() {
             }
         }
         else if(!isClosing) {
+
+            val activity = activity
+            activity?.runOnUiThread {
+                var textViewBackground: TextView? = view?.findViewById(R.id.background_initialize)
+                textViewBackground!!.alpha = 0.0F
+
+                var textViewCountdown: TextView? = view?.findViewById(R.id.countdown)
+                textViewCountdown!!.alpha = 0.0F
+
+                var textViewInstruction: TextView? = view?.findViewById(R.id.instructions)
+                textViewInstruction!!.alpha = 0.0F
+
+                var textViewTermine: TextView? = view?.findViewById(R.id.termine)
+                textViewTermine!!.alpha = 0.0F
+
+                drawView!!.invalidate()
+            }
+
             // Verify angle
             drawView!!.exercice!!.exerciceVerification(drawView!!)
 
