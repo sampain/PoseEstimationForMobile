@@ -40,6 +40,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
+import com.epmus.mobile.MongoDbService.MongoTransactions
 import com.epmus.mobile.R
 import com.epmus.mobile.program.ProgramListActivity
 import kotlinx.coroutines.GlobalScope
@@ -76,6 +77,8 @@ class Camera2BasicFragment : Fragment() {
     private var audioIsPlaying: Boolean = false
 
     private var isClosing: Boolean = false
+
+    private var mongoTransactions : MongoTransactions = MongoTransactions()
 
     /**
      * [TextureView.SurfaceTextureListener] handles several lifecycle events on a [ ].
@@ -1074,8 +1077,9 @@ class Camera2BasicFragment : Fragment() {
         cleanStats.initStartTime = convertLongToTime(s[cpt-1].initStartTimer!!)
         cleanStats.exerciceStartTime = convertLongToTime(s[cpt-1].exerciceStartTime!!)
         cleanStats.exerciceEndTime = convertLongToTime(s[cpt-1].exerciceEndTime!!)
-    }
 
+        mongoTransactions.insertHistoryEntry(cleanStats)
+    }
 
     private fun showDebugUI(text: String) {
         val activity = activity
