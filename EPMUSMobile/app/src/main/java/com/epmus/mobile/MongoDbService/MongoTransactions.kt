@@ -8,19 +8,9 @@ import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 import io.realm.annotations.RealmClass
-import io.realm.mongodb.App
-import io.realm.mongodb.AppConfiguration
-// Realm Authentication Packages
-import io.realm.mongodb.User
-import io.realm.mongodb.Credentials
 
-// MongoDB Service Packages
-import io.realm.mongodb.mongo.MongoClient
-import io.realm.mongodb.mongo.MongoDatabase
-import io.realm.mongodb.mongo.MongoCollection
 import io.realm.mongodb.sync.SyncConfiguration
-// Utility Packages
-import org.bson.Document
+
 import org.bson.types.ObjectId
 import java.lang.Math.abs
 import java.math.RoundingMode
@@ -82,11 +72,9 @@ class MongoTransactions {
         val config = SyncConfiguration.Builder(realmApp.currentUser()!!, partitionValue)
             .build()
 
-        uiThreadRealm = Realm.getInstance(config)
-
         val histoEntry : historique = historique(tmpId, exerName, stats.initStartTime!!, formatTime(timeDiff))
 
-        val task : FutureTask<String> = FutureTask(BackgroundInsertEntry(uiThreadRealm, histoEntry), "test")
+        val task : FutureTask<String> = FutureTask(BackgroundInsertEntry(config, histoEntry), "test")
         val executorService: ExecutorService = Executors.newFixedThreadPool(2)
         executorService.execute(task)
 
@@ -116,9 +104,10 @@ class MongoTransactions {
 //        }
     }
 
-    class BackgroundInsertEntry(val thread: Realm, val histoEntry: historique) : Runnable {
+    class BackgroundInsertEntry(val config: SyncConfiguration, val histoEntry: historique) : Runnable {
         override fun run() {
-            thread.executeTransaction { transactionRealm ->
+            val test = Realm.getInstance(config)
+            test.executeTransaction { transactionRealm ->
                 transactionRealm.insert(histoEntry)
             }
         }
