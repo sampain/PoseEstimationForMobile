@@ -34,7 +34,7 @@ class MongoTransactions {
 
         init {
             val user: User? = realmApp.currentUser()
-            val partitionValue: String = user.toString()
+            val partitionValue: String? = user?.id
             config = SyncConfiguration.Builder(user, partitionValue).build()
         }
 
