@@ -10,8 +10,12 @@ import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.RecyclerView
 import com.epmus.mobile.program.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 class HistoryActivity : AppCompatActivity() {
+    lateinit var historyList: ArrayList<HistoryData>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_history)
@@ -20,15 +24,27 @@ class HistoryActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        setupRecyclerView(findViewById(R.id.history_list))
+        //val findIterable : FindIterable<Document>? = mongoCollection?.find()
+
+        /*findIterable?.iterator()?.getAsync {
+            if (it.isSuccess) {
+                historyList = ArrayList()
+                it.get().forEach {
+                    val historyData = HistoryData(it["name"].toString(), SimpleDateFormat(it["date"].toString()), it["time"].toString() )
+                    historyList.add(historyData)
+                }
+                setupRecyclerView(findViewById(R.id.history_list))
+            } else {
+            }
+        }*/
     }
 
     private fun setupRecyclerView(recyclerView: RecyclerView) {
-        recyclerView.adapter = SimpleItemRecyclerViewAdapter(ProgramContent.ITEMS)
+        recyclerView.adapter = SimpleItemRecyclerViewAdapter(historyList)
     }
 
     class SimpleItemRecyclerViewAdapter(
-        private val values: List<ProgramContent.ProgramItem>,
+        private val values: List<HistoryData>,
     ) :
         RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder>() {
 
@@ -52,8 +68,8 @@ class HistoryActivity : AppCompatActivity() {
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val item = values[position]
-            holder.idView.text = item.id
-            holder.contentView.text = item.content
+            holder.idView.text = item.name
+            holder.contentView.text = item.time
 
             with(holder.itemView) {
                 tag = item
@@ -69,3 +85,9 @@ class HistoryActivity : AppCompatActivity() {
         }
     }
 }
+
+data class HistoryData(
+    var name: String,
+    var date: SimpleDateFormat,
+    var time: String
+)
