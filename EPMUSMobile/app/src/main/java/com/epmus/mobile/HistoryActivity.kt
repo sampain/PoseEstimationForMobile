@@ -31,7 +31,7 @@ class HistoryActivity : AppCompatActivity() {
     }
 
     class SimpleItemRecyclerViewAdapter(
-        private val values: List<Statistics>,
+        private val values: List<historique>,
     ) :
         RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder>() {
 
@@ -44,8 +44,8 @@ class HistoryActivity : AppCompatActivity() {
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val item = values[position]
-            holder.idView.text = item.name
-            holder.contentView.text = item.time
+            holder.idView.text = item.patient_id
+            holder.contentView.text = item.programme_id
 
             with(holder.itemView) {
                 tag = item

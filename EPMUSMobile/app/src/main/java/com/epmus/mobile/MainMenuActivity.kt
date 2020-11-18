@@ -11,19 +11,21 @@ import com.epmus.mobile.program.ProgramListActivity
 import com.epmus.mobile.ui.login.LoginActivity
 import com.epmus.mobile.ui.login.realmApp
 import io.realm.Realm
+import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.RealmResults
 import io.realm.annotations.PrimaryKey
+import io.realm.annotations.RealmClass
 import io.realm.kotlin.where
 import io.realm.mongodb.User
 import io.realm.mongodb.sync.SyncConfiguration
 import org.bson.types.ObjectId
 
-var statistics: MutableList<Statistics> = mutableListOf()
+var statistics: MutableList<historique> = mutableListOf()
+lateinit var uiThreadRealm: Realm
 
 class MainMenuActivity : AppCompatActivity() {
-    lateinit var uiThreadRealm: Realm
-    lateinit var historyLister: RealmResults<Statistics>
+    lateinit var historyLister: RealmResults<historique>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_menu)
@@ -66,7 +68,7 @@ class MainMenuActivity : AppCompatActivity() {
     }
 
     private fun addChangeListenerToRealm(realm: Realm) {
-        historyLister = realm.where<Statistics>().findAllAsync()
+        historyLister = realm.where<historique>().findAllAsync()
 
         historyLister.addChangeListener { collection, changeSet ->
 
@@ -126,17 +128,31 @@ enum class TaskStatus(val displayName: String) {
     Complete("Complete"),
 }
 
-open class Statistics(
-    _name: String = "Statistics",
+open class historique(
+    _patientId: String = "test",
+    _programme_id: String = "Statistics",
     _date: String = "My Project",
-    _time: String = "defaultTime"
+    _duree: String = "defaultTime",
+    _activite: RealmList<activite>? = null
 ) :
     RealmObject() {
     @PrimaryKey
     var _id: ObjectId = ObjectId()
-    var name: String = _name
+
+    var patient_id = _patientId
 
     var date: String = _date
 
-    var time: String = _time
+    var duree: String = _duree
+
+    var programme_id: String = _programme_id
+
+    var activite = _activite
 }
+
+@RealmClass(embedded = true)
+open class activite(
+    var nom: String? = null,
+    var resultat: Int? = null,
+    var repetition: Int? = null,
+): RealmObject() {}
