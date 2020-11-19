@@ -56,6 +56,7 @@
     <string name="title_activity_program">"Programmes"</string>
     <string name="title_activity_statistics">"Statistiques"</string>
     <string name="title_activity_messaging">"Messagerie"</string>
+    <string name="title_activity_chat_log">"Chat Log"</string>
     <string name="title_activity_alerts">"Alertes"</string>
     <string name="action_account">"Compte"</string>
     <string name="action_settings">"Paramètres"</string>

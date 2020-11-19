@@ -20,7 +20,7 @@ class Chatlog : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chatlog)
 
-        supportActionBar?.title = "Chat Log"
+        supportActionBar?.title = "ChatLog"
 
         setupDummyData()
 

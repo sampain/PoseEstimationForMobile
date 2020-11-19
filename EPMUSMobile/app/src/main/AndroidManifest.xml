@@ -16,6 +16,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".Messaging.ChatLogActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Messaging.MessagingActivity" />
+        </activity>
         <activity
             android:name=".CreateAccountActivity"
             android:label="@string/action_create"
@@ -57,16 +62,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity android:name=".Messaging.NewMessageActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Messaging.LatestMessagesActivity" />
-        </activity>
-        <activity android:name=".Messaging.Chatlog">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Messaging.LatestMessagesActivity" />
         </activity>
         <activity
             android:name=".poseestimation.CameraActivity"

@@ -25,6 +25,7 @@ import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_messaging.*
 import kotlinx.android.synthetic.main.user_row_message.view.*
 
+
 class MessagingActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,6 +52,15 @@ class MessagingActivity : AppCompatActivity() {
                     }
 
                 }
+
+                adapter.setOnItemClickListener{ item, view->
+                    val intent = Intent(view.context, ChatLogActivity::class.java)
+                    startActivity(intent)
+
+                    finish()
+
+                }
+
                 recyclerview_newmessage.adapter = adapter
             }
 

@@ -35,6 +35,6 @@
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/btn_dialog" />
+        app:srcCompat="@drawable/ic_account_circle_24px"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
