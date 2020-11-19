@@ -18,8 +18,4 @@ class LoginDataSource {
             Result.Error(IOException("Error logging in", e))
         }
     }
-
-    fun logout() {
-        // TODO: revoke authentication
-    }
 }
