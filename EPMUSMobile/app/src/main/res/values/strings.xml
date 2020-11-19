@@ -88,6 +88,6 @@
     <string name="play_button">Play Button</string>
     <string name="instructions">Placez votre appareil debout de façon à ce que la caméra puisse voir votre corps au complet. Mettez vous devant l\'appareil et restez immobile. L\'exercice commencera ensuite.</string>
     <string name="repetition_number">Nombre de répétitions</string>
-    <string name="exercise_type">Type d\'exercicice</string>
+    <string name="exercise_type">Type d\'exercice</string>
     <string name="exercise_time">Durée de l\'exercice</string>
 </resources>
