@@ -9,17 +9,18 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
+import com.epmus.mobile.poseestimation.ExerciceType
 import com.epmus.mobile.ui.login.LoginActivity
 import com.epmus.mobile.ui.login.realmApp
 import org.eazegraph.lib.charts.PieChart
 import org.eazegraph.lib.models.PieModel
 
 class StatisticsActivity : AppCompatActivity() {
-    lateinit var tvR: TextView
-    lateinit var tvPython: TextView
-    lateinit var tvCPP: TextView
-    lateinit var tvJava: TextView
+    lateinit var statistic_count: TextView
+    lateinit var statistic_count_7: TextView
     lateinit var pieChart: PieChart
+    lateinit var history: TextView
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,11 +30,10 @@ class StatisticsActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        tvR = findViewById(R.id.tvR);
-        tvPython = findViewById(R.id.tvPython);
-        tvCPP = findViewById(R.id.tvCPP);
-        tvJava = findViewById(R.id.tvJava);
+        statistic_count = findViewById(R.id.statistic_count);
+        statistic_count_7 = findViewById(R.id.statistic_count_7);
         pieChart = findViewById(R.id.piechart);
+        history  = findViewById(R.id.history_number);
 
         val history = findViewById<CardView>(R.id.history_button);
 
@@ -73,32 +73,44 @@ class StatisticsActivity : AppCompatActivity() {
     }
 
     private fun setData() {
-        tvR.setText(40.toString())
-        tvPython.setText(30.toString())
-        tvCPP.setText(5.toString())
-        tvJava.setText(25.toString())
+        statistic_count.setText(statistics.count().toString())
+
+        var holdCount = 0
+        var repetitionCount = 0
+        var chronoCount = 0
+
+        statistics.forEach{
+            val exerciceType = ExerciceType.getEnumValue(it.exerciceType)
+            if(exerciceType == ExerciceType.HOLD){
+                holdCount++
+            }
+            else if(exerciceType == ExerciceType.REPETITION){
+                repetitionCount++
+            }
+            else{
+                chronoCount++
+            }
+        }
+
+        statistic_count_7.setText(999999.toString())
+
+        history.setText(statistics.count().toString())
 
         pieChart.addPieSlice(
             PieModel(
-                "R", tvR.getText().toString().toInt().toFloat(),
-                Color.parseColor("#FFA726")
-            )
-        )
-        pieChart.addPieSlice(
-            PieModel(
-                "Python", tvPython.getText().toString().toInt().toFloat(),
+                "Type HOLD", holdCount.toFloat(),
                 Color.parseColor("#66BB6A")
             )
         )
         pieChart.addPieSlice(
             PieModel(
-                "C++", tvCPP.getText().toString().toInt().toFloat(),
+                "Type REPETITION", repetitionCount.toFloat(),
                 Color.parseColor("#EF5350")
             )
         )
         pieChart.addPieSlice(
             PieModel(
-                "Java", tvJava.getText().toString().toInt().toFloat(),
+                "Type CHRONO", chronoCount.toFloat(),
                 Color.parseColor("#29B6F6")
             )
         )

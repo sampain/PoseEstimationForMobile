@@ -52,31 +52,12 @@
                 android:gravity="center_vertical"
                 android:orientation="vertical">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="15dp"
-                    android:layout_gravity="center_vertical">
-
-                    <!--View to display the yellow color icon-->
-                    <View
-                        android:layout_width="15dp"
-                        android:layout_height="match_parent" />
-
-                    <!--Text view to display R -->
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="10dp"
-                        android:text="R" />
-
-                </LinearLayout>
-
                 <!--Linear layout to display Python-->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="15dp"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginTop="5dp">
+                    android:layout_marginTop="10dp">
 
                     <!--View to display the green color icon-->
                     <View
@@ -88,8 +69,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingStart="10dp"
-                        android:text="Python"
-                        android:textColor="@android:color/holo_green_light" />
+                        android:text="Type HOLD"
+                        android:textColor="#66BB6A" />
 
                 </LinearLayout>
 
@@ -98,7 +79,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="15dp"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginTop="5dp">
+                    android:layout_marginTop="10dp">
 
                     <!--View to display the red color icon-->
                     <View
@@ -110,8 +91,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingStart="10dp"
-                        android:text="C++"
-                        android:textColor="@android:color/holo_red_light" />
+                        android:text="Type REPETITION"
+                        android:textColor="#EF5350" />
 
                 </LinearLayout>
 
@@ -120,7 +101,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="15dp"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginTop="5dp">
+                    android:layout_marginTop="10dp">
 
                     <!--View to display the blue color icon-->
                     <View
@@ -132,8 +113,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingStart="10dp"
-                        android:text="Java"
-                        android:textColor="@android:color/holo_blue_light" />
+                        android:text="Type CHRONO"
+                        android:textColor="#29B6F6" />
 
                 </LinearLayout>
 
@@ -148,7 +129,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/details"
         android:layout_width="match_parent"
-        android:layout_height="260dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/cardViewGraph"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
@@ -169,7 +150,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="25dp"
                 android:layout_marginTop="20dp"
-                android:text="Use of Programming Languages(In Percentage):"
+                android:text="Résumé"
                 android:textSize="23sp"
                 android:textStyle="bold" />
 
@@ -194,12 +175,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-light"
-                    android:text="R"
+                    android:text="Nombre d'exercices terminées"
                     android:textSize="18sp" />
 
                 <!-- used. For now default set to 0-->
                 <TextView
-                    android:id="@+id/tvR"
+                    android:id="@+id/statistic_count"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -229,83 +210,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-light"
-                    android:text="Python"
+                    android:text="Nombre d'exercices terminées (7 derniers jours)"
                     android:textSize="18sp" />
 
                 <!-- For now default set to 0-->
 
                 <TextView
-                    android:id="@+id/tvPython"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:fontFamily="sans-serif-light"
-                    android:text="0"
-                    android:textAlignment="textEnd"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-            </RelativeLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp" />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="25dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="25dp"
-                android:layout_marginBottom="10dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-light"
-                    android:text="C++"
-                    android:textSize="18sp" />
-
-                <!-- For now default set to 0-->
-                <TextView
-                    android:id="@+id/tvCPP"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:fontFamily="sans-serif-light"
-                    android:text="0"
-                    android:textAlignment="textEnd"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-            </RelativeLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp" />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="25dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="25dp"
-                android:layout_marginBottom="10dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-light"
-                    android:text="Java"
-                    android:textSize="18sp" />
-
-                <!-- For now default set to 0-->
-                <TextView
-                    android:id="@+id/tvJava"
+                    android:id="@+id/statistic_count_7"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
@@ -347,7 +258,9 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-light"
                 android:text="Historique"
-                android:textSize="18sp" />
+                android:textColor="#29B6F6"
+                android:textSize="23sp"
+                android:textStyle="bold" />
 
             <!-- used. For now default set to 0-->
             <TextView
@@ -358,7 +271,8 @@
                 android:fontFamily="sans-serif-light"
                 android:text="0"
                 android:textAlignment="textEnd"
-                android:textSize="18sp"
+                android:textColor="#29B6F6"
+                android:textSize="23sp"
                 android:textStyle="bold" />
         </RelativeLayout>
 
