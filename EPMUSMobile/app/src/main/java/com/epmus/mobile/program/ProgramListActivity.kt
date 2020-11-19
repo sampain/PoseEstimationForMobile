@@ -104,9 +104,10 @@ class ProgramListActivity : AppCompatActivity() {
                 val item = v.tag as ProgramContent.ProgramItem
                 val intent = Intent(v.context, CameraActivity::class.java)
                 val program = ProgramContent.ITEM_MAP[item.id]
-                val exerciceData =
-                    ExerciceData.getExerciceData(ExerciceNameList.getEnumValue(program!!.content))
-                intent.putExtra("exercice", exerciceData.exercice)
+                val exerciceData = ExerciceData()
+                val exerciceDataPopulated =
+                    exerciceData.getExerciceData(ExerciceNameList.getEnumValue(program!!.content))
+                intent.putExtra("exercice", exerciceDataPopulated)
                 v.context.startActivity(intent)
             }
 

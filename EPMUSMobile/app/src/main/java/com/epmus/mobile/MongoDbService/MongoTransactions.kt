@@ -4,6 +4,7 @@ package com.epmus.mobile.MongoDbService
 import com.epmus.mobile.HistoryActivity
 import com.epmus.mobile.historyView
 import com.epmus.mobile.poseestimation.ExerciceStatistique
+import com.epmus.mobile.poseestimation.ExerciceType
 import com.epmus.mobile.statistics
 import com.epmus.mobile.ui.login.realmApp
 import io.realm.Realm
@@ -30,17 +31,29 @@ import java.util.concurrent.FutureTask
 class MongoTransactions {
     companion object {
         val config: SyncConfiguration
+        val user: User?
         lateinit var historyListener: RealmResults<historique>
 
         init {
-            val user: User? = realmApp.currentUser()
+            user = realmApp.currentUser()
             val partitionValue: String? = user?.id
             config = SyncConfiguration.Builder(user, partitionValue).build()
         }
 
         fun insertHistoryEntry(stats: ExerciceStatistique) {
-            val tmpId = "5e728b24fa1bf23c20bdb3a4"
-            var exerName = "NA"
+            val mongoDBUserId = user?.id.toString()
+            var exerName = stats.exerciceName
+            val exerciceType = stats.exerciceType
+
+            val exerciceTypeEnum = ExerciceType.getEnumValue(exerciceType)
+
+            var nbrRepetitionOrHoldTime = stats.numberOfRepetition.last().toString()
+
+            if (exerciceTypeEnum == ExerciceType.HOLD) {
+                // TODO: Fix value
+                nbrRepetitionOrHoldTime = stats.holdTime.last().toString()
+            }
+
 
             val dates = SimpleDateFormat("yyyy-mm-dd hh:mm:ss")
             val timeEnd: Date? = dates.parse(stats.exerciceEndTime)
@@ -48,7 +61,14 @@ class MongoTransactions {
             val timeDiff: Long = abs(timeEnd!!.time - timeStart!!.time)
 
             val histoEntry =
-                historique(tmpId, exerName, stats.initStartTime!!, formatTime(timeDiff))
+                historique(
+                    exerName,
+                    exerciceType,
+                    mongoDBUserId,
+                    stats.initStartTime!!,
+                    formatTime(timeDiff),
+                    nbrRepetitionOrHoldTime
+                )
 
             val task: FutureTask<String> =
                 FutureTask(BackgroundInsertEntry(config, histoEntry), "test")
@@ -64,7 +84,8 @@ class MongoTransactions {
                 statistics = realm.copyFromRealm(collection);
 
                 if (historyView != null) {
-                    historyView!!.adapter = HistoryActivity.SimpleItemRecyclerViewAdapter(statistics)
+                    historyView!!.adapter =
+                        HistoryActivity.SimpleItemRecyclerViewAdapter(statistics)
                 }
             }
         }
@@ -104,15 +125,21 @@ class MongoTransactions {
 }
 
 open class historique(
-    _patientId: String = "test",
-    _programme_id: String = "Statistics",
-    _date: String = "My Project",
-    _duree: String = "defaultTime",
+    _exerciceName: String = "",
+    _exerciceType: String = "",
+    _patientId: String = "",
+    _date: String = "",
+    _duree: String = "",
+    _nbrRepetitionOrHoldTime: String = "",
     _activite: RealmList<activite>? = null
 ) :
     RealmObject() {
     @PrimaryKey
     var _id: ObjectId = ObjectId()
+
+    var exerciceName: String = _exerciceName
+
+    var exerciceType: String = _exerciceType
 
     var patient_id = _patientId
 
@@ -120,7 +147,7 @@ open class historique(
 
     var duree: String = _duree
 
-    var programme_id: String = _programme_id
+    var nbrRepetitionOrHoldTime = _nbrRepetitionOrHoldTime
 
     var activite = _activite
 }

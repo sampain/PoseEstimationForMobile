@@ -3,46 +3,183 @@
     android:id="@+id/history_button"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_below="@+id/history_card"
     android:layout_marginLeft="10dp"
     android:layout_marginTop="20dp"
     android:layout_marginRight="10dp"
     android:elevation="10dp"
     app:cardCornerRadius="10dp">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_marginLeft="25dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="25dp"
-        android:layout_marginBottom="10dp"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/history_button"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/id_text_history"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:autoSizeMaxTextSize="30sp"
-            android:autoSizeStepGranularity="10sp"
-            android:autoSizeTextType="uniform"
-            android:fontFamily="sans-serif-light"
-            android:gravity="center_vertical" />
+        <LinearLayout
+            android:id="@+id/fixed_layout"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/content_history"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_weight="8"
-            android:autoSizeMaxTextSize="30sp"
-            android:autoSizeStepGranularity="10sp"
-            android:autoSizeTextType="uniform"
-            android:fontFamily="sans-serif-light"
-            android:gravity="center_vertical|end"
-            android:singleLine="true" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/id_text_history"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:autoSizeMaxTextSize="30sp"
+                android:autoSizeStepGranularity="10sp"
+                android:autoSizeTextType="uniform"
+                android:fontFamily="sans-serif-light"
+                android:gravity="center_vertical" />
 
+            <TextView
+                android:id="@+id/content_history"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="1"
+                android:autoSizeMaxTextSize="30sp"
+                android:autoSizeStepGranularity="10sp"
+                android:autoSizeTextType="uniform"
+                android:fontFamily="sans-serif-light"
+                android:gravity="center_vertical|end"
+                android:singleLine="true" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/hidden_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fixed_layout">
+
+            <!--View to display the line-->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="20dp" />
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginBottom="10dp">
+
+                <!--Text view to display R -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:text="@string/exercise_type"
+                    android:textSize="18sp" />
+
+                <!-- used. For now default set to 0-->
+                <TextView
+                    android:id="@+id/history_type"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:autoSizeMaxTextSize="30sp"
+                    android:autoSizeStepGranularity="10sp"
+                    android:autoSizeTextType="uniform"
+                    android:fontFamily="sans-serif-light"
+                    android:textAlignment="textEnd" />
+            </RelativeLayout>
+
+            <!--View to display the line-->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginBottom="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:text="@string/exercise_time"
+                    android:textSize="18sp" />
+
+                <!-- For now default set to 0-->
+
+                <TextView
+                    android:id="@+id/history_time"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:autoSizeMaxTextSize="30sp"
+                    android:autoSizeStepGranularity="10sp"
+                    android:autoSizeTextType="uniform"
+                    android:fontFamily="sans-serif-light"
+                    android:textAlignment="textEnd" />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginBottom="10dp">
+
+                <TextView
+                    android:id="@+id/history_nbr_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:text="@string/repetition_number"
+                    android:textSize="18sp" />
+
+                <!-- For now default set to 0-->
+                <TextView
+                    android:id="@+id/history_nbr"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:autoSizeMaxTextSize="30sp"
+                    android:autoSizeStepGranularity="10sp"
+                    android:autoSizeTextType="uniform"
+                    android:fontFamily="sans-serif-light"
+                    android:textAlignment="textEnd" />
+
+            </RelativeLayout>
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

@@ -17,7 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".HistoryActivity"
-            android:label="@string/title_program_list"
+            android:label="@string/title_history_list"
             android:parentActivityName=".StatisticsActivity"/>
         <activity
             android:name=".program.ProgramListActivity"

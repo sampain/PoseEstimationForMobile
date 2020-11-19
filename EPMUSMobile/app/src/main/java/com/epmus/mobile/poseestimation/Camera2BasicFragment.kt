@@ -42,6 +42,7 @@ import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
 import com.epmus.mobile.MongoDbService.MongoTransactions
 import com.epmus.mobile.R
+import com.epmus.mobile.program.ExerciceData
 import com.epmus.mobile.program.ProgramListActivity
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -60,6 +61,7 @@ import java.util.concurrent.TimeUnit
 class Camera2BasicFragment : Fragment() {
     private var sharedPreferences: SharedPreferences? = null
     private val rawStats = ArrayList<Exercice>()
+    lateinit var exerciceData: ExerciceData
 
     private val lock = Any()
     private var runClassifier = false
@@ -483,7 +485,8 @@ class Camera2BasicFragment : Fragment() {
         layoutFrame = view.findViewById(R.id.layout_frame)
         drawView = view.findViewById(R.id.drawview)
 
-        drawView!!.exercice = activity?.intent?.extras?.getParcelable("exercice")
+        exerciceData = activity?.intent?.extras?.getParcelable("exercice")!!
+        drawView!!.exercice = exerciceData.exercice
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.context)
     }
 
@@ -1035,6 +1038,9 @@ class Camera2BasicFragment : Fragment() {
 
     fun adjustStats(s: ArrayList<Exercice>) {
         val cleanStats = ExerciceStatistique()
+
+        cleanStats.exerciceName = exerciceData.name
+        cleanStats.exerciceType = exerciceData.exercice.exerciceType.toString()
 
         // initialize the movements list
         val tmpMovStats = MovementStatistics()

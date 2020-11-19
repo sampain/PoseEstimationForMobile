@@ -3,6 +3,9 @@ package com.epmus.mobile.poseestimation
 import java.io.Serializable
 
 class ExerciceStatistique : Serializable {
+    var exerciceName = ""
+    var exerciceType = ""
+
     var numberOfRepetition = ArrayList<Int?>()
     var speedOfRepetition = ArrayList<Float?>()
     var holdTime = ArrayList<Double?>()
