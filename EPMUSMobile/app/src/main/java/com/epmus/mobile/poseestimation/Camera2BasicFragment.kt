@@ -965,6 +965,11 @@ class Camera2BasicFragment : Fragment() {
                 // must do a separate thread or the background wont show
                 GlobalScope.launch {
 
+                    while(audioIsPlaying)
+                    {
+                        delay(20L)
+                    }
+
                     //Play the audio file
                     if(!sharedPreferences?.getBoolean("audio_setting", true)!!) {
                         var mediaPlayer: MediaPlayer? = MediaPlayer.create(context, R.raw.termine)
