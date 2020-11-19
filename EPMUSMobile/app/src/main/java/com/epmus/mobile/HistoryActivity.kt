@@ -45,8 +45,8 @@ class HistoryActivity : AppCompatActivity() {
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val item = values[position]
-            holder.idView.text = item.patient_id
-            holder.contentView.text = item.programme_id
+            holder.idView.text = item.programme_id
+            holder.contentView.text = item.date
 
             with(holder.itemView) {
                 tag = item
@@ -62,9 +62,3 @@ class HistoryActivity : AppCompatActivity() {
         }
     }
 }
-
-data class HistoryData(
-    var name: String,
-    var date: SimpleDateFormat,
-    var time: String
-)
