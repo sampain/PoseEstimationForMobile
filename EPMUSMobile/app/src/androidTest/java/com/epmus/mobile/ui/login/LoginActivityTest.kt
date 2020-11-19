@@ -3,6 +3,7 @@ package com.epmus.mobile.ui.login
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.typeText
+import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.intent.Intents.intended
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.espresso.intent.rule.IntentsTestRule
@@ -40,5 +41,6 @@ class LoginActivityTest {
         onView(withId(R.id.username)).perform(typeText("BadUser"))
         onView(withId(R.id.password)).perform(typeText("BadUser"))
         onView(withId(R.id.login)).perform(click())
+        onView(withId(R.id.login)).check(ViewAssertions.matches(isDisplayed()))
     }
 }

@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
+import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.*
@@ -63,6 +64,7 @@ class Test_deconnexion {
         onView(withId(R.id.username)).perform(typeText("BadUser"))
         onView(withId(R.id.password)).perform(typeText("BadUser"))
         onView(withId(R.id.login)).perform(click())
+        onView(withId(R.id.login)).check(ViewAssertions.matches(isDisplayed()))
         // onView(withText("La connexion n'a pas réussi")).inRoot(isDialog()).check(matches(isDisplayed()))
     }
 }
