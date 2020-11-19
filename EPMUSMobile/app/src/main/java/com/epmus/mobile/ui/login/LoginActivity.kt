@@ -12,6 +12,7 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.epmus.mobile.CreateAccountActivity
 import com.epmus.mobile.ForgotPasswordActivity
 import com.epmus.mobile.MainMenuActivity
 import com.epmus.mobile.R
@@ -36,7 +37,13 @@ class LoginActivity : AppCompatActivity() {
         val password = findViewById<EditText>(R.id.password)
         val login = findViewById<Button>(R.id.login)
         val loading = findViewById<ProgressBar>(R.id.loading)
+        val createAccount = findViewById<TextView>(R.id.createAccount)
         val forgetPassword = findViewById<TextView>(R.id.forgotPassword)
+
+        createAccount.setOnClickListener {
+            val intent = Intent(this@LoginActivity, CreateAccountActivity::class.java)
+            startActivity(intent)
+        }
 
         forgetPassword.setOnClickListener {
             val intent = Intent(this@LoginActivity, ForgotPasswordActivity::class.java)

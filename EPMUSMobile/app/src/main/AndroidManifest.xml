@@ -16,9 +16,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".HistoryActivity"
+        <activity
+            android:name=".CreateAccountActivity"
+            android:label="@string/action_create"
+            android:parentActivityName=".ui.login.LoginActivity" />
+        <activity
+            android:name=".HistoryActivity"
             android:label="@string/title_history_list"
-            android:parentActivityName=".StatisticsActivity"/>
+            android:parentActivityName=".StatisticsActivity" />
         <activity
             android:name=".program.ProgramListActivity"
             android:label="@string/title_program_list"

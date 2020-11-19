@@ -5,14 +5,20 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context=".ui.login.LoginActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_Create"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
     <EditText
-        android:id="@+id/username"
+        android:id="@+id/create_username"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -26,10 +32,10 @@
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_Create"  />
 
     <EditText
-        android:id="@+id/password"
+        android:id="@+id/create_password"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -38,17 +44,16 @@
 
         android:autofillHints=""
         android:hint="@string/prompt_password"
-        android:imeActionLabel="@string/action_sign_in_short"
         android:imeOptions="actionDone"
         android:inputType="textPassword"
         android:selectAllOnFocus="true"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/username" />
+        app:layout_constraintTop_toBottomOf="@+id/create_username" />
 
     <Button
-        android:id="@+id/login"
+        android:id="@+id/createAccoutButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
@@ -58,13 +63,13 @@
         android:layout_marginBottom="64dp"
         android:background="@drawable/rounded_to"
         android:enabled="false"
-        android:text="@string/action_sign_in"
+        android:text="@string/action_create"
         android:textColor="@android:color/white"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/forgotPassword"
+        app:layout_constraintTop_toBottomOf="@+id/create_password"
         app:layout_constraintVertical_bias="0.07999998" />
 
     <ProgressBar
@@ -78,33 +83,9 @@
         android:layout_marginBottom="64dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/password"
-        app:layout_constraintStart_toStartOf="@+id/password"
+        app:layout_constraintEnd_toEndOf="@+id/create_password"
+        app:layout_constraintStart_toStartOf="@+id/create_password"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.3" />
-
-    <TextView
-        android:id="@+id/createAccount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:layout_marginTop="16dp"
-        android:text="@string/createAccount"
-        android:textColor="@android:color/holo_blue_light"
-        android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="@+id/password"
-        app:layout_constraintTop_toBottomOf="@+id/password" />
-
-    <TextView
-        android:id="@+id/forgotPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/forgot_password"
-        android:textColor="@android:color/holo_blue_light"
-        android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="@+id/createAccount"
-        app:layout_constraintTop_toBottomOf="@+id/createAccount" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
