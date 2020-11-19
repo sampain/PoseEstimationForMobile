@@ -974,6 +974,7 @@ class Camera2BasicFragment : Fragment() {
                     if(!sharedPreferences?.getBoolean("audio_setting", true)!!) {
                         var mediaPlayer: MediaPlayer? = MediaPlayer.create(context, R.raw.termine)
                         mediaPlayer?.start()
+                        delay(mediaPlayer?.duration!!.toLong())
                     }
 
                     delay(2000L)
