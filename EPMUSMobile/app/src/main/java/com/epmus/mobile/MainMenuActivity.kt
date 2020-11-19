@@ -14,7 +14,7 @@ import com.epmus.mobile.ui.login.LoginActivity
 import com.epmus.mobile.ui.login.realmApp
 import io.realm.Realm
 
-var statistics: MutableList<historique> = mutableListOf()
+var historic: MutableList<historique> = mutableListOf()
 lateinit var uiThreadRealm: Realm
 
 class MainMenuActivity : AppCompatActivity() {

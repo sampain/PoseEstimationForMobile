@@ -32,7 +32,7 @@ class HistoryActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView(recyclerView: RecyclerView) {
-        recyclerView.adapter = SimpleItemRecyclerViewAdapter(statistics)
+        recyclerView.adapter = SimpleItemRecyclerViewAdapter(historic)
     }
 
     class SimpleItemRecyclerViewAdapter(

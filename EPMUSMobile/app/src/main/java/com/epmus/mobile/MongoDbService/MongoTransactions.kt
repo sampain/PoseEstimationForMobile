@@ -5,7 +5,7 @@ import com.epmus.mobile.HistoryActivity
 import com.epmus.mobile.historyView
 import com.epmus.mobile.poseestimation.ExerciceStatistique
 import com.epmus.mobile.poseestimation.ExerciceType
-import com.epmus.mobile.statistics
+import com.epmus.mobile.historic
 import com.epmus.mobile.ui.login.realmApp
 import io.realm.Realm
 import io.realm.RealmList
@@ -41,7 +41,6 @@ class MongoTransactions {
         }
 
         fun insertHistoryEntry(stats: ExerciceStatistique) {
-            val mongoDBUserId = user?.id.toString()
             var exerName = stats.exerciceName
             val exerciceType = stats.exerciceType
 
@@ -64,7 +63,6 @@ class MongoTransactions {
                 historique(
                     exerName,
                     exerciceType,
-                    mongoDBUserId,
                     stats.initStartTime!!,
                     formatTime(timeDiff),
                     nbrRepetitionOrHoldTime
@@ -81,11 +79,11 @@ class MongoTransactions {
 
             historyListener.addChangeListener { collection, changeSet ->
 
-                statistics = realm.copyFromRealm(collection);
+                historic = realm.copyFromRealm(collection);
 
                 if (historyView != null) {
                     historyView!!.adapter =
-                        HistoryActivity.SimpleItemRecyclerViewAdapter(statistics)
+                        HistoryActivity.SimpleItemRecyclerViewAdapter(historic)
                 }
             }
         }
@@ -127,34 +125,21 @@ class MongoTransactions {
 open class historique(
     _exerciceName: String = "",
     _exerciceType: String = "",
-    _patientId: String = "",
     _date: String = "",
     _duree: String = "",
-    _nbrRepetitionOrHoldTime: String = "",
-    _activite: RealmList<activite>? = null
+    _nbrRepetitionOrHoldTime: String = ""
 ) :
     RealmObject() {
     @PrimaryKey
     var _id: ObjectId = ObjectId()
 
-    var exerciceName: String = _exerciceName
-
-    var exerciceType: String = _exerciceType
-
-    var patient_id = _patientId
-
     var date: String = _date
 
     var duree: String = _duree
 
+    var exerciceName: String = _exerciceName
+
+    var exerciceType: String = _exerciceType
+
     var nbrRepetitionOrHoldTime = _nbrRepetitionOrHoldTime
-
-    var activite = _activite
 }
-
-@RealmClass(embedded = true)
-open class activite(
-    var nom: String? = null,
-    var resultat: Int? = null,
-    var repetition: Int? = null,
-) : RealmObject() {}

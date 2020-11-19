@@ -73,13 +73,13 @@ class StatisticsActivity : AppCompatActivity() {
     }
 
     private fun setData() {
-        statistic_count.setText(statistics.count().toString())
+        statistic_count.setText(historic.count().toString())
 
         var holdCount = 0
         var repetitionCount = 0
         var chronoCount = 0
 
-        statistics.forEach{
+        historic.forEach{
             val exerciceType = ExerciceType.getEnumValue(it.exerciceType)
             if(exerciceType == ExerciceType.HOLD){
                 holdCount++
@@ -94,7 +94,7 @@ class StatisticsActivity : AppCompatActivity() {
 
         statistic_count_7.setText(999999.toString())
 
-        history.setText(statistics.count().toString())
+        history.setText(historic.count().toString())
 
         pieChart.addPieSlice(
             PieModel(
