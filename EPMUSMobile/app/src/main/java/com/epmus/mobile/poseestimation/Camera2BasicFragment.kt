@@ -71,7 +71,6 @@ class Camera2BasicFragment : Fragment() {
     private var layoutFrame: AutoFitFrameLayout? = null
     private var drawView: DrawView? = null
     private var classifier: ImageClassifier? = null
-    private var layoutBottom: ViewGroup? = null
 
     private var debugMode: Boolean = true
     private var audioIsPlaying: Boolean = false
@@ -474,7 +473,6 @@ class Camera2BasicFragment : Fragment() {
         infoLeft = view.findViewById(R.id.infoLeft)
         layoutFrame = view.findViewById(R.id.layout_frame)
         drawView = view.findViewById(R.id.drawview)
-        layoutBottom = view.findViewById(R.id.layout_bottom)
 
         drawView!!.exercice = activity?.intent?.extras?.getParcelable("exercice")
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.context)
