@@ -114,7 +114,7 @@ class ProgramListActivity : AppCompatActivity() {
             }
 
             onClickListenerDetails = View.OnClickListener { v ->
-                val item = v.tag as ProgramContent.ProgramItem
+                val item = v.tag as ExerciceData
                 if (twoPane) {
                     val fragment = ProgramDetailFragment().apply {
                         arguments = Bundle().apply {
@@ -127,7 +127,7 @@ class ProgramListActivity : AppCompatActivity() {
                         .commit()
                 } else {
                     val intent = Intent(v.context, ProgramDetailActivity::class.java).apply {
-                        putExtra(ProgramDetailFragment.ARG_ITEM_ID, item.id)
+                        putExtra(ProgramDetailFragment.ARG_ITEM_ID, item)
                     }
                     v.context.startActivity(intent)
                 }

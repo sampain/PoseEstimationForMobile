@@ -1,6 +1,7 @@
 package com.epmus.mobile.MongoDbService
 
 // Base Realm Packages
+import android.provider.DocumentsContract
 import com.epmus.mobile.*
 import com.epmus.mobile.poseestimation.BodyPart
 import com.epmus.mobile.poseestimation.ExerciceStatistique
@@ -316,10 +317,11 @@ class MongoTransactions {
                                 exerciceProgram.tempo?.min?.toFloat()
                             exerciceData.exercice.maxExecutionTime =
                                 exerciceProgram.tempo?.max?.toFloat()
+                            exerciceData.id = exerciceProgram.exerciceId
                             exerciceData.name = exercice.name
                             exerciceData.description = exercice.description
                             exerciceData.exercice.exerciceType =
-                                ExerciceType.getEnumValue(exercice.type.capitalize(Locale.ROOT))
+                                ExerciceType.getEnumValue(exercice.type.toUpperCase(Locale.ROOT))
                             exerciceData.exercice.numberOfRepetitionToDo =
                                 exerciceProgram.repetition
                             var i = 0
