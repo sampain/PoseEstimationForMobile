@@ -14,6 +14,7 @@ import com.epmus.mobile.ui.login.LoginActivity
 import com.epmus.mobile.ui.login.realmApp
 import org.eazegraph.lib.charts.PieChart
 import org.eazegraph.lib.models.PieModel
+import kotlin.system.exitProcess
 
 class StatisticsActivity : AppCompatActivity() {
     lateinit var statistic_count: TextView
@@ -60,8 +61,7 @@ class StatisticsActivity : AppCompatActivity() {
         R.id.action_logout -> {
             realmApp.currentUser()?.logOutAsync {
                 if (it.isSuccess) {
-                    val intent = Intent(this, LoginActivity::class.java)
-                    startActivity(intent)
+                    exitProcess(1)
                 }
             }
             true

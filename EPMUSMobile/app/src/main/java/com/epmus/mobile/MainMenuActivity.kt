@@ -11,9 +11,9 @@ import com.epmus.mobile.MongoDbService.MongoTransactions
 import com.epmus.mobile.MongoDbService.historique
 import com.epmus.mobile.program.ExerciceData
 import com.epmus.mobile.program.ProgramListActivity
-import com.epmus.mobile.ui.login.LoginActivity
 import com.epmus.mobile.ui.login.realmApp
 import io.realm.Realm
+import kotlin.system.exitProcess
 
 var historic: MutableList<historique> = mutableListOf()
 var globalExerciceList: MutableList<ExerciceData> = mutableListOf()
@@ -81,8 +81,7 @@ class MainMenuActivity : AppCompatActivity() {
         R.id.action_logout -> {
             realmApp.currentUser()?.logOutAsync {
                 if (it.isSuccess) {
-                    val intent = Intent(this, LoginActivity::class.java)
-                    startActivity(intent)
+                    exitProcess(1)
                 }
             }
             true
