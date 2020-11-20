@@ -1083,6 +1083,7 @@ class Camera2BasicFragment : Fragment() {
         cleanStats.exerciceEndTime = convertLongToTime(s[cpt-1].exerciceEndTime!!)
 
         MongoTransactions.insertHistoryEntry(cleanStats)
+        MongoTransactions.insertStatistics(cleanStats)
     }
 
     private fun showDebugUI(text: String) {
