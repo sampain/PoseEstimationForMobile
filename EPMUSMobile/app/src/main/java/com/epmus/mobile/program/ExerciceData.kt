@@ -49,8 +49,8 @@ class ExerciceData {
                 exercice.numberOfRepetitionToDo = 5
                 exercice.exerciceType = ExerciceType.REPETITION
             } else if (exerciceName == ExerciceNameList.ExerciceBrasDroitRepetition) {
-                movement2.startingAngle = 180
-                movement2.endingAngle = 270
+                movement2.startingAngle = 170
+                movement2.endingAngle = 90
                 movement2.isAngleClockWise = true
                 exercice.movementList.add(movement2)
                 exercice.numberOfRepetitionToDo = 5

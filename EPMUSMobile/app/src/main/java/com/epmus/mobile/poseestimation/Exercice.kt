@@ -564,39 +564,39 @@ class Exercice() : Parcelable {
         //Adding anti/clockwise effect
         //vertical PointO-Point1
         if (X1ToX0 == 0F) {
-            if (pointY2 < pointY1) {
+            if (pointY1 < pointY0) {
                 if (pointX2 < pointX1) {
-                    angleDeg = correctAngle(true, movement.isAngleClockWise!!, angleDeg)
+                    angleDeg = correctAngle(false, movement.isAngleClockWise!!, angleDeg)
                 }
                 else {
-                    angleDeg = correctAngle(false, movement.isAngleClockWise!!, angleDeg)
+                    angleDeg = correctAngle(true, movement.isAngleClockWise!!, angleDeg)
                 }
             }
             else {
                 if (pointX2 < pointX1) {
-                    angleDeg = correctAngle(false, movement.isAngleClockWise!!, angleDeg)
+                    angleDeg = correctAngle(true, movement.isAngleClockWise!!, angleDeg)
                 }
                 else {
-                    angleDeg = correctAngle(true, movement.isAngleClockWise!!, angleDeg)
+                    angleDeg = correctAngle(false, movement.isAngleClockWise!!, angleDeg)
                 }
             }
         }
         //horizontal Point0-Point1
         else if (Y1ToY0 == 0F) {
-            if (pointX2 > pointX1) {
+            if (pointX1 > pointX0) {
                 if (pointY2 > pointY1) {
-                    angleDeg = correctAngle(false, movement.isAngleClockWise!!, angleDeg)
+                    angleDeg = correctAngle(true, movement.isAngleClockWise!!, angleDeg)
                 }
                 else {
-                    angleDeg = correctAngle(true, movement.isAngleClockWise!!, angleDeg)
+                    angleDeg = correctAngle(false, movement.isAngleClockWise!!, angleDeg)
                 }
             }
             else {
                 if (pointY2 > pointY1) {
-                    angleDeg = correctAngle(true, movement.isAngleClockWise!!, angleDeg)
+                    angleDeg = correctAngle(false, movement.isAngleClockWise!!, angleDeg)
                 }
                 else {
-                    angleDeg = correctAngle(false, movement.isAngleClockWise!!, angleDeg)
+                    angleDeg = correctAngle(true, movement.isAngleClockWise!!, angleDeg)
                 }
             }
 
