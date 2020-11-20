@@ -19,7 +19,6 @@ var historic: MutableList<historique> = mutableListOf()
 var programmes: MutableList<programmes> = mutableListOf()
 lateinit var uiThreadRealm: Realm
 lateinit var uiThreadRealm2: Realm
-lateinit var uiThreadRealm3: Realm
 
 class MainMenuActivity : AppCompatActivity() {
 
@@ -58,8 +57,7 @@ class MainMenuActivity : AppCompatActivity() {
         //Add listener to Realm
         uiThreadRealm = Realm.getInstance(MongoTransactions.config)
         uiThreadRealm2 = Realm.getInstance(MongoTransactions.config2)
-        uiThreadRealm3 = Realm.getInstance(MongoTransactions.config3)
-        MongoTransactions.addChangeListenerToRealm(uiThreadRealm, uiThreadRealm2, uiThreadRealm3)
+        MongoTransactions.addChangeListenerToRealm(uiThreadRealm, uiThreadRealm2)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
