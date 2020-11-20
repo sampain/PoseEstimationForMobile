@@ -59,11 +59,16 @@ class MongoTransactions {
             val timeStart: Date? = dates.parse(stats.exerciceStartTime)
             val timeDiff: Long = abs(timeEnd!!.time - timeStart!!.time)
 
+            var initStartTime: String =""
+            if(stats.initStartTime != null){
+                initStartTime = stats.initStartTime!!
+            }
+
             val histoEntry =
                 historique(
                     exerName,
                     exerciceType,
-                    stats.initStartTime!!,
+                    initStartTime,
                     formatTime(timeDiff),
                     nbrRepetitionOrHoldTime
                 )
