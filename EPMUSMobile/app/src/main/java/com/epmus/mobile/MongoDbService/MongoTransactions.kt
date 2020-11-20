@@ -6,7 +6,7 @@ import com.epmus.mobile.historyView
 import com.epmus.mobile.poseestimation.ExerciceStatistique
 import com.epmus.mobile.poseestimation.ExerciceType
 import com.epmus.mobile.historic
-import com.epmus.mobile.poseestimation.MovementState
+import com.epmus.mobile.programmes
 import com.epmus.mobile.ui.login.realmApp
 import io.realm.Realm
 import io.realm.RealmList
@@ -32,13 +32,18 @@ import java.util.concurrent.FutureTask
 class MongoTransactions {
     companion object {
         val config: SyncConfiguration
+        val config2: SyncConfiguration
+        val config3: SyncConfiguration
         val user: User?
         lateinit var historyListener: RealmResults<historique>
+        lateinit var programListener: RealmResults<programmes>
 
         init {
             user = realmApp.currentUser()
             val partitionValue: String? = user?.id
             config = SyncConfiguration.Builder(user, partitionValue).build()
+            config2 = SyncConfiguration.Builder(user, "5e70fbbd362c587b9cc296e2").build()
+            config3 = SyncConfiguration.Builder(user, "5fb6d4b6c3144e2344c97838").build()
         }
 
         fun insertHistoryEntry(stats: ExerciceStatistique) {
@@ -259,9 +264,8 @@ class MongoTransactions {
             executorService.execute(task)
         }
 
-        fun addChangeListenerToRealm(realm: Realm) {
+        fun addChangeListenerToRealm(realm: Realm, realm2: Realm, realm3: Realm) {
             historyListener = realm.where<historique>().findAllAsync()
-
             historyListener.addChangeListener { collection, changeSet ->
 
                 historic = realm.copyFromRealm(collection);
@@ -271,6 +275,33 @@ class MongoTransactions {
                         HistoryActivity.SimpleItemRecyclerViewAdapter(historic)
                 }
             }
+
+            programListener = realm.where<programmes>().findAllAsync()
+            programListener.addChangeListener { collection, changeSet ->
+
+                programmes = realm.copyFromRealm(collection);
+
+                val test = programmes
+            }
+
+            programListener = realm2.where<programmes>().findAllAsync()
+            programListener.addChangeListener { collection, changeSet ->
+
+                programmes = realm.copyFromRealm(collection);
+
+                val test = programmes
+            }
+
+            programListener = realm3.where<programmes>().findAllAsync()
+            programListener.addChangeListener { collection, changeSet ->
+
+                val programme2 = realm.copyFromRealm(collection);
+
+                programmes = (programmes + programme2) as MutableList<programmes>
+
+                val test = programmes
+            }
+
         }
 
         private fun formatTime(time: Long): String {
@@ -310,6 +341,33 @@ class MongoTransactions {
         Runnable {
         override fun run() {
             val realmInstance = Realm.getInstance(config)
+
+            /*var realmList = RealmList<exercices2>()
+            realmList.add(
+                exercices2(
+                    "exer",
+                    angle(5, 6, 7, false),
+                    null,
+                    "desc",
+                    "32132132",
+                    3,
+                    0,
+                    tempo(5, 6, 7)
+                )
+            )
+            realmList.add(
+                exercices2(
+                    "exer2",
+                    angle(5, 6, 7, false),
+                    null,
+                    "desc",
+                    "3213455422132",
+                    3,
+                    0,
+                    tempo(5, 6, 7)
+                )
+            )
+            var test = programmes("nom", realmList)*/
 
             realmInstance.executeTransaction { transactionRealm ->
                 transactionRealm.insert(histoEntry)
@@ -466,3 +524,75 @@ open class simpleDouble(
     RealmObject() {
     var value = _value
 }
+
+open class programmes(
+    _nom: String = "",
+    _exercices2: RealmList<exercices2>? = null
+) : RealmObject() {
+    @PrimaryKey
+    var _id: ObjectId = ObjectId()
+
+    var nom = _nom
+    var exercices2 = _exercices2
+}
+
+@RealmClass(embedded = true)
+open class exercices2(
+    _nom: String? = "",
+    _angle: angle? = null,
+    _angle2: angle? = null,
+    _description: String = "",
+    _exerciceId: String = "",
+    _repetition: Int = 0,
+    _tenir: Int = 0,
+    _tempo: tempo? = null,
+    _dimanche: Boolean = false,
+    _lundi: Boolean = false,
+    _mardi: Boolean = false,
+    _mercredi: Boolean = false,
+    _jeudi: Boolean = false,
+    _vendredi: Boolean = false,
+    _samedi: Boolean = false,
+) : RealmObject() {
+    var nom = _nom
+    var angle = _angle
+    var angle2 = _angle2
+    var description = _description
+    var exerciceId = _exerciceId
+    var repetition = _repetition
+    var tenir = _tenir
+    var tempo = _tempo
+    var dimanche = _dimanche
+    var lundi = _lundi
+    var mardi = _mardi
+    var mercredi = _mercredi
+    var jeudi = _jeudi
+    var vendredi = _vendredi
+    var samedi = _samedi
+}
+
+@RealmClass(embedded = true)
+open class angle(
+    _debut: Int = 0,
+    _fin: Int = 0,
+    _hold: Int = 0,
+    _isAntiClockWise: Boolean = false,
+) : RealmObject() {
+    var debut = _debut
+    var fin = _fin
+    var hold = _hold
+    var isAntiClockWise = _isAntiClockWise
+}
+
+@RealmClass(embedded = true)
+open class tempo(
+    _max: Int = 0,
+    _min: Int = 0,
+    _value: Int = 0
+) : RealmObject() {
+    var max = _max
+    var min = _min
+    var value = _value
+}
+
+
