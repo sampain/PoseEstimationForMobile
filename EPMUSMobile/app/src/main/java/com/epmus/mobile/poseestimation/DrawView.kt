@@ -158,22 +158,54 @@ class DrawView : View {
 
                 when (it.movementState) {
                     MovementState.INIT, MovementState.ENDING_ANGLE_REACHED -> {
-                        angleDeg = it.startingAngle!! + (180 - it.startingAngle!!) * 2
+                        if(!it.isAngleClockWise!!)
+                        {
+                            angleDeg = it.startingAngle!! + (180 - it.startingAngle!!) * 2
+                        }
+                        else
+                        {
+                            angleDeg = it.startingAngle!!
+                        }
+
                         outlinePaint.color = 0xfffc0303.toInt()
                     }
 
                     MovementState.STARTING_ANGLE_REACHED -> {
-                        angleDeg = it.endingAngle!! + (180 - it.endingAngle!!) * 2
+                        if(!it.isAngleClockWise!!)
+                        {
+                            angleDeg = it.endingAngle!! + (180 - it.endingAngle!!) * 2
+                        }
+                        else
+                        {
+                            angleDeg = it.endingAngle!!
+                        }
+
                         outlinePaint.color = 0xfffc0303.toInt()
                     }
 
                     MovementState.WAITING_FOR_OTHER_MOVEMENT_ENDING_ANGLE -> {
-                        angleDeg = it.endingAngle!! + (180 - it.endingAngle!!) * 2
+                        if(!it.isAngleClockWise!!)
+                        {
+                            angleDeg = it.endingAngle!! + (180 - it.endingAngle!!) * 2
+                        }
+                        else
+                        {
+                            angleDeg = it.endingAngle!!
+                        }
+
                         outlinePaint.color = 0xff1cb833.toInt()
                     }
 
                     MovementState.WAITING_FOR_OTHER_MOVEMENT_STARTING_ANGLE -> {
-                        angleDeg = it.startingAngle!! + (180 - it.startingAngle!!) * 2
+                        if(!it.isAngleClockWise!!)
+                        {
+                            angleDeg = it.startingAngle!! + (180 - it.startingAngle!!) * 2
+                        }
+                        else
+                        {
+                            angleDeg = it.startingAngle!!
+                        }
+
                         outlinePaint.color = 0xff1cb833.toInt()
                     }
                 }
