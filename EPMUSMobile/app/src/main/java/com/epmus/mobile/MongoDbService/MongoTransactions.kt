@@ -1,12 +1,12 @@
 package com.epmus.mobile.MongoDbService
 
 // Base Realm Packages
-import com.epmus.mobile.HistoryActivity
-import com.epmus.mobile.historyView
+import com.epmus.mobile.*
+import com.epmus.mobile.poseestimation.BodyPart
 import com.epmus.mobile.poseestimation.ExerciceStatistique
 import com.epmus.mobile.poseestimation.ExerciceType
-import com.epmus.mobile.historic
-import com.epmus.mobile.programmes
+import com.epmus.mobile.poseestimation.Movement
+import com.epmus.mobile.program.ExerciceData
 import com.epmus.mobile.ui.login.realmApp
 import io.realm.Realm
 import io.realm.RealmList
@@ -31,17 +31,22 @@ import java.util.concurrent.FutureTask
 
 class MongoTransactions {
     companion object {
+        var programmesList: MutableList<programmes> = mutableListOf()
+        var exercicesList: MutableList<exercices> = mutableListOf()
         val config: SyncConfiguration
         val config2: SyncConfiguration
+        val config3: SyncConfiguration
         val user: User?
         lateinit var historyListener: RealmResults<historique>
         lateinit var programListener: RealmResults<programmes>
+        lateinit var exercicesListener: RealmResults<exercices>
 
         init {
             user = realmApp.currentUser()
             val partitionValue: String? = user?.id
             config = SyncConfiguration.Builder(user, partitionValue).build()
             config2 = SyncConfiguration.Builder(user, "5e70fbbd362c587b9cc296e2").build()
+            config3 = SyncConfiguration.Builder(user, "exercices").build()
         }
 
         fun insertHistoryEntry(stats: ExerciceStatistique) {
@@ -254,7 +259,7 @@ class MongoTransactions {
             executorService.execute(task)
         }
 
-        fun addChangeListenerToRealm(realm: Realm, realm2: Realm) {
+        fun addChangeListenerToRealm(realm: Realm, realm2: Realm, realm3: Realm) {
             historyListener = realm.where<historique>().findAllAsync()
             historyListener.addChangeListener { collection, changeSet ->
 
@@ -268,7 +273,14 @@ class MongoTransactions {
 
             programListener = realm2.where<programmes>().findAllAsync()
             programListener.addChangeListener { collection, changeSet ->
-                programmes = realm.copyFromRealm(collection);
+                programmesList = realm2.copyFromRealm(collection);
+                globalExerciceList = ExerciceList()
+            }
+
+            exercicesListener = realm3.where<exercices>().findAllAsync()
+            exercicesListener.addChangeListener { collection, changeSet ->
+                exercicesList = realm3.copyFromRealm(collection);
+                globalExerciceList = ExerciceList()
             }
         }
 
@@ -289,6 +301,54 @@ class MongoTransactions {
             }
 
             return cleanTime
+        }
+
+        private fun ExerciceList(): MutableList<ExerciceData> {
+            var exerciceDataList: MutableList<ExerciceData> = mutableListOf()
+            val currentProgrammesList = programmesList
+            val currentExerciceList = exercicesList
+            currentProgrammesList.forEach { programme ->
+                programme.exercices2?.forEach { exerciceProgram ->
+                    currentExerciceList.forEach { exercice ->
+                        var exerciceData = ExerciceData()
+                        if (exerciceProgram.exerciceId == exercice._id.toString()) {
+                            exerciceData.exercice.minExecutionTime =
+                                exerciceProgram.tempo?.min?.toFloat()
+                            exerciceData.exercice.maxExecutionTime =
+                                exerciceProgram.tempo?.max?.toFloat()
+                            exerciceData.name = exercice.name
+                            exerciceData.description = exercice.description
+                            exerciceData.exercice.exerciceType =
+                                ExerciceType.getEnumValue(exercice.type.capitalize(Locale.ROOT))
+                            exerciceData.exercice.numberOfRepetitionToDo =
+                                exerciceProgram.repetition
+                            var i = 0
+                            exercice.movements?.forEach {
+                                val movement = Movement(
+                                    BodyPart.getEnumValue(it.bodyPart0)?.ordinal!!,
+                                    BodyPart.getEnumValue(it.bodyPart1)?.ordinal!!,
+                                    BodyPart.getEnumValue(it.bodyPart2)?.ordinal!!
+                                )
+                                if (i == 0) {
+                                    movement.startingAngle = exerciceProgram.angle?.debut
+                                    movement.endingAngle = exerciceProgram.angle?.fin
+                                    movement.isAngleAntiClockWise =
+                                        exerciceProgram.angle?.isAntiClockWise
+                                } else {
+                                    movement.startingAngle = exerciceProgram.angle2?.debut
+                                    movement.endingAngle = exerciceProgram.angle2?.fin
+                                    movement.isAngleAntiClockWise =
+                                        exerciceProgram.angle2?.isAntiClockWise
+                                }
+                                exerciceData.exercice.movementList.add(movement)
+                                i++
+                            }
+                            exerciceDataList.add(exerciceData)
+                        }
+                    }
+                }
+            }
+            return exerciceDataList
         }
     }
 
@@ -468,13 +528,13 @@ open class simpleDouble(
 
 open class programmes(
     _nom: String = "",
-    _exercices: RealmList<exercices2>? = null
+    _exercices2: RealmList<exercices2>? = null
 ) : RealmObject() {
     @PrimaryKey
     var _id: ObjectId = ObjectId()
 
     var nom = _nom
-    var exercices = _exercices
+    var exercices2 = _exercices2
 }
 
 @RealmClass(embedded = true)
@@ -535,5 +595,49 @@ open class tempo(
     var min = _min
     var value = _value
 }
+
+open class exercices(
+    _name: String = "",
+    _description: String = "",
+    _options: options? = null,
+    _imagePath: String = "",
+    _isActive: Boolean? = null,
+    _type: String = "",
+    _movements: RealmList<movements>? = null
+) : RealmObject() {
+    @PrimaryKey
+    var _id: ObjectId = ObjectId()
+
+    var name = _name
+    var description = _description
+    var options = _options
+    var imagePath = _imagePath
+    var isActive = _isActive
+    var type = _type
+    var movements = _movements
+}
+
+@RealmClass(embedded = true)
+open class movements(
+    _bodyPart0: String = "",
+    _bodyPart1: String = "",
+    _bodyPart2: String = ""
+) : RealmObject() {
+    var bodyPart0 = _bodyPart0
+    var bodyPart1 = _bodyPart1
+    var bodyPart2 = _bodyPart2
+}
+
+@RealmClass(embedded = true)
+open class options(
+    _repetition: Boolean = false,
+    _compteur: Boolean = false,
+    _angle: Boolean = false
+) : RealmObject() {
+    var repetition = _repetition
+    var compteur = _compteur
+    var angle = _angle
+}
+
 
 

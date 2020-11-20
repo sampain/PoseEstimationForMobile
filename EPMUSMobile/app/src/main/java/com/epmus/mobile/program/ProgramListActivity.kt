@@ -13,6 +13,7 @@ import android.widget.TextView
 import com.epmus.mobile.Messaging.NewMessageActivity
 import com.epmus.mobile.R
 import com.epmus.mobile.SettingsActivity
+import com.epmus.mobile.globalExerciceList
 import com.epmus.mobile.poseestimation.CameraActivity
 import com.epmus.mobile.ui.login.LoginActivity
 import com.epmus.mobile.ui.login.realmApp
@@ -85,12 +86,13 @@ class ProgramListActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView(recyclerView: RecyclerView) {
-        recyclerView.adapter = SimpleItemRecyclerViewAdapter(this, ProgramContent.ITEMS, twoPane)
+        recyclerView.adapter =
+            SimpleItemRecyclerViewAdapter(this, globalExerciceList, twoPane)
     }
 
     class SimpleItemRecyclerViewAdapter(
         private val parentActivity: ProgramListActivity,
-        private val values: List<ProgramContent.ProgramItem>,
+        private val values: List<ExerciceData>,
         private val twoPane: Boolean
     ) :
         RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder>() {
@@ -101,13 +103,13 @@ class ProgramListActivity : AppCompatActivity() {
 
         init {
             onClickListenerPlay = View.OnClickListener { v ->
-                val item = v.tag as ProgramContent.ProgramItem
+                val item = v.tag as ExerciceData
                 val intent = Intent(v.context, CameraActivity::class.java)
-                val program = ProgramContent.ITEM_MAP[item.id]
+                /*val program = ProgramContent.ITEM_MAP[item.id]
                 val exerciceData = ExerciceData()
                 val exerciceDataPopulated =
-                    exerciceData.getExerciceData(ExerciceNameList.getEnumValue(program!!.content))
-                intent.putExtra("exercice", exerciceDataPopulated)
+                    exerciceData.getExerciceData(ExerciceNameList.getEnumValue(program!!.content))*/
+                intent.putExtra("exercice", item)
                 v.context.startActivity(intent)
             }
 
@@ -140,8 +142,8 @@ class ProgramListActivity : AppCompatActivity() {
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val item = values[position]
-            holder.idView.text = item.id
-            holder.contentView.text = item.content
+            holder.idView.text = "1"
+            holder.contentView.text = item.name
 
             with(holder.itemView) {
                 tag = item

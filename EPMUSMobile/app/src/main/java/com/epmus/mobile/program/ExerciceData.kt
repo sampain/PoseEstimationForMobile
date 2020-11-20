@@ -9,10 +9,12 @@ import com.epmus.mobile.poseestimation.Movement
 
 class ExerciceData() : Parcelable {
     var name: String = ""
+    var description: String = ""
     var exercice: Exercice = Exercice()
 
     constructor(parcel: Parcel) : this() {
         name = parcel.readString().toString()
+        description = parcel.readString().toString()
         exercice = parcel.readParcelable(Exercice::class.java.classLoader)!!
     }
 
@@ -206,6 +208,7 @@ class ExerciceData() : Parcelable {
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(name)
+        parcel.writeString(description)
         parcel.writeParcelable(exercice, flags)
     }
 

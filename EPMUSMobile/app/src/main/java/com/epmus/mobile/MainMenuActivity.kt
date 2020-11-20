@@ -8,17 +8,20 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.epmus.mobile.Messaging.NewMessageActivity
 import com.epmus.mobile.MongoDbService.MongoTransactions
+import com.epmus.mobile.MongoDbService.exercices
 import com.epmus.mobile.MongoDbService.historique
 import com.epmus.mobile.MongoDbService.programmes
+import com.epmus.mobile.program.ExerciceData
 import com.epmus.mobile.program.ProgramListActivity
 import com.epmus.mobile.ui.login.LoginActivity
 import com.epmus.mobile.ui.login.realmApp
 import io.realm.Realm
 
 var historic: MutableList<historique> = mutableListOf()
-var programmes: MutableList<programmes> = mutableListOf()
+var globalExerciceList: MutableList<ExerciceData> = mutableListOf()
 lateinit var uiThreadRealm: Realm
 lateinit var uiThreadRealm2: Realm
+lateinit var uiThreadRealm3: Realm
 
 class MainMenuActivity : AppCompatActivity() {
 
@@ -57,7 +60,8 @@ class MainMenuActivity : AppCompatActivity() {
         //Add listener to Realm
         uiThreadRealm = Realm.getInstance(MongoTransactions.config)
         uiThreadRealm2 = Realm.getInstance(MongoTransactions.config2)
-        MongoTransactions.addChangeListenerToRealm(uiThreadRealm, uiThreadRealm2)
+        uiThreadRealm3 = Realm.getInstance(MongoTransactions.config3)
+        MongoTransactions.addChangeListenerToRealm(uiThreadRealm, uiThreadRealm2, uiThreadRealm3)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
