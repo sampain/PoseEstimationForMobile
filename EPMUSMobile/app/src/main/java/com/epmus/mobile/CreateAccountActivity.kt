@@ -3,15 +3,12 @@ package com.epmus.mobile
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
-import com.epmus.mobile.program.ProgramListActivity
 import com.epmus.mobile.ui.login.LoginActivity
 import com.epmus.mobile.ui.login.realmApp
-import kotlinx.android.synthetic.main.activity_login.*
 
 class CreateAccountActivity : AppCompatActivity() {
 
@@ -28,7 +25,7 @@ class CreateAccountActivity : AppCompatActivity() {
         val createAccoutButton = findViewById<Button>(R.id.createAccoutButton)
 
         createAccoutButton.setOnClickListener {
-            createUser(username.toString(), password.toString())
+            createUser(username.text.toString(), password.text.toString())
         }
     }
 

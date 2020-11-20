@@ -62,7 +62,6 @@
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="64dp"
         android:background="@drawable/rounded_to"
-        android:enabled="false"
         android:text="@string/action_create"
         android:textColor="@android:color/white"
         android:textSize="30sp"
