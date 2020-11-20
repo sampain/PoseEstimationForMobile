@@ -1,7 +1,6 @@
 package com.epmus.mobile.MongoDbService
 
 // Base Realm Packages
-import android.provider.DocumentsContract
 import com.epmus.mobile.*
 import com.epmus.mobile.poseestimation.BodyPart
 import com.epmus.mobile.poseestimation.ExerciceStatistique
@@ -34,9 +33,9 @@ class MongoTransactions {
     companion object {
         var programmesList: MutableList<programmes> = mutableListOf()
         var exercicesList: MutableList<exercices> = mutableListOf()
-        val config: SyncConfiguration
-        val config2: SyncConfiguration
-        val config3: SyncConfiguration
+        val configUserId: SyncConfiguration
+        val configTempId: SyncConfiguration
+        val configExercices: SyncConfiguration
         val user: User?
         lateinit var historyListener: RealmResults<historique>
         lateinit var programListener: RealmResults<programmes>
@@ -45,9 +44,9 @@ class MongoTransactions {
         init {
             user = realmApp.currentUser()
             val partitionValue: String? = user?.id
-            config = SyncConfiguration.Builder(user, partitionValue).build()
-            config2 = SyncConfiguration.Builder(user, "5e70fbbd362c587b9cc296e2").build()
-            config3 = SyncConfiguration.Builder(user, "exercices").build()
+            configUserId = SyncConfiguration.Builder(user, partitionValue).build()
+            configTempId = SyncConfiguration.Builder(user, "5e70fbbd362c587b9cc296e2").build()
+            configExercices = SyncConfiguration.Builder(user, "exercices").build()
         }
 
         fun insertHistoryEntry(stats: ExerciceStatistique) {
@@ -75,7 +74,7 @@ class MongoTransactions {
                 )
 
             val task: FutureTask<String> =
-                FutureTask(BackgroundInsertEntry(config, histoEntry), "test")
+                FutureTask(BackgroundInsertEntry(configUserId, histoEntry), "test")
             val executorService: ExecutorService = Executors.newFixedThreadPool(2)
             executorService.execute(task)
         }
@@ -255,16 +254,20 @@ class MongoTransactions {
             )
 
             val task: FutureTask<String> =
-                FutureTask(BackgroundInsertStatsEntry(config, statistics), "test")
+                FutureTask(BackgroundInsertStatsEntry(configUserId, statistics), "test")
             val executorService: ExecutorService = Executors.newFixedThreadPool(2)
             executorService.execute(task)
         }
 
-        fun addChangeListenerToRealm(realm: Realm, realm2: Realm, realm3: Realm) {
-            historyListener = realm.where<historique>().findAllAsync()
+        fun addChangeListenerToRealm(
+            realmUserId: Realm,
+            realmTempId: Realm,
+            realmExercices: Realm
+        ) {
+            historyListener = realmUserId.where<historique>().findAllAsync()
             historyListener.addChangeListener { collection, changeSet ->
 
-                historic = realm.copyFromRealm(collection);
+                historic = realmUserId.copyFromRealm(collection);
 
                 if (historyView != null) {
                     historyView!!.adapter =
@@ -272,15 +275,15 @@ class MongoTransactions {
                 }
             }
 
-            programListener = realm2.where<programmes>().findAllAsync()
+            programListener = realmTempId.where<programmes>().findAllAsync()
             programListener.addChangeListener { collection, changeSet ->
-                programmesList = realm2.copyFromRealm(collection);
+                programmesList = realmTempId.copyFromRealm(collection);
                 globalExerciceList = ExerciceList()
             }
 
-            exercicesListener = realm3.where<exercices>().findAllAsync()
+            exercicesListener = realmExercices.where<exercices>().findAllAsync()
             exercicesListener.addChangeListener { collection, changeSet ->
-                exercicesList = realm3.copyFromRealm(collection);
+                exercicesList = realmExercices.copyFromRealm(collection);
                 globalExerciceList = ExerciceList()
             }
         }
