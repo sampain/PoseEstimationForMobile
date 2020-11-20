@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.widget.Toolbar
 import com.epmus.mobile.R
 import com.epmus.mobile.SettingsActivity
 import com.epmus.mobile.ui.login.LoginActivity
@@ -13,6 +14,8 @@ import com.xwray.groupie.ViewHolder
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import kotlinx.android.synthetic.main.activity_chat_log.*
+import kotlinx.android.synthetic.main.chat_f_row.view.*
+import kotlinx.android.synthetic.main.fragment_camera2_basic.view.*
 import kotlinx.android.synthetic.main.user_row_message.view.*
 
 class ChatLogActivity : AppCompatActivity() {
@@ -20,7 +23,10 @@ class ChatLogActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_log)
 
-        supportActionBar?.title = "Chat Log"
+        val toolbar = findViewById<Toolbar>(R.id.toolbar_ChatLogMessaging)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
 
        //val username = intent.getStringExtra(MessagingActivity.USER_KEY)
         val user = intent.getParcelableExtra<MessagingUser>(MessagingActivity.USER_KEY)
@@ -75,7 +81,7 @@ class ChatLogActivity : AppCompatActivity() {
 
 class ChatFItem: Item<ViewHolder>(){
     override fun bind(viewHolder: ViewHolder, position: Int){
-
+        viewHolder.itemView.textView2.text = "bonjour"
     }
 
     override fun getLayout(): Int {
@@ -85,7 +91,7 @@ class ChatFItem: Item<ViewHolder>(){
 
 class ChatTItem: Item<ViewHolder>(){
     override fun bind(viewHolder: ViewHolder, position: Int){
-
+        viewHolder.itemView.textView2.text = "Salut"
     }
 
     override fun getLayout(): Int {

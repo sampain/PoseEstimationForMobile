@@ -16,7 +16,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Messaging.ChatLogActivity">
+        <activity android:name=".Messaging.ChatLogActivity"
+            android:label="@string/title_activity_chat_log">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Messaging.MessagingActivity" />
