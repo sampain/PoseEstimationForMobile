@@ -314,7 +314,7 @@ class Camera2BasicFragment : Fragment() {
                 //Play the audio file
                 var mediaPlayer: MediaPlayer? = MediaPlayer.create(context, audioFile)
 
-                if(!sharedPreferences?.getBoolean("audio_setting", true)!!) {
+                if(!sharedPreferences?.getBoolean("audio_setting", false)!!) {
                     mediaPlayer?.start()
                 }
 
@@ -969,7 +969,7 @@ class Camera2BasicFragment : Fragment() {
                     }
 
                     //Play the audio file
-                    if(!sharedPreferences?.getBoolean("audio_setting", true)!!) {
+                    if(!sharedPreferences?.getBoolean("audio_setting", false)!!) {
                         var mediaPlayer: MediaPlayer? = MediaPlayer.create(context, R.raw.termine)
                         mediaPlayer?.start()
                         delay(mediaPlayer?.duration!!.toLong())
