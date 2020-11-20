@@ -22,6 +22,11 @@ class ChatLogActivity : AppCompatActivity() {
 
         supportActionBar?.title = "Chat Log"
 
+       //val username = intent.getStringExtra(MessagingActivity.USER_KEY)
+        val user = intent.getParcelableExtra<MessagingUser>(MessagingActivity.USER_KEY)
+
+        //supportActionBar?.title = user.nickname
+
         val adapter = GroupAdapter<ViewHolder>()
 
         adapter.add(ChatFItem())

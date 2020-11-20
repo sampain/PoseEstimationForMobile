@@ -54,9 +54,8 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview_chat_log"
         android:layout_width="0dp"
-        android:layout_height="610dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="16dp"
         android:background="@android:color/darker_gray"
         app:layout_constraintBottom_toTopOf="@+id/Text_chat_log"
         app:layout_constraintEnd_toEndOf="parent"
