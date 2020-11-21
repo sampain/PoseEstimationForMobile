@@ -337,12 +337,14 @@ class MongoTransactions {
                                 if (i == 0) {
                                     movement.startingAngle = exerciceProgram.angle?.debut
                                     movement.endingAngle = exerciceProgram.angle?.fin
-                                    movement.isAngleAntiClockWise =
+                                    // TODO: Fix this
+                                    movement.isAngleClockWise =
                                         exerciceProgram.angle?.isAntiClockWise
                                 } else {
                                     movement.startingAngle = exerciceProgram.angle2?.debut
                                     movement.endingAngle = exerciceProgram.angle2?.fin
-                                    movement.isAngleAntiClockWise =
+                                    // TODO: Fix this
+                                    movement.isAngleClockWise =
                                         exerciceProgram.angle2?.isAntiClockWise
                                 }
                                 exerciceData.exercice.movementList.add(movement)
