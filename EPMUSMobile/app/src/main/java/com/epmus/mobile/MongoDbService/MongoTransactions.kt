@@ -376,7 +376,7 @@ class MongoTransactions {
         Runnable {
         override fun run() {
             val realmInstance = Realm.getInstance(config)
-
+            //TODO: Statistics has an empty patientId
             realmInstance.executeTransaction { transactionRealm ->
                 transactionRealm.insert(histoEntry)
             }
