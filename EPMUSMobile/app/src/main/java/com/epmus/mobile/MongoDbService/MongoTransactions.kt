@@ -32,14 +32,14 @@ import java.util.concurrent.FutureTask
 class MongoTransactions {
     companion object {
         var programmesList: MutableList<programmes> = mutableListOf()
-        var exercicesList: MutableList<exercices> = mutableListOf()
+        var exercicesPhysiotecList: MutableList<exercicesPhysiotec> = mutableListOf()
         val configUserId: SyncConfiguration
         val configTempId: SyncConfiguration
         val configExercices: SyncConfiguration
         val user: User?
         lateinit var historyListener: RealmResults<historique>
         lateinit var programListener: RealmResults<programmes>
-        lateinit var exercicesListener: RealmResults<exercices>
+        lateinit var exercicesPhysiotecListener: RealmResults<exercicesPhysiotec>
 
         init {
             user = realmApp.currentUser()
@@ -281,9 +281,9 @@ class MongoTransactions {
                 globalExerciceList = ExerciceList()
             }
 
-            exercicesListener = realmExercices.where<exercices>().findAllAsync()
-            exercicesListener.addChangeListener { collection, changeSet ->
-                exercicesList = realmExercices.copyFromRealm(collection);
+            exercicesPhysiotecListener = realmExercices.where<exercicesPhysiotec>().findAllAsync()
+            exercicesPhysiotecListener.addChangeListener { collection, changeSet ->
+                exercicesPhysiotecList = realmExercices.copyFromRealm(collection);
                 globalExerciceList = ExerciceList()
             }
         }
@@ -310,9 +310,9 @@ class MongoTransactions {
         private fun ExerciceList(): MutableList<ExerciceData> {
             var exerciceDataList: MutableList<ExerciceData> = mutableListOf()
             val currentProgrammesList = programmesList
-            val currentExerciceList = exercicesList
+            val currentExerciceList = exercicesPhysiotecList
             currentProgrammesList.forEach { programme ->
-                programme.exercices2?.forEach { exerciceProgram ->
+                programme.exercices?.forEach { exerciceProgram ->
                     currentExerciceList.forEach { exercice ->
                         var exerciceData = ExerciceData()
                         if (exerciceProgram.exerciceId == exercice._id.toString()) {
@@ -339,13 +339,13 @@ class MongoTransactions {
                                     movement.endingAngle = exerciceProgram.angle?.fin
                                     // TODO: Fix this
                                     movement.isAngleClockWise =
-                                        exerciceProgram.angle?.isAntiClockWise
+                                        exerciceProgram.angle?.isClockWise
                                 } else {
                                     movement.startingAngle = exerciceProgram.angle2?.debut
                                     movement.endingAngle = exerciceProgram.angle2?.fin
                                     // TODO: Fix this
                                     movement.isAngleClockWise =
-                                        exerciceProgram.angle2?.isAntiClockWise
+                                        exerciceProgram.angle2?.isClockWise
                                 }
                                 exerciceData.exercice.movementList.add(movement)
                                 i++
@@ -418,7 +418,7 @@ open class statistics(
     _initStartTime: String = "",
     _exerciceStartTime: String = "",
     _exerciceEndTime: String = "",
-    _movements: RealmList<movement> = RealmList<movement>(),
+    _movement: RealmList<movement> = RealmList<movement>(),
     _bodyPartPos: bodyPartPos? = bodyPartPos(),
     _patientID: String = "",
     _exerciceID: String? = "",
@@ -439,7 +439,7 @@ open class statistics(
     var exerciceStartTime = _exerciceStartTime
     var exerciceEndTime = _exerciceEndTime
 
-    var movements = _movements
+    var movement = _movement
 
     var bodyPartPos = _bodyPartPos
 
@@ -535,17 +535,17 @@ open class simpleDouble(
 
 open class programmes(
     _nom: String = "",
-    _exercices2: RealmList<exercices2>? = null
+    _exercices: RealmList<exercices>? = null
 ) : RealmObject() {
     @PrimaryKey
     var _id: ObjectId = ObjectId()
 
     var nom = _nom
-    var exercices2 = _exercices2
+    var exercices = _exercices
 }
 
 @RealmClass(embedded = true)
-open class exercices2(
+open class exercices(
     _nom: String = "",
     _angle: angle? = null,
     _angle2: angle? = null,
@@ -584,12 +584,12 @@ open class angle(
     _debut: Int = 0,
     _fin: Int = 0,
     _hold: Int? = null,
-    _isAntiClockWise: Boolean = false,
+    _isClockWise: Boolean = false,
 ) : RealmObject() {
     var debut = _debut
     var fin = _fin
     var hold = _hold
-    var isAntiClockWise = _isAntiClockWise
+    var isClockWise = _isClockWise
 }
 
 @RealmClass(embedded = true)
@@ -603,7 +603,7 @@ open class tempo(
     var value = _value
 }
 
-open class exercices(
+open class exercicesPhysiotec(
     _name: String = "",
     _description: String = "",
     _options: options? = null,
