@@ -3,50 +3,122 @@ package com.epmus.mobile.Messaging
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar
+import com.anshdeep.kotlinmessenger.models.ChatMessage
 import com.epmus.mobile.R
 import com.epmus.mobile.SettingsActivity
 import com.epmus.mobile.ui.login.LoginActivity
 import com.epmus.mobile.ui.login.realmApp
+import com.google.firebase.database.ChildEventListener
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
 import com.xwray.groupie.ViewHolder
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import kotlinx.android.synthetic.main.activity_chat_log.*
 import kotlinx.android.synthetic.main.chat_f_row.view.*
-import kotlinx.android.synthetic.main.fragment_camera2_basic.view.*
-import kotlinx.android.synthetic.main.user_row_message.view.*
 
 class ChatLogActivity : AppCompatActivity() {
+
+    companion object {
+        val TAG = "ChatLog"
+    }
+
+    val adapter = GroupAdapter<ViewHolder>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_log)
 
+        recyclerview_chat_log.adapter = adapter
         val toolbar = findViewById<Toolbar>(R.id.toolbar_ChatLogMessaging)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
 
-       //val username = intent.getStringExtra(MessagingActivity.USER_KEY)
-        val user = intent.getParcelableExtra<MessagingUser>(MessagingActivity.USER_KEY)
+       val username = intent.getStringExtra(MessagingActivity.USER_KEY)
+        //val user = intent.getParcelableExtra<MessagingUser>(MessagingActivity.USER_KEY)
 
-        //supportActionBar?.title = user.nickname
+        supportActionBar?.title = username
+
+        //setupDummyData()
+        ListenForMessages()
+
+        envoyer_button_chat_log.setOnClickListener {
+            Log.d(TAG, "Attempt to send message ....")
+            performSendMessage()
+        }
+    }
+
+    private fun ListenForMessages() {
+        val ref = FirebaseDatabase.getInstance().getReference("/chats")
+
+        ref.addChildEventListener(object : ChildEventListener {
+            override fun onChildAdded(p0: DataSnapshot, p1:String?){
+                val chatMessage = p0.getValue((ChatMessage::class.java))
+                Log.d(TAG, chatMessage?.message.toString())
+
+                if(chatMessage?.fromId == "Aida"){
+                    adapter.add(ChatFItem(chatMessage?.message.toString()))
+                }
+
+                else{
+                    adapter.add(ChatTItem(chatMessage?.message.toString()))
+                }
+
+            }
+
+            override fun onCancelled(p0: DatabaseError){
+
+            }
+
+            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onChildRemoved(snapshot: DataSnapshot) {
+                TODO("Not yet implemented")
+            }
+        })
+    }
+
+
+
+    private fun performSendMessage(){
+
+        val message = Text_chat_log.text.toString()
+
+        //val fromId = FirebaseAuth.getInstance().uid ?: return
+        val fromId = "Aida"
+
+        val username = intent.getStringExtra(MessagingActivity.USER_KEY)
+        val toId = username
+
+
+
+        val reference = FirebaseDatabase.getInstance().getReference("/chats").push()
+
+        val chatMessage = toId?.let { ChatMessage(reference.key!!, message, fromId, it, System.currentTimeMillis()/1000) }
+        reference.setValue(chatMessage)
+                .addOnSuccessListener {
+                    Log.d(TAG, "Saved our chat message: ${reference.key}")
+                }
+    }
+
+    private fun setupDummyData(){
 
         val adapter = GroupAdapter<ViewHolder>()
 
-        adapter.add(ChatFItem())
-        adapter.add(ChatTItem())
-        adapter.add(ChatFItem())
-        adapter.add(ChatTItem())
-        adapter.add(ChatFItem())
-        adapter.add(ChatTItem())
-        adapter.add(ChatFItem())
-        adapter.add(ChatTItem())
-        adapter.add(ChatFItem())
-        adapter.add(ChatTItem())
-        adapter.add(ChatFItem())
-        adapter.add(ChatTItem())
+        adapter.add(ChatFItem("From Message...."))
+        adapter.add(ChatTItem("To Message \n To Message"))
 
         recyclerview_chat_log.adapter = adapter
     }
@@ -79,9 +151,9 @@ class ChatLogActivity : AppCompatActivity() {
     }
 }
 
-class ChatFItem: Item<ViewHolder>(){
+class ChatFItem(val text: String): Item<ViewHolder>(){
     override fun bind(viewHolder: ViewHolder, position: Int){
-        viewHolder.itemView.textView2.text = "bonjour"
+        viewHolder.itemView.textView2.text = text
     }
 
     override fun getLayout(): Int {
@@ -89,9 +161,9 @@ class ChatFItem: Item<ViewHolder>(){
     }
 }
 
-class ChatTItem: Item<ViewHolder>(){
+class ChatTItem(val text: String): Item<ViewHolder>(){
     override fun bind(viewHolder: ViewHolder, position: Int){
-        viewHolder.itemView.textView2.text = "Salut"
+       viewHolder.itemView.textView2.text = text
     }
 
     override fun getLayout(): Int {
