@@ -1,11 +1,13 @@
 package com.epmus.mobile.program
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import com.epmus.mobile.R
 import com.epmus.mobile.globalExerciceList
@@ -46,10 +48,15 @@ class ProgramDetailFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         val rootView = inflater.inflate(R.layout.program_detail, container, false)
 
         item?.let {
             rootView.findViewById<TextView>(R.id.program_detail).text = it.description
+            val id = resources.getIdentifier(it.imagePath, "drawable",
+                activity?.packageName
+            )
+            rootView.findViewById<ImageView>(R.id.test).setImageResource(id)
         }
 
         return rootView

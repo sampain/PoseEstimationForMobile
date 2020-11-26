@@ -321,8 +321,9 @@ class MongoTransactions {
                             exerciceData.exercice.maxExecutionTime =
                                 exerciceProgram.tempo?.max?.toFloat()
                             exerciceData.id = exerciceProgram.exerciceId
-                            exerciceData.name = exercice.name
-                            exerciceData.description = exercice.description
+                            exerciceData.imagePath = exercice.imagePath
+                            exerciceData.name = exerciceProgram.nom
+                            exerciceData.description = exerciceProgram.description
                             exerciceData.exercice.exerciceType =
                                 ExerciceType.getEnumValue(exercice.type.toUpperCase(Locale.ROOT))
                             exerciceData.exercice.numberOfRepetitionToDo =

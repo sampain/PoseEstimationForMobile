@@ -11,6 +11,7 @@ class ExerciceData() : Parcelable {
     var id: String = ""
     var name: String = ""
     var description: String = ""
+    var imagePath: String = ""
     var exercice: Exercice = Exercice()
 
     constructor(parcel: Parcel) : this() {
