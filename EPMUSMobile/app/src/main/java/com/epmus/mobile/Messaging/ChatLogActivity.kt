@@ -153,7 +153,7 @@ class ChatLogActivity : AppCompatActivity() {
 
 class ChatFItem(val text: String): Item<ViewHolder>(){
     override fun bind(viewHolder: ViewHolder, position: Int){
-        viewHolder.itemView.textView2.text = text
+        viewHolder.itemView.textView.text = text
     }
 
     override fun getLayout(): Int {
@@ -163,7 +163,7 @@ class ChatFItem(val text: String): Item<ViewHolder>(){
 
 class ChatTItem(val text: String): Item<ViewHolder>(){
     override fun bind(viewHolder: ViewHolder, position: Int){
-       viewHolder.itemView.textView2.text = text
+       viewHolder.itemView.textView.text = text
     }
 
     override fun getLayout(): Int {

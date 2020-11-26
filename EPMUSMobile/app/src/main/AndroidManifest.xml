@@ -17,10 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Messaging.ChatLogActivity"
-            android:label="@string/title_activity_chat_log">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Messaging.MessagingActivity" />
+            android:parentActivityName=".Messaging.MessagingActivity">
         </activity>
         <activity
             android:name=".CreateAccountActivity"
