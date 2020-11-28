@@ -30,28 +30,29 @@
 
             <TextView
                 android:id="@+id/id_text_history"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:autoSizeMaxTextSize="30sp"
-                android:autoSizeStepGranularity="10sp"
+                android:autoSizeMinTextSize="5sp"
                 android:autoSizeTextType="uniform"
                 android:fontFamily="sans-serif-light"
-                android:gravity="center_vertical" />
+                android:gravity="center_vertical"
+                android:maxLines="2" />
 
             <TextView
                 android:id="@+id/content_history"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_weight="1"
                 android:autoSizeMaxTextSize="30sp"
-                android:autoSizeStepGranularity="10sp"
+                android:autoSizeMinTextSize="5sp"
                 android:autoSizeTextType="uniform"
                 android:fontFamily="sans-serif-light"
                 android:gravity="center_vertical|end"
-                android:singleLine="true" />
+                android:maxLines="2" />
         </LinearLayout>
 
         <LinearLayout
@@ -78,34 +79,42 @@
                 android:layout_marginRight="20dp" />
 
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:layout_marginLeft="25dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="25dp"
-                android:layout_marginBottom="10dp">
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal">
 
                 <!--Text view to display R -->
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="5dp"
+                    android:layout_weight="4"
+                    android:autoSizeMaxTextSize="30sp"
+                    android:autoSizeMinTextSize="5sp"
+                    android:autoSizeTextType="uniform"
                     android:fontFamily="sans-serif-light"
-                    android:text="@string/exercise_type"
-                    android:textSize="18sp" />
+                    android:maxLines="2"
+                    android:text="@string/exercise_type" />
 
                 <!-- used. For now default set to 0-->
                 <TextView
                     android:id="@+id/history_type"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="6"
                     android:autoSizeMaxTextSize="30sp"
-                    android:autoSizeStepGranularity="10sp"
+                    android:autoSizeMinTextSize="5sp"
                     android:autoSizeTextType="uniform"
                     android:fontFamily="sans-serif-light"
+                    android:maxLines="1"
                     android:textAlignment="textEnd" />
-            </RelativeLayout>
+            </LinearLayout>
 
             <!--View to display the line-->
             <View
@@ -114,35 +123,43 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp" />
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:layout_marginLeft="25dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="25dp"
-                android:layout_marginBottom="10dp">
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="5dp"
+                    android:layout_weight="1"
+                    android:autoSizeMaxTextSize="30sp"
+                    android:autoSizeMinTextSize="5sp"
+                    android:autoSizeTextType="uniform"
                     android:fontFamily="sans-serif-light"
-                    android:text="@string/exercise_time"
-                    android:textSize="18sp" />
+                    android:maxLines="2"
+                    android:text="@string/exercise_time" />
 
                 <!-- For now default set to 0-->
 
                 <TextView
                     android:id="@+id/history_time"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="5"
                     android:autoSizeMaxTextSize="30sp"
-                    android:autoSizeStepGranularity="10sp"
+                    android:autoSizeMinTextSize="5sp"
                     android:autoSizeTextType="uniform"
                     android:fontFamily="sans-serif-light"
+                    android:maxLines="1"
                     android:textAlignment="textEnd" />
 
-            </RelativeLayout>
+            </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -150,35 +167,43 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp" />
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:layout_marginLeft="25dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="25dp"
-                android:layout_marginBottom="10dp">
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/history_nbr_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="5dp"
+                    android:layout_weight="1"
+                    android:autoSizeMaxTextSize="30sp"
+                    android:autoSizeMinTextSize="5sp"
+                    android:autoSizeTextType="uniform"
                     android:fontFamily="sans-serif-light"
-                    android:text="@string/repetition_number"
-                    android:textSize="18sp" />
+                    android:maxLines="2"
+                    android:text="@string/repetition_number" />
 
                 <!-- For now default set to 0-->
                 <TextView
                     android:id="@+id/history_nbr"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="8"
                     android:autoSizeMaxTextSize="30sp"
-                    android:autoSizeStepGranularity="10sp"
+                    android:autoSizeMinTextSize="5sp"
                     android:autoSizeTextType="uniform"
                     android:fontFamily="sans-serif-light"
+                    android:maxLines="1"
                     android:textAlignment="textEnd" />
 
-            </RelativeLayout>
+            </LinearLayout>
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

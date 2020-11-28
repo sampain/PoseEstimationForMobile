@@ -52,74 +52,54 @@
                 android:gravity="center_vertical"
                 android:orientation="vertical">
 
-                <!--Linear layout to display Python-->
-                <LinearLayout
+
+                <!--Text view to display python text -->
+                <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="15dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginTop="10dp">
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:autoSizeMaxTextSize="30sp"
+                    android:autoSizeMinTextSize="5sp"
+                    android:autoSizeTextType="uniform"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="20dp"
+                    android:text="@string/hold_stats"
+                    android:textColor="#66BB6A" />
 
-                    <!--View to display the green color icon-->
-                    <View
-                        android:layout_width="15dp"
-                        android:layout_height="match_parent" />
 
-                    <!--Text view to display python text -->
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="10dp"
-                        android:paddingEnd="0dp"
-                        android:text="@string/hold_stats"
-                        android:textColor="#66BB6A" />
-
-                </LinearLayout>
-
-                <!--Linear layout to display C++-->
-                <LinearLayout
+                <!--Text view to display C++ text -->
+                <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="15dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginTop="10dp">
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:autoSizeMaxTextSize="30sp"
+                    android:autoSizeMinTextSize="5sp"
+                    android:autoSizeTextType="uniform"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="20dp"
+                    android:text="@string/repetition_stats"
+                    android:textColor="#EF5350" />
 
-                    <!--View to display the red color icon-->
-                    <View
-                        android:layout_width="15dp"
-                        android:layout_height="match_parent" />
 
-                    <!--Text view to display C++ text -->
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="10dp"
-                        android:paddingEnd="0dp"
-                        android:text="@string/repetition_stats"
-                        android:textColor="#EF5350" />
-
-                </LinearLayout>
-
-                <!--Linear layout to display Java-->
-                <LinearLayout
+                <!--Text view to display Java text -->
+                <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="15dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginTop="10dp">
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:autoSizeMaxTextSize="30sp"
+                    android:autoSizeMinTextSize="5sp"
+                    android:autoSizeTextType="uniform"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:text="@string/chono_stats"
+                    android:textColor="#29B6F6" />
 
-                    <!--View to display the blue color icon-->
-                    <View
-                        android:layout_width="15dp"
-                        android:layout_height="match_parent" />
-
-                    <!--Text view to display Java text -->
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="10dp"
-                        android:paddingEnd="0dp"
-                        android:text="@string/chono_stats"
-                        android:textColor="#29B6F6" />
-
-                </LinearLayout>
 
             </LinearLayout>
 
@@ -154,7 +134,7 @@
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="20dp"
                 android:text="@string/summary_stats"
-                android:textSize="23sp"
+                android:textSize="40sp"
                 android:textStyle="bold" />
 
             <!--View to display the line-->
@@ -165,33 +145,42 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="20dp" />
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 android:layout_marginLeft="25dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="25dp"
-                android:layout_marginBottom="10dp">
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal">
 
                 <!--Text view to display R -->
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="5dp"
+                    android:layout_weight="1"
+                    android:autoSizeMaxTextSize="30sp"
+                    android:autoSizeMinTextSize="5sp"
+                    android:autoSizeTextType="uniform"
                     android:fontFamily="sans-serif-light"
-                    android:text="@string/exercice_stats"
-                    android:textSize="18sp" />
+                    android:maxLines="2"
+                    android:text="@string/exercice_stats" />
 
                 <!-- used. For now default set to 0-->
                 <TextView
                     android:id="@+id/statistic_count"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="6"
+                    android:autoSizeMaxTextSize="30sp"
+                    android:autoSizeMinTextSize="5sp"
+                    android:autoSizeTextType="uniform"
                     android:fontFamily="sans-serif-light"
-                    android:textAlignment="textEnd"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-            </RelativeLayout>
+                    android:maxLines="1"
+                    android:textAlignment="textEnd" />
+            </LinearLayout>
 
             <!--View to display the line-->
             <View
@@ -200,34 +189,45 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp" />
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 android:layout_marginLeft="25dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="25dp"
-                android:layout_marginBottom="10dp">
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="5dp"
+                    android:layout_weight="1"
+                    android:autoSizeMaxTextSize="30sp"
+                    android:autoSizeMinTextSize="5sp"
+                    android:autoSizeTextType="uniform"
                     android:fontFamily="sans-serif-light"
-                    android:text="@string/exercice7_stats"
-                    android:textSize="18sp" />
+                    android:maxLines="2"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="30dp"
+                    android:text="@string/exercice7_stats" />
 
                 <!-- For now default set to 0-->
 
                 <TextView
                     android:id="@+id/statistic_count_7"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="5"
+                    android:autoSizeMaxTextSize="30sp"
+                    android:autoSizeMinTextSize="5sp"
+                    android:autoSizeTextType="uniform"
                     android:fontFamily="sans-serif-light"
-                    android:textAlignment="textEnd"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:maxLines="1"
+                    android:textAlignment="textEnd" />
 
-            </RelativeLayout>
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -236,7 +236,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/history_button"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:layout_below="@+id/details"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
@@ -245,36 +245,46 @@
         android:elevation="10dp"
         app:cardCornerRadius="10dp">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginLeft="25dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="25dp"
-            android:layout_marginBottom="10dp">
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
 
             <!--Text view to display R -->
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
+                android:autoSizeMaxTextSize="30sp"
+                android:autoSizeMinTextSize="5sp"
+                android:autoSizeTextType="uniform"
                 android:fontFamily="sans-serif-light"
+                android:maxLines="1"
                 android:text="@string/action_history"
                 android:textColor="#29B6F6"
-                android:textSize="23sp"
                 android:textStyle="bold" />
 
             <!-- used. For now default set to 0-->
             <TextView
                 android:id="@+id/history_number"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
+                android:layout_weight="5"
+                android:autoSizeMaxTextSize="30sp"
+                android:autoSizeMinTextSize="5sp"
+                android:autoSizeTextType="uniform"
                 android:fontFamily="sans-serif-light"
+                android:maxLines="1"
                 android:textAlignment="textEnd"
                 android:textColor="#29B6F6"
-                android:textSize="23sp"
                 android:textStyle="bold" />
-        </RelativeLayout>
+        </LinearLayout>
 
     </androidx.cardview.widget.CardView>
 
