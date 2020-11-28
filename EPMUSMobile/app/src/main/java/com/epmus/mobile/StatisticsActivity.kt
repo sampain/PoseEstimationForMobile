@@ -10,17 +10,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
 import com.epmus.mobile.poseestimation.ExerciceType
-import com.epmus.mobile.ui.login.LoginActivity
 import com.epmus.mobile.ui.login.realmApp
 import org.eazegraph.lib.charts.PieChart
 import org.eazegraph.lib.models.PieModel
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import kotlin.system.exitProcess
 
 class StatisticsActivity : AppCompatActivity() {
-    lateinit var statistic_count: TextView
-    lateinit var statistic_count_7: TextView
-    lateinit var pieChart: PieChart
-    lateinit var history: TextView
+    private lateinit var statisticCount: TextView
+    private lateinit var statisticCount7: TextView
+    private lateinit var pieChart: PieChart
+    private lateinit var history: TextView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,21 +32,21 @@ class StatisticsActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        statistic_count = findViewById(R.id.statistic_count);
-        statistic_count_7 = findViewById(R.id.statistic_count_7);
-        pieChart = findViewById(R.id.piechart);
-        history  = findViewById(R.id.history_number);
+        statisticCount = findViewById(R.id.statistic_count)
+        statisticCount7 = findViewById(R.id.statistic_count_7)
+        pieChart = findViewById(R.id.piechart)
+        history = findViewById(R.id.history_number)
 
-        val history = findViewById<CardView>(R.id.history_button);
+        val history = findViewById<CardView>(R.id.history_button)
 
         history.setOnClickListener {
             val intent = Intent(this, HistoryActivity::class.java)
             startActivity(intent)
         }
 
-
         setData()
     }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.toolbar_actions, menu)
         return true
@@ -73,28 +74,37 @@ class StatisticsActivity : AppCompatActivity() {
     }
 
     private fun setData() {
-        statistic_count.setText(historic.count().toString())
+        statisticCount.text = historic.count().toString()
 
         var holdCount = 0
         var repetitionCount = 0
         var chronoCount = 0
+        var count7 = 0
 
-        historic.forEach{
-            val exerciceType = ExerciceType.getEnumValue(it.exerciceType)
-            if(exerciceType == ExerciceType.HOLD){
-                holdCount++
+        val localDate = LocalDate.now()
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
+        historic.forEach {
+
+            when (ExerciceType.getEnumValue(it.exerciceType)) {
+                ExerciceType.HOLD -> {
+                    holdCount++
+                }
+                ExerciceType.REPETITION -> {
+                    repetitionCount++
+                }
+                else -> {
+                    chronoCount++
+                }
             }
-            else if(exerciceType == ExerciceType.REPETITION){
-                repetitionCount++
-            }
-            else{
-                chronoCount++
+
+            if (LocalDate.parse(it.date, formatter).compareTo(localDate) >= -7) {
+                count7++
             }
         }
 
-        statistic_count_7.setText(999999.toString())
+        statisticCount7.text = count7.toString()
 
-        history.setText(historic.count().toString())
+        history.text = historic.count().toString()
 
         pieChart.addPieSlice(
             PieModel(

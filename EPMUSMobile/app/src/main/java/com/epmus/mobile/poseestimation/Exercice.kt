@@ -1,12 +1,8 @@
 package com.epmus.mobile.poseestimation
 
-import android.graphics.Point
 import android.graphics.PointF
 import android.os.Parcel
 import android.os.Parcelable
-import android.widget.Chronometer
-import android.widget.TextView
-import com.epmus.mobile.R
 import java.util.ArrayList
 import kotlin.math.*
 

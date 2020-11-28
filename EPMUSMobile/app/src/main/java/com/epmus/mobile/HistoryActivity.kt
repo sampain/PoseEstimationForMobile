@@ -14,6 +14,8 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.epmus.mobile.MongoDbService.historique
 import com.epmus.mobile.poseestimation.ExerciceType
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 var historyView: RecyclerView? = null
 
@@ -47,12 +49,12 @@ class HistoryActivity : AppCompatActivity() {
 
                 val test = v.tag as LinearLayout
                 if (test.visibility == View.VISIBLE) {
-                    test.visibility = View.GONE;
+                    test.visibility = View.GONE
                 } else {
                     TransitionManager.beginDelayedTransition(
                         v as CardView,
                         AutoTransition()
-                    );
+                    )
                     test.visibility = View.VISIBLE
                 }
             }
@@ -72,6 +74,11 @@ class HistoryActivity : AppCompatActivity() {
             holder.time.text = item.duree
             holder.nbr.text = item.nbrRepetitionOrHoldTime
 
+            val formatterFrom = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
+            val formatterTo = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+            val dateTime = LocalDateTime.parse(item.date!!, formatterFrom)
+            holder.contentView.text = dateTime.format(formatterTo)
+
             val exerciceTypeEnum = ExerciceType.getEnumValue(item.exerciceType)
 
             if (exerciceTypeEnum == ExerciceType.HOLD) {
@@ -79,7 +86,7 @@ class HistoryActivity : AppCompatActivity() {
             }
 
             with(holder.itemView) {
-                tag = holder.hidden_details
+                tag = holder.hiddenDetails
                 setOnClickListener(onClickListenerDetails)
             }
         }
@@ -93,7 +100,7 @@ class HistoryActivity : AppCompatActivity() {
             val time: TextView = view.findViewById(R.id.history_time)
             val nbr: TextView = view.findViewById(R.id.history_nbr)
             val nbrText: TextView = view.findViewById(R.id.history_nbr_text)
-            val hidden_details: LinearLayout = view.findViewById(R.id.hidden_details)
+            val hiddenDetails: LinearLayout = view.findViewById(R.id.hidden_details)
         }
     }
 }

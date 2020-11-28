@@ -20,7 +20,6 @@ import io.realm.mongodb.User
 import io.realm.mongodb.sync.SyncConfiguration
 
 import org.bson.types.ObjectId
-import java.lang.Math.abs
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -36,13 +35,12 @@ class MongoTransactions {
         val configUserId: SyncConfiguration
         val configTempId: SyncConfiguration
         val configExercices: SyncConfiguration
-        val user: User?
+        val user: User? = realmApp.currentUser()
         lateinit var historyListener: RealmResults<historique>
         lateinit var programListener: RealmResults<programmes>
         lateinit var exercicesPhysiotecListener: RealmResults<exercicesPhysiotec>
 
         init {
-            user = realmApp.currentUser()
             val partitionValue: String? = user?.id
             configUserId = SyncConfiguration.Builder(user, partitionValue).build()
             configTempId = SyncConfiguration.Builder(user, "5e70fbbd362c587b9cc296e2").build()
@@ -60,9 +58,13 @@ class MongoTransactions {
             }
 
             val dates = SimpleDateFormat("yyyy-mm-dd hh:mm:ss")
-            val timeEnd: Date? = dates.parse(stats.exerciceEndTime)
-            val timeStart: Date? = dates.parse(stats.exerciceStartTime)
-            val timeDiff: Long = abs(timeEnd!!.time - timeStart!!.time)
+            val timeEnd: Date? = dates.parse(stats.exerciceEndTime!!)
+            val timeStart: Date? = dates.parse(stats.exerciceStartTime!!)
+
+            var timeDiff: Long = 0
+            if (timeEnd != null && timeStart != null) {
+                timeDiff = kotlin.math.abs(timeEnd.time - timeStart.time)
+            }
 
             val histoEntry =
                 historique(
@@ -74,7 +76,7 @@ class MongoTransactions {
                 )
 
             val task: FutureTask<String> =
-                FutureTask(BackgroundInsertEntry(configUserId, histoEntry), "test")
+                FutureTask(BackgroundInsertEntry(configUserId, histoEntry), "histoEntry completed")
             val executorService: ExecutorService = Executors.newFixedThreadPool(2)
             executorService.execute(task)
         }
@@ -289,14 +291,14 @@ class MongoTransactions {
         }
 
         private fun formatTime(time: Long): String {
-            var cleanTime: String = ""
+            var cleanTime = ""
             var seconds: Long = time / 1000
 
             if (seconds > 59) {
                 val df = DecimalFormat("##")
                 df.roundingMode = RoundingMode.FLOOR
 
-                var minutes = df.format(seconds / 60)
+                val minutes = df.format(seconds / 60)
                 seconds %= 60
 
                 cleanTime = minutes.toString() + "m " + seconds.toString() + "s"
@@ -308,13 +310,13 @@ class MongoTransactions {
         }
 
         private fun ExerciceList(): MutableList<ExerciceData> {
-            var exerciceDataList: MutableList<ExerciceData> = mutableListOf()
+            val exerciceDataList: MutableList<ExerciceData> = mutableListOf()
             val currentProgrammesList = programmesList
             val currentExerciceList = exercicesPhysiotecList
             currentProgrammesList.forEach { programme ->
                 programme.exercices?.forEach { exerciceProgram ->
                     currentExerciceList.forEach { exercice ->
-                        var exerciceData = ExerciceData()
+                        val exerciceData = ExerciceData()
                         if (exerciceProgram.exerciceId == exercice._id.toString()) {
                             exerciceData.exercice.minExecutionTime =
                                 exerciceProgram.tempo?.min?.toFloat()
@@ -338,13 +340,11 @@ class MongoTransactions {
                                 if (i == 0) {
                                     movement.startingAngle = exerciceProgram.angle?.debut
                                     movement.endingAngle = exerciceProgram.angle?.fin
-                                    // TODO: Fix this
                                     movement.isAngleClockWise =
                                         exerciceProgram.angle?.isClockWise
                                 } else {
                                     movement.startingAngle = exerciceProgram.angle2?.debut
                                     movement.endingAngle = exerciceProgram.angle2?.fin
-                                    // TODO: Fix this
                                     movement.isAngleClockWise =
                                         exerciceProgram.angle2?.isClockWise
                                 }
