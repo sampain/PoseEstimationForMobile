@@ -149,7 +149,7 @@ class ProgramListActivity : AppCompatActivity() {
                     holder.contentView.setTextColor(Color.parseColor("#EF5350"))
                 }
                 ExerciceType.REPETITION -> {
-                    holder.contentView.setTextColor(Color.parseColor("#EF5350"))
+                    holder.contentView.setTextColor(Color.parseColor("#FF9800"))
                 }
                 ExerciceType.CHRONO -> {
                     holder.contentView.setTextColor(Color.parseColor("#29B6F6"))

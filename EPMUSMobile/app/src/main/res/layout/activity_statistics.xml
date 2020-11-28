@@ -53,7 +53,6 @@
                 android:orientation="vertical">
 
 
-                <!--Text view to display python text -->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -69,7 +68,6 @@
                     android:textColor="#66BB6A" />
 
 
-                <!--Text view to display C++ text -->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -82,10 +80,9 @@
                     android:paddingStart="10dp"
                     android:paddingEnd="20dp"
                     android:text="@string/repetition_stats"
-                    android:textColor="#EF5350" />
+                    android:textColor="#FF9800" />
 
 
-                <!--Text view to display Java text -->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -100,7 +97,6 @@
                     android:text="@string/chono_stats"
                     android:textColor="#29B6F6" />
 
-
             </LinearLayout>
 
         </LinearLayout>
@@ -108,7 +104,6 @@
     </androidx.cardview.widget.CardView>
 
 
-    <!-- Use of programming languages -->
     <androidx.cardview.widget.CardView
         android:id="@+id/details"
         android:layout_width="match_parent"
@@ -121,13 +116,11 @@
         android:elevation="10dp"
         app:cardCornerRadius="10dp">
 
-        <!-- use of programming languages -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- programming languages text-->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -137,7 +130,6 @@
                 android:textSize="40sp"
                 android:textStyle="bold" />
 
-            <!--View to display the line-->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -167,7 +159,6 @@
                     android:maxLines="2"
                     android:text="@string/exercice_stats" />
 
-                <!-- used. For now default set to 0-->
                 <TextView
                     android:id="@+id/statistic_count"
                     android:layout_width="match_parent"
@@ -182,7 +173,6 @@
                     android:textAlignment="textEnd" />
             </LinearLayout>
 
-            <!--View to display the line-->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -211,8 +201,6 @@
                     android:paddingStart="0dp"
                     android:paddingEnd="30dp"
                     android:text="@string/exercice7_stats" />
-
-                <!-- For now default set to 0-->
 
                 <TextView
                     android:id="@+id/statistic_count_7"
@@ -254,7 +242,6 @@
             android:layout_marginBottom="10dp"
             android:orientation="horizontal">
 
-            <!--Text view to display R -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -269,7 +256,6 @@
                 android:textColor="#29B6F6"
                 android:textStyle="bold" />
 
-            <!-- used. For now default set to 0-->
             <TextView
                 android:id="@+id/history_number"
                 android:layout_width="match_parent"

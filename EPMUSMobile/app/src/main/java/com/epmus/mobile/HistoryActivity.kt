@@ -1,6 +1,7 @@
 package com.epmus.mobile
 
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.transition.AutoTransition
@@ -111,6 +112,21 @@ class HistoryActivity : AppCompatActivity() {
 
             if (exerciceTypeEnum == ExerciceType.HOLD) {
                 holder.nbrText.text = "Temps soutenu"
+            }
+
+            when (ExerciceType.getEnumValue(item.exerciceType)) {
+                ExerciceType.HOLD -> {
+                    holder.idView.setTextColor(Color.parseColor("#EF5350"))
+                    holder.exerciceType.setTextColor(Color.parseColor("#EF5350"))
+                }
+                ExerciceType.REPETITION -> {
+                    holder.idView.setTextColor(Color.parseColor("#FF9800"))
+                    holder.exerciceType.setTextColor(Color.parseColor("#FF9800"))
+                }
+                ExerciceType.CHRONO -> {
+                    holder.idView.setTextColor(Color.parseColor("#29B6F6"))
+                    holder.exerciceType.setTextColor(Color.parseColor("#29B6F6"))
+                }
             }
 
             with(holder.itemView) {

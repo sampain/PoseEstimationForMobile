@@ -115,7 +115,7 @@ class StatisticsActivity : AppCompatActivity() {
         pieChart.addPieSlice(
             PieModel(
                 "Type Répétition", repetitionCount.toFloat(),
-                Color.parseColor("#EF5350")
+                Color.parseColor("#FF9800")
             )
         )
         pieChart.addPieSlice(
