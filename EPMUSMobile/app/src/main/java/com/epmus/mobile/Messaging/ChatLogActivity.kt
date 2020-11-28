@@ -55,6 +55,11 @@ class ChatLogActivity : AppCompatActivity() {
     }
 
     private fun ListenForMessages() {
+        val fromId = "Aida"
+
+        val username = intent.getStringExtra(MessagingActivity.USER_KEY)
+        val toId = username
+
         val ref = FirebaseDatabase.getInstance().getReference("/chats")
 
         ref.addChildEventListener(object : ChildEventListener {
@@ -90,8 +95,6 @@ class ChatLogActivity : AppCompatActivity() {
         })
     }
 
-
-
     private fun performSendMessage(){
 
         val message = Text_chat_log.text.toString()
@@ -102,15 +105,19 @@ class ChatLogActivity : AppCompatActivity() {
         val username = intent.getStringExtra(MessagingActivity.USER_KEY)
         val toId = username
 
-
-
+        //val reference = FirebaseDatabase.getInstance().getReference("/chats").push()
         val reference = FirebaseDatabase.getInstance().getReference("/chats").push()
+
+       // val toReference = FirebaseDatabase.getInstance().getReference("/chats").push()
 
         val chatMessage = toId?.let { ChatMessage(reference.key!!, message, fromId, it, System.currentTimeMillis()/1000) }
         reference.setValue(chatMessage)
                 .addOnSuccessListener {
                     Log.d(TAG, "Saved our chat message: ${reference.key}")
+                    Text_chat_log.text.clear()
+                    recyclerview_chat_log.scrollToPosition(adapter.itemCount -1)
                 }
+       // toReference.setValue(chatMessage)
     }
 
     private fun setupDummyData(){
