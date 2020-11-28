@@ -1,6 +1,7 @@
 package com.epmus.mobile.program
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.*
 import android.widget.ImageButton
@@ -15,7 +16,7 @@ import com.epmus.mobile.R
 import com.epmus.mobile.SettingsActivity
 import com.epmus.mobile.globalExerciceList
 import com.epmus.mobile.poseestimation.CameraActivity
-import com.epmus.mobile.ui.login.LoginActivity
+import com.epmus.mobile.poseestimation.ExerciceType
 import com.epmus.mobile.ui.login.realmApp
 import kotlin.system.exitProcess
 
@@ -105,10 +106,6 @@ class ProgramListActivity : AppCompatActivity() {
             onClickListenerPlay = View.OnClickListener { v ->
                 val item = v.tag as ExerciceData
                 val intent = Intent(v.context, CameraActivity::class.java)
-                /*val program = ProgramContent.ITEM_MAP[item.id]
-                val exerciceData = ExerciceData()
-                val exerciceDataPopulated =
-                    exerciceData.getExerciceData(ExerciceNameList.getEnumValue(program!!.content))*/
                 intent.putExtra("exercice", item)
                 v.context.startActivity(intent)
             }
@@ -142,8 +139,20 @@ class ProgramListActivity : AppCompatActivity() {
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val item = values[position]
-            holder.idView.text = "1"
-            holder.contentView.text = item.name
+            holder.idView.text = item.name
+            holder.contentView.text = item.exercice.exerciceType.toString()
+
+            when (item.exercice.exerciceType) {
+                ExerciceType.HOLD -> {
+                    holder.contentView.setTextColor(Color.parseColor("#EF5350"))
+                }
+                ExerciceType.REPETITION -> {
+                    holder.contentView.setTextColor(Color.parseColor("#EF5350"))
+                }
+                ExerciceType.CHRONO -> {
+                    holder.contentView.setTextColor(Color.parseColor("#29B6F6"))
+                }
+            }
 
             with(holder.itemView) {
                 tag = item

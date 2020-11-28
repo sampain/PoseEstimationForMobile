@@ -1,12 +1,11 @@
 package com.epmus.mobile
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.transition.AutoTransition
 import android.transition.TransitionManager
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
@@ -14,8 +13,10 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.epmus.mobile.MongoDbService.historique
 import com.epmus.mobile.poseestimation.ExerciceType
+import com.epmus.mobile.ui.login.realmApp
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import kotlin.system.exitProcess
 
 var historyView: RecyclerView? = null
 
@@ -31,6 +32,32 @@ class HistoryActivity : AppCompatActivity() {
 
         historyView = findViewById(R.id.history_list)
         setupRecyclerView(findViewById(R.id.history_list))
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.toolbar_actions, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.action_settings -> {
+            val intent = Intent(this, SettingsActivity::class.java)
+            startActivity(intent)
+            true
+        }
+
+        R.id.action_logout -> {
+            realmApp.currentUser()?.logOutAsync {
+                if (it.isSuccess) {
+                    exitProcess(1)
+                }
+            }
+            true
+        }
+
+        else -> {
+            super.onOptionsItemSelected(item)
+        }
     }
 
     private fun setupRecyclerView(recyclerView: RecyclerView) {

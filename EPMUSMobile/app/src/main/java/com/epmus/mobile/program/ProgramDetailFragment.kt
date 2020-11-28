@@ -1,6 +1,5 @@
 package com.epmus.mobile.program
 
-import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.google.android.material.appbar.CollapsingToolbarLayout
@@ -19,10 +18,6 @@ import com.epmus.mobile.globalExerciceList
  * on handsets.
  */
 class ProgramDetailFragment : Fragment() {
-
-    /**
-     * The dummy content this fragment is presenting.
-     */
     private var item: ExerciceData? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,10 +31,8 @@ class ProgramDetailFragment : Fragment() {
                     }
                 }
 
-
                 activity?.findViewById<CollapsingToolbarLayout>(R.id.toolbar_layout)?.title =
                     item?.name
-
             }
         }
     }
@@ -63,10 +56,6 @@ class ProgramDetailFragment : Fragment() {
     }
 
     companion object {
-        /**
-         * The fragment argument representing the item ID that this fragment
-         * represents.
-         */
         const val ARG_ITEM_ID = "item_id"
     }
 }
