@@ -13,6 +13,7 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.epmus.mobile.MongoDbService.historique
 import com.epmus.mobile.poseestimation.ExerciceType
+import com.epmus.mobile.poseestimation.ExerciceTypeUI
 import com.epmus.mobile.ui.login.realmApp
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -97,7 +98,7 @@ class HistoryActivity : AppCompatActivity() {
             val item = values[position]
             holder.idView.text = item.exerciceName
             holder.contentView.text = item.date
-            holder.exerciceType.text = item.exerciceType
+            holder.exerciceType.text = ExerciceTypeUI.getEnumValue(item.exerciceType).toString()
             holder.time.text = item.duree
             holder.nbr.text = item.nbrRepetitionOrHoldTime
 

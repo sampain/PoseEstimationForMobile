@@ -69,7 +69,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingStart="10dp"
-                        android:text="Type HOLD"
+                        android:paddingEnd="0dp"
+                        android:text="@string/hold_stats"
                         android:textColor="#66BB6A" />
 
                 </LinearLayout>
@@ -91,7 +92,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingStart="10dp"
-                        android:text="Type REPETITION"
+                        android:paddingEnd="0dp"
+                        android:text="@string/repetition_stats"
                         android:textColor="#EF5350" />
 
                 </LinearLayout>
@@ -113,7 +115,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingStart="10dp"
-                        android:text="Type CHRONO"
+                        android:paddingEnd="0dp"
+                        android:text="@string/chono_stats"
                         android:textColor="#29B6F6" />
 
                 </LinearLayout>
@@ -148,9 +151,9 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="25dp"
+                android:layout_marginStart="25dp"
                 android:layout_marginTop="20dp"
-                android:text="Résumé"
+                android:text="@string/summary_stats"
                 android:textSize="23sp"
                 android:textStyle="bold" />
 
@@ -175,7 +178,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-light"
-                    android:text="Nombre d'exercices terminées"
+                    android:text="@string/exercice_stats"
                     android:textSize="18sp" />
 
                 <!-- used. For now default set to 0-->
@@ -183,9 +186,8 @@
                     android:id="@+id/statistic_count"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:fontFamily="sans-serif-light"
-                    android:text="0"
                     android:textAlignment="textEnd"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -210,7 +212,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-light"
-                    android:text="Nombre d'exercices terminées (7 derniers jours)"
+                    android:text="@string/exercice7_stats"
                     android:textSize="18sp" />
 
                 <!-- For now default set to 0-->
@@ -221,7 +223,6 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:fontFamily="sans-serif-light"
-                    android:text="0"
                     android:textAlignment="textEnd"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -257,7 +258,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-light"
-                android:text="Historique"
+                android:text="@string/action_history"
                 android:textColor="#29B6F6"
                 android:textSize="23sp"
                 android:textStyle="bold" />
@@ -269,7 +270,6 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:fontFamily="sans-serif-light"
-                android:text="0"
                 android:textAlignment="textEnd"
                 android:textColor="#29B6F6"
                 android:textSize="23sp"

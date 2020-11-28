@@ -91,4 +91,10 @@
     <string name="repetition_number">Nombre de répétitions</string>
     <string name="exercise_type">Type d\'exercice</string>
     <string name="exercise_time">Durée de l\'exercice</string>
+    <string name="hold_stats">Type Maintenir</string>
+    <string name="repetition_stats">Type Répétition</string>
+    <string name="chono_stats">Type Chronomètre</string>
+    <string name="summary_stats">Résumé</string>
+    <string name="exercice_stats">Nombre d\'exercices terminées</string>
+    <string name="exercice7_stats">Nombre d\'exercices terminées (7 derniers jours)</string>
 </resources>

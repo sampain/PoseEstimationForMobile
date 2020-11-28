@@ -108,19 +108,19 @@ class StatisticsActivity : AppCompatActivity() {
 
         pieChart.addPieSlice(
             PieModel(
-                "Type HOLD", holdCount.toFloat(),
+                "Type Maintenir", holdCount.toFloat(),
                 Color.parseColor("#66BB6A")
             )
         )
         pieChart.addPieSlice(
             PieModel(
-                "Type REPETITION", repetitionCount.toFloat(),
+                "Type Répétition", repetitionCount.toFloat(),
                 Color.parseColor("#EF5350")
             )
         )
         pieChart.addPieSlice(
             PieModel(
-                "Type CHRONO", chronoCount.toFloat(),
+                "Type Chronomètre", chronoCount.toFloat(),
                 Color.parseColor("#29B6F6")
             )
         )

@@ -17,6 +17,7 @@ import com.epmus.mobile.SettingsActivity
 import com.epmus.mobile.globalExerciceList
 import com.epmus.mobile.poseestimation.CameraActivity
 import com.epmus.mobile.poseestimation.ExerciceType
+import com.epmus.mobile.poseestimation.ExerciceTypeUI
 import com.epmus.mobile.ui.login.realmApp
 import kotlin.system.exitProcess
 
@@ -140,7 +141,8 @@ class ProgramListActivity : AppCompatActivity() {
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val item = values[position]
             holder.idView.text = item.name
-            holder.contentView.text = item.exercice.exerciceType.toString()
+            holder.contentView.text =
+                ExerciceTypeUI.getEnumValue(item.exercice.exerciceType.toString()).toString()
 
             when (item.exercice.exerciceType) {
                 ExerciceType.HOLD -> {

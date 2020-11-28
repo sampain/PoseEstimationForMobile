@@ -1,6 +1,5 @@
 package com.epmus.mobile.poseestimation
 
-import com.epmus.mobile.program.ExerciceNameList
 import java.io.Serializable
 
 enum class ExerciceType(val exerciceType: String): Serializable {
@@ -10,6 +9,17 @@ enum class ExerciceType(val exerciceType: String): Serializable {
 
     companion object {
         fun getEnumValue(value: String): ExerciceType? =
-            ExerciceType.values().find { it.exerciceType == value }
+            values().find { it.exerciceType == value }
+    }
+}
+
+enum class ExerciceTypeUI(val exerciceTypeUI: String): Serializable {
+    Chronomètre("CHRONO"),
+    Répétition("REPETITION"),
+    Maintenir("HOLD");
+
+    companion object {
+        fun getEnumValue(value: String): ExerciceTypeUI? =
+            values().find { it.exerciceTypeUI == value }
     }
 }
