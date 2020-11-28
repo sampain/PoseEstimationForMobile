@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
 
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".StatisticsActivity">
 
     <androidx.appcompat.widget.Toolbar
@@ -15,263 +16,272 @@
         android:background="?attr/colorPrimary"
         android:theme="@style/AppTheme.AppBarOverlay" />
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardViewGraph"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_below="@+id/toolbar_Statistics"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginRight="20dp"
-        android:elevation="10dp"
-        app:cardCornerRadius="10dp">
-
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:weightSum="2">
-
-            <org.eazegraph.lib.charts.PieChart
-                android:id="@+id/piechart"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp"
-                android:layout_weight="1"
-                android:padding="6dp" />
-
-            <!-- to display pie chart details -->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="20dp"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:orientation="vertical">
-
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:autoSizeMaxTextSize="30sp"
-                    android:autoSizeMinTextSize="5sp"
-                    android:autoSizeTextType="uniform"
-                    android:gravity="center_vertical"
-                    android:maxLines="1"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="20dp"
-                    android:text="@string/hold_stats"
-                    android:textColor="#66BB6A" />
-
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:autoSizeMaxTextSize="30sp"
-                    android:autoSizeMinTextSize="5sp"
-                    android:autoSizeTextType="uniform"
-                    android:gravity="center_vertical"
-                    android:maxLines="1"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="20dp"
-                    android:text="@string/repetition_stats"
-                    android:textColor="#FF9800" />
-
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:autoSizeMaxTextSize="30sp"
-                    android:autoSizeMinTextSize="5sp"
-                    android:autoSizeTextType="uniform"
-                    android:gravity="center_vertical"
-                    android:maxLines="1"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="10dp"
-                    android:text="@string/chono_stats"
-                    android:textColor="#29B6F6" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </androidx.cardview.widget.CardView>
-
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/details"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/cardViewGraph"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp"
-        android:elevation="10dp"
-        app:cardCornerRadius="10dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardViewGraph"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="20dp"
+                android:elevation="10dp"
+                app:cardCornerRadius="10dp">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <org.eazegraph.lib.charts.PieChart
+                        android:id="@+id/piechart"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:layout_weight="1"
+                        android:padding="6dp" />
+
+                    <!-- to display pie chart details -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="20dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical">
+
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:autoSizeMaxTextSize="30sp"
+                            android:autoSizeMinTextSize="5sp"
+                            android:autoSizeTextType="uniform"
+                            android:gravity="center_vertical"
+                            android:maxLines="1"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="20dp"
+                            android:text="@string/hold_stats"
+                            android:textColor="#66BB6A" />
+
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:autoSizeMaxTextSize="30sp"
+                            android:autoSizeMinTextSize="5sp"
+                            android:autoSizeTextType="uniform"
+                            android:gravity="center_vertical"
+                            android:maxLines="1"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="20dp"
+                            android:text="@string/repetition_stats"
+                            android:textColor="#FF9800" />
+
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:autoSizeMaxTextSize="30sp"
+                            android:autoSizeMinTextSize="5sp"
+                            android:autoSizeTextType="uniform"
+                            android:gravity="center_vertical"
+                            android:maxLines="1"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp"
+                            android:text="@string/chono_stats"
+                            android:textColor="#29B6F6" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/details"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="25dp"
+                android:layout_below="@+id/cardViewGraph"
+                android:layout_marginLeft="20dp"
                 android:layout_marginTop="20dp"
-                android:text="@string/summary_stats"
-                android:textSize="40sp"
-                android:textStyle="bold" />
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="20dp"
+                android:elevation="10dp"
+                app:cardCornerRadius="10dp">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="20dp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-            <LinearLayout
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="25dp"
+                        android:layout_marginTop="20dp"
+                        android:text="@string/summary_stats"
+                        android:textSize="40sp"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginRight="20dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginLeft="25dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="25dp"
+                        android:layout_marginBottom="10dp"
+                        android:orientation="horizontal">
+
+                        <!--Text view to display R -->
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginEnd="5dp"
+                            android:layout_weight="1"
+                            android:autoSizeMaxTextSize="30sp"
+                            android:autoSizeMinTextSize="5sp"
+                            android:autoSizeTextType="uniform"
+                            android:fontFamily="sans-serif-light"
+                            android:maxLines="2"
+                            android:text="@string/exercice_stats" />
+
+                        <TextView
+                            android:id="@+id/statistic_count"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="5dp"
+                            android:layout_weight="6"
+                            android:autoSizeMaxTextSize="30sp"
+                            android:autoSizeMinTextSize="5sp"
+                            android:autoSizeTextType="uniform"
+                            android:fontFamily="sans-serif-light"
+                            android:maxLines="1"
+                            android:textAlignment="textEnd" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginLeft="25dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="25dp"
+                        android:layout_marginBottom="10dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginEnd="5dp"
+                            android:layout_weight="1"
+                            android:autoSizeMaxTextSize="30sp"
+                            android:autoSizeMinTextSize="5sp"
+                            android:autoSizeTextType="uniform"
+                            android:fontFamily="sans-serif-light"
+                            android:maxLines="2"
+                            android:paddingStart="0dp"
+                            android:paddingEnd="30dp"
+                            android:text="@string/exercice7_stats" />
+
+                        <TextView
+                            android:id="@+id/statistic_count_7"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="5dp"
+                            android:layout_weight="5"
+                            android:autoSizeMaxTextSize="30sp"
+                            android:autoSizeMinTextSize="5sp"
+                            android:autoSizeTextType="uniform"
+                            android:fontFamily="sans-serif-light"
+                            android:maxLines="1"
+                            android:textAlignment="textEnd" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/history_button"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:layout_marginLeft="25dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="25dp"
-                android:layout_marginBottom="10dp"
-                android:orientation="horizontal">
-
-                <!--Text view to display R -->
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginEnd="5dp"
-                    android:layout_weight="1"
-                    android:autoSizeMaxTextSize="30sp"
-                    android:autoSizeMinTextSize="5sp"
-                    android:autoSizeTextType="uniform"
-                    android:fontFamily="sans-serif-light"
-                    android:maxLines="2"
-                    android:text="@string/exercice_stats" />
-
-                <TextView
-                    android:id="@+id/statistic_count"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="5dp"
-                    android:layout_weight="6"
-                    android:autoSizeMaxTextSize="30sp"
-                    android:autoSizeMinTextSize="5sp"
-                    android:autoSizeTextType="uniform"
-                    android:fontFamily="sans-serif-light"
-                    android:maxLines="1"
-                    android:textAlignment="textEnd" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_below="@+id/details"
                 android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp" />
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="20dp"
+                android:elevation="10dp"
+                app:cardCornerRadius="10dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginLeft="25dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="25dp"
-                android:layout_marginBottom="10dp"
-                android:orientation="horizontal">
-
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginEnd="5dp"
-                    android:layout_weight="1"
-                    android:autoSizeMaxTextSize="30sp"
-                    android:autoSizeMinTextSize="5sp"
-                    android:autoSizeTextType="uniform"
-                    android:fontFamily="sans-serif-light"
-                    android:maxLines="2"
-                    android:paddingStart="0dp"
-                    android:paddingEnd="30dp"
-                    android:text="@string/exercice7_stats" />
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="25dp"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/statistic_count_7"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="5dp"
-                    android:layout_weight="5"
-                    android:autoSizeMaxTextSize="30sp"
-                    android:autoSizeMinTextSize="5sp"
-                    android:autoSizeTextType="uniform"
-                    android:fontFamily="sans-serif-light"
-                    android:maxLines="1"
-                    android:textAlignment="textEnd" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="5dp"
+                        android:layout_weight="1"
+                        android:autoSizeMaxTextSize="30sp"
+                        android:autoSizeMinTextSize="5sp"
+                        android:autoSizeTextType="uniform"
+                        android:fontFamily="sans-serif-light"
+                        android:maxLines="1"
+                        android:text="@string/action_history"
+                        android:textColor="#29B6F6"
+                        android:textStyle="bold" />
 
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/history_number"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="5dp"
+                        android:layout_weight="5"
+                        android:autoSizeMaxTextSize="30sp"
+                        android:autoSizeMinTextSize="5sp"
+                        android:autoSizeTextType="uniform"
+                        android:fontFamily="sans-serif-light"
+                        android:maxLines="1"
+                        android:textAlignment="textEnd"
+                        android:textColor="#29B6F6"
+                        android:textStyle="bold" />
+                </LinearLayout>
 
+            </androidx.cardview.widget.CardView>
         </LinearLayout>
-
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/history_button"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_below="@+id/details"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp"
-        android:elevation="10dp"
-        app:cardCornerRadius="10dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="25dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="25dp"
-            android:layout_marginBottom="10dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="5dp"
-                android:layout_weight="1"
-                android:autoSizeMaxTextSize="30sp"
-                android:autoSizeMinTextSize="5sp"
-                android:autoSizeTextType="uniform"
-                android:fontFamily="sans-serif-light"
-                android:maxLines="1"
-                android:text="@string/action_history"
-                android:textColor="#29B6F6"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/history_number"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="5dp"
-                android:layout_weight="5"
-                android:autoSizeMaxTextSize="30sp"
-                android:autoSizeMinTextSize="5sp"
-                android:autoSizeTextType="uniform"
-                android:fontFamily="sans-serif-light"
-                android:maxLines="1"
-                android:textAlignment="textEnd"
-                android:textColor="#29B6F6"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-    </androidx.cardview.widget.CardView>
-
-</RelativeLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>
