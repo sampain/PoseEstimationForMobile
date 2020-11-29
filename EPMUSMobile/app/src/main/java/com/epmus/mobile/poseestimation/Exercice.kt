@@ -58,6 +58,9 @@ class Exercice() : Parcelable {
     //This is used to make sure that a warning cannot be spammed
     var warningCanBeDisplayed: Boolean = true
 
+    // Track all bodypart (mostly used for statistics)
+    var bp: BodyPartPos = BodyPartPos()
+
     constructor(parcel: Parcel) : this() {
         maxExecutionTime = parcel.readValue(Float::class.java.classLoader) as? Float
         minExecutionTime = parcel.readValue(Float::class.java.classLoader) as? Float
@@ -88,40 +91,37 @@ class Exercice() : Parcelable {
         warningCanBeDisplayed = parcel.readByte() != 0.toByte()
     }
 
-    // Track all bodypart (mostly used for statistics)
-    var bp: BodyPartPos = BodyPartPos()
-
     fun updateTimeStamp(dv: DrawView) {
         timeStamp = System.currentTimeMillis()
 
-        bp.HEAD.X = round(dv!!.mDrawPoint[BodyPart.HEAD.ordinal].x).toInt()
-        bp.HEAD.Y = round(dv!!.mDrawPoint[BodyPart.HEAD.ordinal].y).toInt()
-        bp.NECK.X = round(dv!!.mDrawPoint[BodyPart.NECK.ordinal].x).toInt()
-        bp.NECK.Y = round(dv!!.mDrawPoint[BodyPart.NECK.ordinal].y).toInt()
-        bp.L_SHOULDER.X = round(dv!!.mDrawPoint[BodyPart.L_SHOULDER.ordinal].x).toInt()
-        bp.L_SHOULDER.Y = round(dv!!.mDrawPoint[BodyPart.L_SHOULDER.ordinal].y).toInt()
-        bp.L_ELBOW.X = round(dv!!.mDrawPoint[BodyPart.L_ELBOW.ordinal].x).toInt()
-        bp.L_ELBOW.Y = round(dv!!.mDrawPoint[BodyPart.L_ELBOW.ordinal].y).toInt()
-        bp.L_WRIST.X = round(dv!!.mDrawPoint[BodyPart.L_WRIST.ordinal].x).toInt()
-        bp.L_WRIST.Y = round(dv!!.mDrawPoint[BodyPart.L_WRIST.ordinal].y).toInt()
-        bp.R_SHOULDER.X = round(dv!!.mDrawPoint[BodyPart.R_SHOULDER.ordinal].x).toInt()
-        bp.R_SHOULDER.Y = round(dv!!.mDrawPoint[BodyPart.R_SHOULDER.ordinal].y).toInt()
-        bp.R_ELBOW.X = round(dv!!.mDrawPoint[BodyPart.R_ELBOW.ordinal].x).toInt()
-        bp.R_ELBOW.Y = round(dv!!.mDrawPoint[BodyPart.R_ELBOW.ordinal].y).toInt()
-        bp.R_WRIST.X = round(dv!!.mDrawPoint[BodyPart.R_WRIST.ordinal].x).toInt()
-        bp.R_WRIST.Y = round(dv!!.mDrawPoint[BodyPart.R_WRIST.ordinal].y).toInt()
-        bp.L_HIP.X = round(dv!!.mDrawPoint[BodyPart.L_HIP.ordinal].x).toInt()
-        bp.L_HIP.Y = round(dv!!.mDrawPoint[BodyPart.L_HIP.ordinal].y).toInt()
-        bp.L_KNEE.X = round(dv!!.mDrawPoint[BodyPart.L_KNEE.ordinal].x).toInt()
-        bp.L_KNEE.Y = round(dv!!.mDrawPoint[BodyPart.L_KNEE.ordinal].y).toInt()
-        bp.L_ANKLE.X = round(dv!!.mDrawPoint[BodyPart.L_ANKLE.ordinal].x).toInt()
-        bp.L_ANKLE.Y = round(dv!!.mDrawPoint[BodyPart.L_ANKLE.ordinal].y).toInt()
-        bp.R_HIP.X = round(dv!!.mDrawPoint[BodyPart.R_HIP.ordinal].x).toInt()
-        bp.R_HIP.Y = round(dv!!.mDrawPoint[BodyPart.R_HIP.ordinal].y).toInt()
-        bp.R_KNEE.X = round(dv!!.mDrawPoint[BodyPart.R_KNEE.ordinal].x).toInt()
-        bp.R_KNEE.Y = round(dv!!.mDrawPoint[BodyPart.R_KNEE.ordinal].y).toInt()
-        bp.R_ANKLE.X = round(dv!!.mDrawPoint[BodyPart.R_ANKLE.ordinal].x).toInt()
-        bp.R_ANKLE.Y = round(dv!!.mDrawPoint[BodyPart.R_ANKLE.ordinal].y).toInt()
+        bp.HEAD.X = round(dv.mDrawPoint[BodyPart.HEAD.ordinal].x).toInt()
+        bp.HEAD.Y = round(dv.mDrawPoint[BodyPart.HEAD.ordinal].y).toInt()
+        bp.NECK.X = round(dv.mDrawPoint[BodyPart.NECK.ordinal].x).toInt()
+        bp.NECK.Y = round(dv.mDrawPoint[BodyPart.NECK.ordinal].y).toInt()
+        bp.L_SHOULDER.X = round(dv.mDrawPoint[BodyPart.L_SHOULDER.ordinal].x).toInt()
+        bp.L_SHOULDER.Y = round(dv.mDrawPoint[BodyPart.L_SHOULDER.ordinal].y).toInt()
+        bp.L_ELBOW.X = round(dv.mDrawPoint[BodyPart.L_ELBOW.ordinal].x).toInt()
+        bp.L_ELBOW.Y = round(dv.mDrawPoint[BodyPart.L_ELBOW.ordinal].y).toInt()
+        bp.L_WRIST.X = round(dv.mDrawPoint[BodyPart.L_WRIST.ordinal].x).toInt()
+        bp.L_WRIST.Y = round(dv.mDrawPoint[BodyPart.L_WRIST.ordinal].y).toInt()
+        bp.R_SHOULDER.X = round(dv.mDrawPoint[BodyPart.R_SHOULDER.ordinal].x).toInt()
+        bp.R_SHOULDER.Y = round(dv.mDrawPoint[BodyPart.R_SHOULDER.ordinal].y).toInt()
+        bp.R_ELBOW.X = round(dv.mDrawPoint[BodyPart.R_ELBOW.ordinal].x).toInt()
+        bp.R_ELBOW.Y = round(dv.mDrawPoint[BodyPart.R_ELBOW.ordinal].y).toInt()
+        bp.R_WRIST.X = round(dv.mDrawPoint[BodyPart.R_WRIST.ordinal].x).toInt()
+        bp.R_WRIST.Y = round(dv.mDrawPoint[BodyPart.R_WRIST.ordinal].y).toInt()
+        bp.L_HIP.X = round(dv.mDrawPoint[BodyPart.L_HIP.ordinal].x).toInt()
+        bp.L_HIP.Y = round(dv.mDrawPoint[BodyPart.L_HIP.ordinal].y).toInt()
+        bp.L_KNEE.X = round(dv.mDrawPoint[BodyPart.L_KNEE.ordinal].x).toInt()
+        bp.L_KNEE.Y = round(dv.mDrawPoint[BodyPart.L_KNEE.ordinal].y).toInt()
+        bp.L_ANKLE.X = round(dv.mDrawPoint[BodyPart.L_ANKLE.ordinal].x).toInt()
+        bp.L_ANKLE.Y = round(dv.mDrawPoint[BodyPart.L_ANKLE.ordinal].y).toInt()
+        bp.R_HIP.X = round(dv.mDrawPoint[BodyPart.R_HIP.ordinal].x).toInt()
+        bp.R_HIP.Y = round(dv.mDrawPoint[BodyPart.R_HIP.ordinal].y).toInt()
+        bp.R_KNEE.X = round(dv.mDrawPoint[BodyPart.R_KNEE.ordinal].x).toInt()
+        bp.R_KNEE.Y = round(dv.mDrawPoint[BodyPart.R_KNEE.ordinal].y).toInt()
+        bp.R_ANKLE.X = round(dv.mDrawPoint[BodyPart.R_ANKLE.ordinal].x).toInt()
+        bp.R_ANKLE.Y = round(dv.mDrawPoint[BodyPart.R_ANKLE.ordinal].y).toInt()
     }
 
     fun initialisationVerification(drawView: DrawView) {
@@ -130,9 +130,9 @@ class Exercice() : Parcelable {
         { index, item ->
 
             // Modify list
-            var pointX: Float = drawView.mDrawPoint[index].x
-            var pointY: Float = drawView.mDrawPoint[index].y
-            var pF = PointF(pointX, pointY)
+            val pointX: Float = drawView.mDrawPoint[index].x
+            val pointY: Float = drawView.mDrawPoint[index].y
+            val pF = PointF(pointX, pointY)
             if (!pointX.isNaN() && !pointY.isNaN()) {
                 if (item.count() == drawView.frameCounterMaxInit) {
                     item.removeAt(0)
@@ -167,9 +167,9 @@ class Exercice() : Parcelable {
                 var varianceY: Float = 0.0000f
                 item.forEach()
                 {
-                    var differenceX = it.x - meanX
+                    val differenceX = it.x - meanX
                     varianceX += (differenceX * differenceX)
-                    var differenceY = it.y - meanY
+                    val differenceY = it.y - meanY
                     varianceY += (differenceY * differenceY)
                 }
 
@@ -201,7 +201,7 @@ class Exercice() : Parcelable {
                 notMovingStartTime = System.currentTimeMillis()
                 notMovingTimer = -1
             } else {
-                var currentTime: Long = System.currentTimeMillis()
+                val currentTime: Long = System.currentTimeMillis()
                 notMovingTimer =
                     targetTime.toInt() / 1000 - ((currentTime - notMovingStartTime!!) / 1000).toInt()
                 if (currentTime - notMovingStartTime!! >= targetTime) {
@@ -387,6 +387,7 @@ class Exercice() : Parcelable {
                 exitStateReached = true
                 exerciceEndTime = System.currentTimeMillis()
                 holdTime += currentHoldTime
+                currentHoldTime = 0
             }
         }
     }
@@ -467,20 +468,20 @@ class Exercice() : Parcelable {
 
     //Calculates the length of member1 and member2 for a given movement
     fun calculateMembersLength(movement: Movement, drawView: DrawView) {
-        var pointX0: Float = drawView.mDrawPoint[movement.bodyPart0_Index].x
-        var pointY0: Float = drawView.mDrawPoint[movement.bodyPart0_Index].y
-        var pointX1: Float = drawView.mDrawPoint[movement.bodyPart1_Index].x
-        var pointY1: Float = drawView.mDrawPoint[movement.bodyPart1_Index].y
-        var pointX2: Float = drawView.mDrawPoint[movement.bodyPart2_Index].x
-        var pointY2: Float = drawView.mDrawPoint[movement.bodyPart2_Index].y
+        val pointX0: Float = drawView.mDrawPoint[movement.bodyPart0_Index].x
+        val pointY0: Float = drawView.mDrawPoint[movement.bodyPart0_Index].y
+        val pointX1: Float = drawView.mDrawPoint[movement.bodyPart1_Index].x
+        val pointY1: Float = drawView.mDrawPoint[movement.bodyPart1_Index].y
+        val pointX2: Float = drawView.mDrawPoint[movement.bodyPart2_Index].x
+        val pointY2: Float = drawView.mDrawPoint[movement.bodyPart2_Index].y
 
-        var X1ToX0: Float = pointX0 - pointX1
-        var Y1ToY0: Float = pointY0 - pointY1
-        var X1ToX2: Float = pointX2 - pointX1
-        var Y1ToY2: Float = pointY2 - pointY1
+        val X1ToX0: Float = pointX0 - pointX1
+        val Y1ToY0: Float = pointY0 - pointY1
+        val X1ToX2: Float = pointX2 - pointX1
+        val Y1ToY2: Float = pointY2 - pointY1
 
-        var member1Length = sqrt(X1ToX0.pow(2) + Y1ToY0.pow(2))
-        var member2Length = sqrt(X1ToX2.pow(2) + Y1ToY2.pow(2))
+        val member1Length = sqrt(X1ToX0.pow(2) + Y1ToY0.pow(2))
+        val member2Length = sqrt(X1ToX2.pow(2) + Y1ToY2.pow(2))
 
         if (!member1Length.isNaN() && !member2Length.isNaN()) {
             if (movement.member1LengthLastFrames.size == drawView.frameCounterMax && movement.member2LengthLastFrames.size == drawView.frameCounterMax) {
@@ -515,21 +516,21 @@ class Exercice() : Parcelable {
         bodyPartCenterOfRotation: Int,
         endBodyPart: Int
     ) {
-        var bodyPartCenterOfRotationX = drawView.mDrawPoint[bodyPartCenterOfRotation].x
-        var bodyPartCenterOfRotationY = drawView.mDrawPoint[bodyPartCenterOfRotation].y
+        val bodyPartCenterOfRotationX = drawView.mDrawPoint[bodyPartCenterOfRotation].x
+        val bodyPartCenterOfRotationY = drawView.mDrawPoint[bodyPartCenterOfRotation].y
 
-        var endBodyPartX = drawView.mDrawPoint[endBodyPart].x
-        var endBodyPartY = drawView.mDrawPoint[endBodyPart].y
+        val endBodyPartX = drawView.mDrawPoint[endBodyPart].x
+        val endBodyPartY = drawView.mDrawPoint[endBodyPart].y
 
-        var deltaY = endBodyPartY - bodyPartCenterOfRotationY
-        var deltaX = endBodyPartX - bodyPartCenterOfRotationX
+        val deltaY = endBodyPartY - bodyPartCenterOfRotationY
+        val deltaX = endBodyPartX - bodyPartCenterOfRotationX
 
-        var angleRad: Float = atan(deltaY / deltaX)
+        val angleRad: Float = atan(deltaY / deltaX)
         var angleDeg: Double = ((angleRad * 180) / Math.PI)
 
         //First quadrant
         if (sign(deltaX).toInt() == 1 && sign(deltaY).toInt() == 1) {
-
+            // nothing
         }
 
         //Second quadrant
@@ -544,7 +545,7 @@ class Exercice() : Parcelable {
 
         //Fourth quadrant
         else if(sign(deltaX).toInt() == 1 && sign(deltaY).toInt() == -1){
-
+            // nothing
         }
 
         else if(sign(deltaX).toInt() == -1 && sign(deltaY).toInt() == 0)
@@ -600,24 +601,24 @@ class Exercice() : Parcelable {
     //Calculates the angle between the three points in a movement
     fun calculateAngleV2(movement: Movement, drawView: DrawView) {
         //*-1 because Y is inverted
-        var pointX0: Float = drawView.mDrawPoint[movement.bodyPart0_Index].x
-        var pointY0: Float = drawView.mDrawPoint[movement.bodyPart0_Index].y
-        var pointX1: Float = drawView.mDrawPoint[movement.bodyPart1_Index].x
-        var pointY1: Float = drawView.mDrawPoint[movement.bodyPart1_Index].y
-        var pointX2: Float = drawView.mDrawPoint[movement.bodyPart2_Index].x
-        var pointY2: Float = drawView.mDrawPoint[movement.bodyPart2_Index].y
+        val pointX0: Float = drawView.mDrawPoint[movement.bodyPart0_Index].x
+        val pointY0: Float = drawView.mDrawPoint[movement.bodyPart0_Index].y
+        val pointX1: Float = drawView.mDrawPoint[movement.bodyPart1_Index].x
+        val pointY1: Float = drawView.mDrawPoint[movement.bodyPart1_Index].y
+        val pointX2: Float = drawView.mDrawPoint[movement.bodyPart2_Index].x
+        val pointY2: Float = drawView.mDrawPoint[movement.bodyPart2_Index].y
 
-        var X1ToX0: Float = pointX0 - pointX1
-        var Y1ToY0: Float = pointY0 - pointY1
-        var X1ToX2: Float = pointX2 - pointX1
-        var Y1ToY2: Float = pointY2 - pointY1
+        val X1ToX0: Float = pointX0 - pointX1
+        val Y1ToY0: Float = pointY0 - pointY1
+        val X1ToX2: Float = pointX2 - pointX1
+        val Y1ToY2: Float = pointY2 - pointY1
 
-        var X1X0mod: Float = sqrt((X1ToX0 * X1ToX0) + (Y1ToY0 * Y1ToY0))
-        var X1X2mod: Float = sqrt((X1ToX2 * X1ToX2) + (Y1ToY2 * Y1ToY2))
+        val X1X0mod: Float = sqrt((X1ToX0 * X1ToX0) + (Y1ToY0 * Y1ToY0))
+        val X1X2mod: Float = sqrt((X1ToX2 * X1ToX2) + (Y1ToY2 * Y1ToY2))
 
-        var vectorProduct: Float = X1ToX0 * X1ToX2 + Y1ToY0 * Y1ToY2
+        val vectorProduct: Float = X1ToX0 * X1ToX2 + Y1ToY0 * Y1ToY2
 
-        var angleRad: Float = acos(vectorProduct / (X1X0mod * X1X2mod))
+        val angleRad: Float = acos(vectorProduct / (X1X0mod * X1X2mod))
         var angleDeg: Double = ((angleRad * 180) / Math.PI)
 
         //Adding anti/clockwise effect
@@ -654,12 +655,12 @@ class Exercice() : Parcelable {
             }
 
         } else {
-            var a = Y1ToY0 / X1ToX0
-            var b = pointY0 - (a * pointX0)
-            var tmpPointY2 = (a * pointX2) + b
+            val a = Y1ToY0 / X1ToX0
+            val b = pointY0 - (a * pointX0)
+            val tmpPointY2 = (a * pointX2) + b
 
-            var dX = pointX1 - pointX0
-            var dY = pointY1 - pointY0
+            val dX = pointX1 - pointX0
+            val dY = pointY1 - pointY0
 
             //Quadrant 1
             if (dX > 0 && dY < 0) {
@@ -740,16 +741,67 @@ class Exercice() : Parcelable {
         return timeInSecond
     }
 
+
+
     fun copy(): Exercice {
         val exercices = Exercice()
         exercices.maxExecutionTime = maxExecutionTime
         exercices.minExecutionTime = minExecutionTime
         exercices.mouvementStartTimer = mouvementStartTimer
         exercices.mouvementSpeedTime = mouvementSpeedTime
+
+        exercices.timeStamp = timeStamp
+
         exercices.numberOfRepetitionToDo = numberOfRepetitionToDo
         exercices.numberOfRepetition = numberOfRepetition
         exercices.exitStateReached = exitStateReached
+
+        movementList.forEach() {
+            val tmpMovement = Movement(it.bodyPart0_Index, it.bodyPart1_Index, it.bodyPart2_Index)
+            tmpMovement.startingAngle = it.startingAngle
+            tmpMovement.endingAngle = it.endingAngle
+            tmpMovement.isAngleClockWise = it.isAngleClockWise
+            tmpMovement.angleAvg = it.angleAvg
+            tmpMovement.member1Length = it.member1Length
+            tmpMovement.member2Length = it.member2Length
+            tmpMovement.angleOffset = it.angleOffset
+            tmpMovement.movementState = it.movementState
+            tmpMovement.member1LengthLastFrames = it.member1LengthLastFrames
+            tmpMovement.member2LengthLastFrames = it.member2LengthLastFrames
+            tmpMovement.angleOffsetLastFrames = it.angleOffsetLastFrames
+            tmpMovement.angleValuesLastFrames = it.angleValuesLastFrames
+
+            exercices.movementList.add(tmpMovement)
+        }
+
+        exercices.initStartTimer = initStartTimer
+        exercices.initList = initList
+        exercices.notMovingInitList = notMovingInitList
+        exercices.isInit = isInit
+        exercices.exerciceStartTime = exerciceStartTime
+        exercices.notMovingStartTime = notMovingStartTime
+        exercices.notMovingTimer = notMovingTimer
+        exercices.targetTime = targetTime
+        exercices.stdMax = stdMax
         exercices.exerciceEndTime = exerciceEndTime
+
+        exercices.exerciceType = exerciceType
+
+        exercices.chronoTime = chronoTime
+        exercices.allowedTimeForExercice = allowedTimeForExercice
+
+        exercices.targetHoldTime = targetHoldTime
+        exercices.holdTime = holdTime
+        exercices.wasHolding = wasHolding
+        exercices.isHolding = isHolding
+        exercices.holdingStartTime = holdingStartTime
+        exercices.currentHoldTime = currentHoldTime
+
+        exercices.maxAngleReached = maxAngleReached
+        exercices.maxAngleReachedTime = maxAngleReachedTime
+        exercices.timeAllowedToReachNewMax = timeAllowedToReachNewMax
+
+        exercices.warningCanBeDisplayed = warningCanBeDisplayed
 
         exercices.bp.HEAD.X = bp.HEAD.X
         exercices.bp.HEAD.Y = bp.HEAD.Y
@@ -780,36 +832,9 @@ class Exercice() : Parcelable {
         exercices.bp.R_ANKLE.X = bp.R_ANKLE.X
         exercices.bp.R_ANKLE.Y = bp.R_ANKLE.Y
 
-        movementList.forEach() {
-            var tmpMovement = Movement(it.bodyPart0_Index, it.bodyPart1_Index, it.bodyPart2_Index)
-            tmpMovement.startingAngle = it.startingAngle
-            tmpMovement.endingAngle = it.endingAngle
-            tmpMovement.isAngleClockWise = it.isAngleClockWise
-            tmpMovement.angleAvg = it.angleAvg
-            tmpMovement.member1Length = it.member1Length
-            tmpMovement.member2Length = it.member2Length
-            tmpMovement.angleOffset = it.angleOffset
-            tmpMovement.movementState = it.movementState
-            tmpMovement.member1LengthLastFrames = it.member1LengthLastFrames
-            tmpMovement.member2LengthLastFrames = it.member2LengthLastFrames
-            tmpMovement.angleOffsetLastFrames = it.angleOffsetLastFrames
-            tmpMovement.angleValuesLastFrames = it.angleValuesLastFrames
-
-            exercices.movementList.add(tmpMovement)
-        }
-
-        exercices.initList = initList
-        exercices.notMovingInitList = notMovingInitList
-        exercices.isInit = isInit
-        exercices.exerciceStartTime = exerciceStartTime
-        exercices.notMovingStartTime = notMovingStartTime
-        exercices.notMovingTimer = notMovingTimer
-        exercices.initStartTimer = initStartTimer
-        exercices.targetTime = targetTime
-        exercices.timeStamp = timeStamp
-
         return exercices
     }
+
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeValue(maxExecutionTime)

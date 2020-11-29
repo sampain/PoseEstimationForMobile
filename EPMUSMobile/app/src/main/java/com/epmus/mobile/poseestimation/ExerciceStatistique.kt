@@ -5,7 +5,7 @@ import java.io.Serializable
 class ExerciceStatistique : Serializable {
     var numberOfRepetition = ArrayList<Int?>()
     var speedOfRepetition = ArrayList<Float?>()
-    var holdTime = ArrayList<Long?>()
+    var holdTime = ArrayList<Double?>()
     var timeStamp = ArrayList<String?>()
 
     var initStartTime: String? = null

@@ -320,7 +320,7 @@ class Camera2BasicFragment : Fragment() {
             // must do a separate thread
             GlobalScope.launch {
                 //Play the audio file
-                var mediaPlayer: MediaPlayer? = MediaPlayer.create(context, audioFile)
+                val mediaPlayer: MediaPlayer? = MediaPlayer.create(context, audioFile)
 
                 if(!sharedPreferences?.getBoolean("audio_setting", false)!!) {
                     mediaPlayer?.start()
@@ -330,15 +330,15 @@ class Camera2BasicFragment : Fragment() {
                 val activity = activity
 
                 activity?.runOnUiThread {
-                    var textViewWarning: TextView? = view?.findViewById(R.id.warningPopUp)
+                    val textViewWarning: TextView? = view?.findViewById(R.id.warningPopUp)
                     textViewWarning!!.alpha = 1.0F
                     textViewWarning!!.text = message
 
                     //Hide the exercise information
-                    var textViewInfoLeft: TextView? = view?.findViewById(R.id.infoLeft)
+                    val textViewInfoLeft: TextView? = view?.findViewById(R.id.infoLeft)
                     textViewInfoLeft!!.alpha = 0.0F
 
-                    var textViewInfoRight: TextView? = view?.findViewById(R.id.infoRight)
+                    val textViewInfoRight: TextView? = view?.findViewById(R.id.infoRight)
                     textViewInfoRight!!.alpha = 0.0F
 
                     drawView!!.invalidate()
@@ -349,15 +349,15 @@ class Camera2BasicFragment : Fragment() {
 
                 //Hide the warning message
                 activity?.runOnUiThread {
-                    var textViewWarning: TextView? = view?.findViewById(R.id.warningPopUp)
+                    val textViewWarning: TextView? = view?.findViewById(R.id.warningPopUp)
                     textViewWarning!!.alpha = 0.0F
                     textViewWarning!!.text = ""
 
                     //Show exercise information
-                    var textViewInfoLeft: TextView? = view?.findViewById(R.id.infoLeft)
+                    val textViewInfoLeft: TextView? = view?.findViewById(R.id.infoLeft)
                     textViewInfoLeft!!.alpha = 1.0F
 
-                    var textViewInfoRight: TextView? = view?.findViewById(R.id.infoRight)
+                    val textViewInfoRight: TextView? = view?.findViewById(R.id.infoRight)
                     textViewInfoRight!!.alpha = 1.0F
 
                     drawView!!.invalidate()
@@ -415,7 +415,7 @@ class Camera2BasicFragment : Fragment() {
             textView!!.text = text
             drawView!!.invalidate()
 
-            var textView2: TextView? = view?.findViewById(R.id.debug)
+            val textView2: TextView? = view?.findViewById(R.id.debug)
             textView2!!.text = debug
             drawView!!.invalidate()
         }
@@ -427,7 +427,7 @@ class Camera2BasicFragment : Fragment() {
         var infoRight = ""
         when (exercises.exerciceType) {
             ExerciceType.HOLD -> {
-                var holdValue = if(exercises!!.isHolding) {
+                val holdValue = if(exercises!!.isHolding) {
                     "<font color='#00EE00'>" + ((exercises.holdTime + exercises.currentHoldTime) / 1000).toInt() + "</font>"
                 } else {
                     "<font color='#EE0000'>" + ((exercises.holdTime + exercises.currentHoldTime) / 1000).toInt() + "</font>"
@@ -628,11 +628,11 @@ class Camera2BasicFragment : Fragment() {
 
                     //Adjust textfield background_initialize to fit the camera overlay
                     activity.runOnUiThread {
-                        var textViewBackground: TextView? =
+                        val textViewBackground: TextView? =
                             view?.findViewById(R.id.background_initialize)
-                        var tmpHeight: Int =
+                        val tmpHeight: Int =
                             displaySize.x * previewSize!!.height / previewSize!!.width // to keep the ratio
-                        var tmpLayout: FrameLayout.LayoutParams = FrameLayout.LayoutParams(
+                        val tmpLayout: FrameLayout.LayoutParams = FrameLayout.LayoutParams(
                             FrameLayout.LayoutParams.MATCH_PARENT, tmpHeight
                         )
                         tmpLayout.gravity = Gravity.CENTER
@@ -643,8 +643,8 @@ class Camera2BasicFragment : Fragment() {
                 }
                 // This one will run most of the times
                 else {
-                    var newWidth = previewSize!!.height
-                    var newHeight = previewSize!!.width
+                    val newWidth = previewSize!!.height
+                    val newHeight = previewSize!!.width
 
                     layoutFrame!!.setAspectRatio(newWidth, newHeight)
                     textureView!!.setAspectRatio(newWidth, newHeight)
@@ -896,8 +896,8 @@ class Camera2BasicFragment : Fragment() {
         //initialize bodyparts
         if (drawView!!.exercice!!.initList.count() == 0) {
             repeat(enumValues<BodyPart>().count()) {
-                var pF = PointF(-1.0f, -1.0f)
-                var aList = arrayListOf<PointF>(pF)
+                val pF = PointF(-1.0f, -1.0f)
+                val aList = arrayListOf<PointF>(pF)
                 drawView!!.exercice!!.initList.add(aList)
                 drawView!!.exercice!!.notMovingInitList.add(false)
             }
@@ -921,14 +921,14 @@ class Camera2BasicFragment : Fragment() {
                 ) {
                     val activity = activity
                     activity?.runOnUiThread {
-                        var textViewBackground: TextView? = view?.findViewById(R.id.background_initialize)
+                        val textViewBackground: TextView? = view?.findViewById(R.id.background_initialize)
                         textViewBackground!!.alpha = 0.5F
 
-                        var textViewCountdown: TextView? = view?.findViewById(R.id.countdown)
+                        val textViewCountdown: TextView? = view?.findViewById(R.id.countdown)
                         textViewCountdown!!.text = drawView!!.exercice!!.notMovingTimer.toString()
                         textViewCountdown!!.alpha = 1.0F
 
-                        var textViewInstruction: TextView? = view?.findViewById(R.id.instructions)
+                        val textViewInstruction: TextView? = view?.findViewById(R.id.instructions)
                         textViewInstruction!!.alpha = 0.0F
 
                         drawView!!.invalidate()
@@ -938,13 +938,13 @@ class Camera2BasicFragment : Fragment() {
                 else {
                     val activity = activity
                     activity?.runOnUiThread {
-                        var textViewBackground: TextView? = view?.findViewById(R.id.background_initialize)
+                        val textViewBackground: TextView? = view?.findViewById(R.id.background_initialize)
                         textViewBackground!!.alpha = 0.5F
 
-                        var textViewInstruction: TextView? = view?.findViewById(R.id.instructions)
+                        val textViewInstruction: TextView? = view?.findViewById(R.id.instructions)
                         textViewInstruction!!.alpha = 1.0F
 
-                        var textViewCountdown: TextView? = view?.findViewById(R.id.countdown)
+                        val textViewCountdown: TextView? = view?.findViewById(R.id.countdown)
                         textViewCountdown!!.alpha = 0.0F
 
                         drawView!!.invalidate()
@@ -961,10 +961,10 @@ class Camera2BasicFragment : Fragment() {
             val activity = activity
 
             activity?.runOnUiThread {
-                var textViewBackground: TextView? = view?.findViewById(R.id.background_initialize)
+                val textViewBackground: TextView? = view?.findViewById(R.id.background_initialize)
                 textViewBackground!!.alpha = 1.0F
 
-                var textViewTermine: TextView? = view?.findViewById(R.id.termine)
+                val textViewTermine: TextView? = view?.findViewById(R.id.termine)
                 textViewTermine!!.alpha = 1.0F
                 drawView!!.invalidate()
 
@@ -978,7 +978,7 @@ class Camera2BasicFragment : Fragment() {
 
                     //Play the audio file
                     if(!sharedPreferences?.getBoolean("audio_setting", false)!!) {
-                        var mediaPlayer: MediaPlayer? = MediaPlayer.create(context, R.raw.termine)
+                        val mediaPlayer: MediaPlayer? = MediaPlayer.create(context, R.raw.termine)
                         mediaPlayer?.start()
                         delay(mediaPlayer?.duration!!.toLong())
                     }
@@ -996,16 +996,16 @@ class Camera2BasicFragment : Fragment() {
 
             val activity = activity
             activity?.runOnUiThread {
-                var textViewBackground: TextView? = view?.findViewById(R.id.background_initialize)
+                val textViewBackground: TextView? = view?.findViewById(R.id.background_initialize)
                 textViewBackground!!.alpha = 0.0F
 
-                var textViewCountdown: TextView? = view?.findViewById(R.id.countdown)
+                val textViewCountdown: TextView? = view?.findViewById(R.id.countdown)
                 textViewCountdown!!.alpha = 0.0F
 
-                var textViewInstruction: TextView? = view?.findViewById(R.id.instructions)
+                val textViewInstruction: TextView? = view?.findViewById(R.id.instructions)
                 textViewInstruction!!.alpha = 0.0F
 
-                var textViewTermine: TextView? = view?.findViewById(R.id.termine)
+                val textViewTermine: TextView? = view?.findViewById(R.id.termine)
                 textViewTermine!!.alpha = 0.0F
 
                 drawView!!.invalidate()
@@ -1033,10 +1033,10 @@ class Camera2BasicFragment : Fragment() {
     }
 
     fun adjustStats(s: ArrayList<Exercice>) {
-        var cleanStats = ExerciceStatistique()
+        val cleanStats = ExerciceStatistique()
 
         // initialize the movements list
-        var tmpMovStats = MovementStatistics()
+        val tmpMovStats = MovementStatistics()
         drawView!!.exercice!!.movementList.forEach() {
             cleanStats.movements.add(tmpMovStats)
         }
@@ -1046,7 +1046,8 @@ class Camera2BasicFragment : Fragment() {
             cleanStats.timeStamp.add(convertLongToTime(e.timeStamp!!))
             cleanStats.numberOfRepetition.add(e.numberOfRepetition)
             cleanStats.speedOfRepetition.add(e.mouvementSpeedTime)
-            cleanStats.holdTime.add(e.holdTime)
+            val hold: Double = (e.holdTime.toDouble() + e.currentHoldTime.toDouble()) / 1000
+            cleanStats.holdTime.add(hold)
 
             cleanStats.bodyPartPos.HEAD.add(PointPos(e.bp.HEAD.X, e.bp.HEAD.Y))
             cleanStats.bodyPartPos.NECK.add(PointPos(e.bp.NECK.X, e.bp.NECK.Y))
@@ -1069,7 +1070,7 @@ class Camera2BasicFragment : Fragment() {
             }
         }
 
-        var cpt = s.count()
+        val cpt = s.count()
         cleanStats.initStartTime = convertLongToTime(s[cpt-1].initStartTimer!!)
         cleanStats.exerciceStartTime = convertLongToTime(s[cpt-1].exerciceStartTime!!)
         cleanStats.exerciceEndTime = convertLongToTime(s[cpt-1].exerciceEndTime!!)
