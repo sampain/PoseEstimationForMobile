@@ -62,6 +62,10 @@ class StatisticsActivity : AppCompatActivity() {
         R.id.action_logout -> {
             realmApp.currentUser()?.logOutAsync {
                 if (it.isSuccess) {
+                    uiThreadRealmUserId.close()
+                    uiThreadRealmTempId.close()
+                    uiThreadRealmExercices.close()
+                    finishAffinity()
                     exitProcess(1)
                 }
             }

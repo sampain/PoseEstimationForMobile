@@ -11,10 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.appcompat.widget.Toolbar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import android.widget.TextView
+import com.epmus.mobile.*
 import com.epmus.mobile.Messaging.NewMessageActivity
-import com.epmus.mobile.R
-import com.epmus.mobile.SettingsActivity
-import com.epmus.mobile.globalExerciceList
 import com.epmus.mobile.poseestimation.CameraActivity
 import com.epmus.mobile.poseestimation.ExerciceType
 import com.epmus.mobile.poseestimation.ExerciceTypeUI
@@ -76,6 +74,10 @@ class ProgramListActivity : AppCompatActivity() {
         R.id.action_logout -> {
             realmApp.currentUser()?.logOutAsync {
                 if (it.isSuccess) {
+                    uiThreadRealmUserId.close()
+                    uiThreadRealmTempId.close()
+                    uiThreadRealmExercices.close()
+                    finishAffinity()
                     exitProcess(1)
                 }
             }

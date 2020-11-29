@@ -1039,6 +1039,7 @@ class Camera2BasicFragment : Fragment() {
     fun adjustStats(s: ArrayList<Exercice>) {
         val cleanStats = ExerciceStatistique()
 
+        cleanStats.exerciceID = exerciceData.id
         cleanStats.exerciceName = exerciceData.name
         cleanStats.exerciceType = exerciceData.exercice.exerciceType.toString()
 
