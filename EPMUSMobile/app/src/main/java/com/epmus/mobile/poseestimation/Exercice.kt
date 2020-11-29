@@ -543,9 +543,15 @@ class Exercice() : Parcelable {
         }
 
         //Fourth quadrant
-        else {
+        else if(sign(deltaX).toInt() == 1 && sign(deltaY).toInt() == -1){
 
         }
+
+        else if(sign(deltaX).toInt() == -1 && sign(deltaY).toInt() == 0)
+        {
+            angleDeg = 180.0
+        }
+
 
         if (!angleDeg.isNaN()) {
             if (movement.angleOffsetLastFrames.size == drawView.frameCounterMax) {
