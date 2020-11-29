@@ -34,7 +34,7 @@ android {
     }
 
     buildTypes {
-        def appId = "iphysio-realm-zseqn"
+        def appId = "iphysio-app-wjkhj"
         debug {
             buildConfigField "String", "MONGODB_REALM_APP_ID", "\"${appId}\""
         }
