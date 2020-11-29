@@ -47,7 +47,7 @@ class MongoTransactions {
             configExercices = SyncConfiguration.Builder(user, "exercices").build()
         }
 
-        fun insertHistoryEntry(stats: ExerciceStatistique) {
+        private fun historyEntry(stats: ExerciceStatistique): historique {
             val exerciceType = stats.exerciceType
             val exerciceTypeEnum = ExerciceType.getEnumValue(exerciceType)
 
@@ -75,10 +75,7 @@ class MongoTransactions {
                     nbrRepetitionOrHoldTime
                 )
 
-            val task: FutureTask<String> =
-                FutureTask(BackgroundInsertEntry(configUserId, histoEntry), "histoEntry completed")
-            val executorService: ExecutorService = Executors.newFixedThreadPool(2)
-            executorService.execute(task)
+            return histoEntry
         }
 
         fun insertStatistics(stats: ExerciceStatistique) {
@@ -159,43 +156,23 @@ class MongoTransactions {
 
             val numberOfRepetitionRealm = RealmList<simpleInt>()
             stats.numberOfRepetition.forEach {
-                val value: Int
-                if (it == null) {
-                    value = -1
-                } else {
-                    value = it
-                }
+                val value: Int = it ?: -1
                 numberOfRepetitionRealm.add(simpleInt(value))
             }
             val speedOfRepetitionRealm = RealmList<simpleDouble>()
             stats.speedOfRepetition.forEach {
-                val value: Double
-                if (it == null) {
-                    value = (-1).toDouble()
-                } else {
-                    value = it.toDouble()
-                }
+                val value: Double = it?.toDouble() ?: (-1).toDouble()
                 speedOfRepetitionRealm.add(simpleDouble(value))
             }
 
             val holdTimeRealm = RealmList<simpleLong>()
             stats.holdTime.forEach {
-                val value: Long
-                if (it == null) {
-                    value = -1
-                } else {
-                    value = it
-                }
+                val value: Long = it ?: -1
                 holdTimeRealm.add(simpleLong(value))
             }
             val timeStampRealm = RealmList<simpleString>()
             stats.timeStamp.forEach {
-                val value: String
-                if (it == null) {
-                    value = ""
-                } else {
-                    value = it
-                }
+                val value: String = it ?: ""
                 timeStampRealm.add(simpleString(value))
             }
 
@@ -203,22 +180,12 @@ class MongoTransactions {
             stats.movements.forEach {
                 val angleAvg = RealmList<simpleInt>()
                 val state = RealmList<simpleString>()
-                it.angleAvg.forEach {
-                    val value: Int
-                    if (it == null) {
-                        value = -1
-                    } else {
-                        value = it
-                    }
+                it.angleAvg.forEach { angle ->
+                    val value: Int = angle ?: -1
                     angleAvg.add(simpleInt(value))
                 }
-                it.state.forEach {
-                    val value: String
-                    if (it == null) {
-                        value = ""
-                    } else {
-                        value = it.toString()
-                    }
+                it.state.forEach { movement ->
+                    val value: String = movement.toString()
                     state.add(simpleString(value))
                 }
                 movementRealm.add(movement(angleAvg, state))
@@ -251,12 +218,17 @@ class MongoTransactions {
                 exerciceEndTime,
                 movementRealm,
                 bodypartObj,
-                stats.patientID,
                 stats.exerciceID
             )
 
             val task: FutureTask<String> =
-                FutureTask(BackgroundInsertStatsEntry(configUserId, statistics), "test")
+                FutureTask(
+                    BackgroundInsertStatsEntry(
+                        configUserId,
+                        statistics,
+                        historyEntry(stats)
+                    ), "Succeeded"
+                )
             val executorService: ExecutorService = Executors.newFixedThreadPool(2)
             executorService.execute(task)
         }
@@ -267,9 +239,9 @@ class MongoTransactions {
             realmExercices: Realm
         ) {
             historyListener = realmUserId.where<historique>().findAllAsync()
-            historyListener.addChangeListener { collection, changeSet ->
+            historyListener.addChangeListener { collection, _ ->
 
-                historic = realmUserId.copyFromRealm(collection);
+                historic = realmUserId.copyFromRealm(collection)
 
                 if (historyView != null) {
                     historyView!!.adapter =
@@ -278,20 +250,20 @@ class MongoTransactions {
             }
 
             programListener = realmTempId.where<programmes>().findAllAsync()
-            programListener.addChangeListener { collection, changeSet ->
-                programmesList = realmTempId.copyFromRealm(collection);
-                globalExerciceList = ExerciceList()
+            programListener.addChangeListener { collection, _ ->
+                programmesList = realmTempId.copyFromRealm(collection)
+                globalExerciceList = exerciceList()
             }
 
             exercicesPhysiotecListener = realmExercices.where<exercicesPhysiotec>().findAllAsync()
-            exercicesPhysiotecListener.addChangeListener { collection, changeSet ->
-                exercicesPhysiotecList = realmExercices.copyFromRealm(collection);
-                globalExerciceList = ExerciceList()
+            exercicesPhysiotecListener.addChangeListener { collection, _ ->
+                exercicesPhysiotecList = realmExercices.copyFromRealm(collection)
+                globalExerciceList = exerciceList()
             }
         }
 
         private fun formatTime(time: Long): String {
-            var cleanTime = ""
+            val cleanTime: String
             var seconds: Long = time / 1000
 
             if (seconds > 59) {
@@ -309,7 +281,7 @@ class MongoTransactions {
             return cleanTime
         }
 
-        private fun ExerciceList(): MutableList<ExerciceData> {
+        private fun exerciceList(): MutableList<ExerciceData> {
             val exerciceDataList: MutableList<ExerciceData> = mutableListOf()
             val currentProgrammesList = programmesList
             val currentExerciceList = exercicesPhysiotecList
@@ -361,26 +333,19 @@ class MongoTransactions {
         }
     }
 
-    class BackgroundInsertEntry(val config: SyncConfiguration, val histoEntry: historique) :
+    class BackgroundInsertStatsEntry(
+        private val config: SyncConfiguration,
+        private val stats: statistics,
+        private val histo: historique
+    ) :
         Runnable {
         override fun run() {
             val realmInstance = Realm.getInstance(config)
-
             realmInstance.executeTransaction { transactionRealm ->
-                transactionRealm.insert(histoEntry)
+                transactionRealm.insert(stats)
             }
-
-            realmInstance.close()
-        }
-    }
-
-    class BackgroundInsertStatsEntry(val config: SyncConfiguration, val histoEntry: statistics) :
-        Runnable {
-        override fun run() {
-            val realmInstance = Realm.getInstance(config)
-            //TODO: Statistics has an empty patientId
             realmInstance.executeTransaction { transactionRealm ->
-                transactionRealm.insert(histoEntry)
+                transactionRealm.insert(histo)
             }
 
             realmInstance.close()
@@ -422,7 +387,6 @@ open class statistics(
     _exerciceEndTime: String = "",
     _movement: RealmList<movement> = RealmList<movement>(),
     _bodyPartPos: bodyPartPos? = bodyPartPos(),
-    _patientID: String = "",
     _exerciceID: String? = "",
 ) :
     RealmObject() {
@@ -445,7 +409,6 @@ open class statistics(
 
     var bodyPartPos = _bodyPartPos
 
-    var patientID: String = _patientID
     var exerciceID = _exerciceID
 }
 

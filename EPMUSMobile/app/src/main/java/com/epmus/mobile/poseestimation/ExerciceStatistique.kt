@@ -19,6 +19,5 @@ class ExerciceStatistique : Serializable {
 
     var bodyPartPos: StatsBodyPartPos = StatsBodyPartPos()
 
-    var patientID: String = ""
     var exerciceID: String = ""
 }
