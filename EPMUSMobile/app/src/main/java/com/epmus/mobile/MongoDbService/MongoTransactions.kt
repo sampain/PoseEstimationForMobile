@@ -47,7 +47,7 @@ class MongoTransactions {
             configExercices = SyncConfiguration.Builder(user, "exercices").build()
         }
 
-        private fun historyEntry(stats: ExerciceStatistique): historique {
+        fun historyEntry(stats: ExerciceStatistique) {
             val exerciceType = stats.exerciceType
             val exerciceTypeEnum = ExerciceType.getEnumValue(exerciceType)
 
@@ -75,7 +75,15 @@ class MongoTransactions {
                     nbrRepetitionOrHoldTime
                 )
 
-            return histoEntry
+            val task: FutureTask<String> =
+                FutureTask(
+                    BackgroundInsertEntry(
+                        configUserId,
+                        histoEntry
+                    ), "Succeeded History"
+                )
+            val executorService: ExecutorService = Executors.newFixedThreadPool(2)
+            executorService.execute(task)
         }
 
         fun insertStatistics(stats: ExerciceStatistique) {
@@ -225,9 +233,8 @@ class MongoTransactions {
                 FutureTask(
                     BackgroundInsertStatsEntry(
                         configUserId,
-                        statistics,
-                        historyEntry(stats)
-                    ), "Succeeded"
+                        statistics
+                    ), "Succeeded Statistics"
                 )
             val executorService: ExecutorService = Executors.newFixedThreadPool(2)
             executorService.execute(task)
@@ -338,25 +345,27 @@ class MongoTransactions {
         }
     }
 
-    class BackgroundInsertStatsEntry(
-        private val config: SyncConfiguration,
-        private val stats: statistics,
-        private val histo: historique
-    ) :
+    class BackgroundInsertEntry(val config: SyncConfiguration, val histoEntry: historique) :
         Runnable {
         override fun run() {
-            val realmInstance1 = Realm.getInstance(config)
-            realmInstance1.executeTransaction { transactionRealm ->
-                transactionRealm.insert(stats)
-            }
-            realmInstance1.close()
+            val realmInstance = Realm.getInstance(config)
 
-            val realmInstance2 = Realm.getInstance(config)
-            realmInstance2.executeTransaction { transactionRealm ->
-                transactionRealm.insert(histo)
+            realmInstance.executeTransaction { transactionRealm ->
+                transactionRealm.insert(histoEntry)
             }
 
-            realmInstance2.close()
+            realmInstance.close()
+        }
+    }
+
+    class BackgroundInsertStatsEntry(val config: SyncConfiguration, val histoEntry: statistics) :
+        Runnable {
+        override fun run() {
+            val realmInstance = Realm.getInstance(config)
+            realmInstance.executeTransaction { transactionRealm ->
+                transactionRealm.insert(histoEntry)
+            }
+            realmInstance.close()
         }
     }
 }
