@@ -5,7 +5,8 @@ import java.io.Serializable
 enum class ExerciceType(val exerciceType: String): Serializable {
     CHRONO("CHRONO"),
     REPETITION("REPETITION"),
-    HOLD("HOLD");
+    HOLD("HOLD"),
+    AMPLITUDE("AMPLITUDE");
 
     companion object {
         fun getEnumValue(value: String): ExerciceType? =
@@ -16,7 +17,8 @@ enum class ExerciceType(val exerciceType: String): Serializable {
 enum class ExerciceTypeUI(val exerciceTypeUI: String): Serializable {
     Chronomètre("CHRONO"),
     Répétition("REPETITION"),
-    Maintenir("HOLD");
+    Maintenir("HOLD"),
+    Amplitude("AMPLITUDE");
 
     companion object {
         fun getEnumValue(value: String): ExerciceTypeUI? =
