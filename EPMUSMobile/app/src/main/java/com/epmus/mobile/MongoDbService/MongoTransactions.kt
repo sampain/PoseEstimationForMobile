@@ -328,6 +328,7 @@ class MongoTransactions {
                             exerciceData.description = exerciceProgram.description
                             exerciceData.exercice.exerciceType =
                                 ExerciceType.getEnumValue(exercice.type.toUpperCase(Locale.ROOT))
+                            exerciceData.exercice.targetHoldTime = exerciceProgram.tenir
                             exerciceData.exercice.numberOfRepetitionToDo =
                                 exerciceProgram.repetition
                             var i = 0

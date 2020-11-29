@@ -97,4 +97,11 @@
     <string name="summary_stats">Résumé</string>
     <string name="exercice_stats">Nombre d\'exercices terminées</string>
     <string name="exercice7_stats">Nombre d\'exercices terminées (7 derniers jours)</string>
+    <string name="tempo_minimum">Tempo minimum (s) :</string>
+    <string name="tempo_maximum">Tempo maximum (s) :</string>
+    <string name="repet_nbr">Nombre de répétition :</string>
+    <string name="angle1_start">Angle de départ (1) :</string>
+    <string name="angle1_end">Angle de fin (1) :</string>
+    <string name="angle2_start">Angle de départ (2) :</string>
+    <string name="angle2_end">Angle de fin (2) :</string>
 </resources>

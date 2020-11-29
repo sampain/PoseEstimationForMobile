@@ -146,7 +146,7 @@ class ProgramListActivity : AppCompatActivity() {
 
             when (item.exercice.exerciceType) {
                 ExerciceType.HOLD -> {
-                    holder.contentView.setTextColor(Color.parseColor("#EF5350"))
+                    holder.contentView.setTextColor(Color.parseColor("#66BB6A"))
                 }
                 ExerciceType.REPETITION -> {
                     holder.contentView.setTextColor(Color.parseColor("#FF9800"))

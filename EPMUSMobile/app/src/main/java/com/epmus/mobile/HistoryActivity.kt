@@ -76,15 +76,15 @@ class HistoryActivity : AppCompatActivity() {
         init {
             onClickListenerDetails = View.OnClickListener { v ->
 
-                val test = v.tag as LinearLayout
-                if (test.visibility == View.VISIBLE) {
-                    test.visibility = View.GONE
+                val moreDetails = v.tag as LinearLayout
+                if (moreDetails.visibility == View.VISIBLE) {
+                    moreDetails.visibility = View.GONE
                 } else {
                     TransitionManager.beginDelayedTransition(
                         v as CardView,
                         AutoTransition()
                     )
-                    test.visibility = View.VISIBLE
+                    moreDetails.visibility = View.VISIBLE
                 }
             }
         }
