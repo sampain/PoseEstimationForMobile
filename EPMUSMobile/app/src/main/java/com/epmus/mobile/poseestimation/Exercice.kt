@@ -89,9 +89,9 @@ class Exercice() : Parcelable {
     }
 
     // Track all bodypart (mostly used for statistics)
-    var bp : BodyPartPos = BodyPartPos()
+    var bp: BodyPartPos = BodyPartPos()
 
-    fun updateTimeStamp (dv : DrawView) {
+    fun updateTimeStamp(dv: DrawView) {
         timeStamp = System.currentTimeMillis()
 
         bp.HEAD.X = round(dv!!.mDrawPoint[BodyPart.HEAD.ordinal].x).toInt()
@@ -222,17 +222,13 @@ class Exercice() : Parcelable {
             ExerciceType.REPETITION -> exerciceVerificationRepetition(drawView)
             ExerciceType.HOLD -> exerciceVerificationHold(drawView)
             ExerciceType.AMPLITUDE -> exerciceVerificationAmplitude(drawView)
-            else -> {}
+            else -> {
+            }
         }
     }
 
     //Verify the state for an exercice type in Amplitude
     fun exerciceVerificationAmplitude(drawView: DrawView) {
-        //Sets the start time of the exercice if not started
-        if (exerciceStartTime == null) {
-            exerciceStartTime = System.currentTimeMillis() / 1000
-        }
-
         movementList.forEach()
         {
 
@@ -251,16 +247,15 @@ class Exercice() : Parcelable {
                 }
             }
 
-            if(movementList[0].movementState == MovementState.STARTING_ANGLE_REACHED)
-            {
-                if(sign((it.endingAngle!! - it.startingAngle!!).toDouble()) == 1.0) {
+            if (movementList[0].movementState == MovementState.STARTING_ANGLE_REACHED) {
+                if (sign((it.endingAngle!! - it.startingAngle!!).toDouble()) == 1.0) {
                     if (maxAngleReached == null || movementList[0].angleAvg!! > maxAngleReached!!) {
                         maxAngleReached = movementList[0].angleAvg
                         maxAngleReachedTime = System.currentTimeMillis()
                     }
                 }
 
-                if(sign((it.endingAngle!! - it.startingAngle!!).toDouble()) == -1.0) {
+                if (sign((it.endingAngle!! - it.startingAngle!!).toDouble()) == -1.0) {
                     if (maxAngleReached == null || movementList[0].angleAvg!! < maxAngleReached!!) {
                         maxAngleReached = movementList[0].angleAvg
                         maxAngleReachedTime = System.currentTimeMillis()
@@ -268,10 +263,10 @@ class Exercice() : Parcelable {
                 }
             }
 
-            if(maxAngleReachedTime != null)
-            {
+            if (maxAngleReachedTime != null) {
                 if (timeAllowedToReachNewMax < (System.currentTimeMillis() - maxAngleReachedTime!!) / 1000) {
                     exitStateReached = true
+                    exerciceEndTime = System.currentTimeMillis()
                 }
             }
         }
@@ -332,7 +327,7 @@ class Exercice() : Parcelable {
         }
 
         //Calculates remaining chrono time
-        chronoTime = ((System.currentTimeMillis() - exerciceStartTime!!)/1000).toInt()
+        chronoTime = ((System.currentTimeMillis() - exerciceStartTime!!) / 1000).toInt()
         chronoTime = allowedTimeForExercice!! - chronoTime!!
 
         //If no time is left, then the exercice is done
@@ -576,21 +571,22 @@ class Exercice() : Parcelable {
         return repetitionDone
     }
 
-    fun correctAngle (needToCorrectClockWise: Boolean, isClockWise: Boolean, angles: Double) : Double {
+    fun correctAngle(
+        needToCorrectClockWise: Boolean,
+        isClockWise: Boolean,
+        angles: Double
+    ): Double {
         if (needToCorrectClockWise) {
             if (isClockWise) {
-                return 360-angles
-            }
-            else {
+                return 360 - angles
+            } else {
                 return angles
             }
-        }
-        else {
+        } else {
             if (isClockWise) {
                 return angles
-            }
-            else {
-                return 360-angles
+            } else {
+                return 360 - angles
             }
         }
     }
@@ -624,16 +620,13 @@ class Exercice() : Parcelable {
             if (pointY1 < pointY0) {
                 if (pointX2 < pointX1) {
                     angleDeg = correctAngle(false, movement.isAngleClockWise!!, angleDeg)
-                }
-                else {
+                } else {
                     angleDeg = correctAngle(true, movement.isAngleClockWise!!, angleDeg)
                 }
-            }
-            else {
+            } else {
                 if (pointX2 < pointX1) {
                     angleDeg = correctAngle(true, movement.isAngleClockWise!!, angleDeg)
-                }
-                else {
+                } else {
                     angleDeg = correctAngle(false, movement.isAngleClockWise!!, angleDeg)
                 }
             }
@@ -643,22 +636,18 @@ class Exercice() : Parcelable {
             if (pointX1 > pointX0) {
                 if (pointY2 > pointY1) {
                     angleDeg = correctAngle(true, movement.isAngleClockWise!!, angleDeg)
-                }
-                else {
+                } else {
                     angleDeg = correctAngle(false, movement.isAngleClockWise!!, angleDeg)
                 }
-            }
-            else {
+            } else {
                 if (pointY2 > pointY1) {
                     angleDeg = correctAngle(false, movement.isAngleClockWise!!, angleDeg)
-                }
-                else {
+                } else {
                     angleDeg = correctAngle(true, movement.isAngleClockWise!!, angleDeg)
                 }
             }
 
-        }
-        else {
+        } else {
             var a = Y1ToY0 / X1ToX0
             var b = pointY0 - (a * pointX0)
             var tmpPointY2 = (a * pointX2) + b
@@ -670,8 +659,7 @@ class Exercice() : Parcelable {
             if (dX > 0 && dY < 0) {
                 if (tmpPointY2 > pointY2) {
                     angleDeg = correctAngle(false, movement.isAngleClockWise!!, angleDeg)
-                }
-                else {
+                } else {
                     angleDeg = correctAngle(true, movement.isAngleClockWise!!, angleDeg)
                 }
             }
@@ -679,8 +667,7 @@ class Exercice() : Parcelable {
             else if (dX < 0 && dY < 0) {
                 if (tmpPointY2 > pointY2) {
                     angleDeg = correctAngle(true, movement.isAngleClockWise!!, angleDeg)
-                }
-                else {
+                } else {
                     angleDeg = correctAngle(false, movement.isAngleClockWise!!, angleDeg)
                 }
 
@@ -689,8 +676,7 @@ class Exercice() : Parcelable {
             else if (dX < 0 && dY > 0) {
                 if (tmpPointY2 > pointY2) {
                     angleDeg = correctAngle(true, movement.isAngleClockWise!!, angleDeg)
-                }
-                else {
+                } else {
                     angleDeg = correctAngle(false, movement.isAngleClockWise!!, angleDeg)
                 }
 
@@ -699,8 +685,7 @@ class Exercice() : Parcelable {
             else if (dX > 0 && dY > 0) {
                 if (tmpPointY2 > pointY2) {
                     angleDeg = correctAngle(false, movement.isAngleClockWise!!, angleDeg)
-                }
-                else {
+                } else {
                     angleDeg = correctAngle(true, movement.isAngleClockWise!!, angleDeg)
                 }
 

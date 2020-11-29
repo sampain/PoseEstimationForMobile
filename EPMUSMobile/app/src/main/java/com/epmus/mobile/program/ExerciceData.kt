@@ -108,7 +108,7 @@ class ExerciceData {
             } else if (exerciceName == ExerciceNameList.ExerciceBrasGaucheAmplitude) {
                 movement.startingAngle = 180
                 movement.endingAngle = 90
-                movement.isAngleAntiClockWise = true
+                movement.isAngleClockWise = false
                 exercice.movementList.add(movement)
                 exercice.exerciceType = ExerciceType.AMPLITUDE
             }
