@@ -105,6 +105,12 @@ class ExerciceData {
                 exercice.movementList.add(movement2)
                 exercice.exerciceType = ExerciceType.HOLD
                 exercice.targetHoldTime = 10
+            } else if (exerciceName == ExerciceNameList.ExerciceBrasGaucheAmplitude) {
+                movement.startingAngle = 180
+                movement.endingAngle = 90
+                movement.isAngleAntiClockWise = true
+                exercice.movementList.add(movement)
+                exercice.exerciceType = ExerciceType.AMPLITUDE
             }
 
             var exerciceData: ExerciceData = ExerciceData()
@@ -125,7 +131,8 @@ enum class ExerciceNameList(val exerciceName: String) {
     ExerciceBrasChrono("Exercice Bras Chrono"),
     ExerciceBrasGaucheHold("Exercice Bras Gauche Hold"),
     ExerciceBrasDroitHold("Exercice Bras Droit Hold"),
-    ExerciceBrasHold("Exercice Bras Hold");
+    ExerciceBrasHold("Exercice Bras Hold"),
+    ExerciceBrasGaucheAmplitude("Exercice Bras Gauche Amplitude");
 
     companion object {
         fun getEnumValue(value: String): ExerciceNameList? =

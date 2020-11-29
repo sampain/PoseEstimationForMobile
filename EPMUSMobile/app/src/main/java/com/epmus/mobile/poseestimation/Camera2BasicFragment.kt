@@ -257,7 +257,15 @@ class Camera2BasicFragment : Fragment() {
             ExerciceType.CHRONO -> retroactionChrono(exercise)
             ExerciceType.REPETITION -> retroactionRepetition(exercise)
             ExerciceType.HOLD -> retroactionHold(exercise)
+            ExerciceType.AMPLITUDE -> retroactionAmplitude(exercise)
             else -> {}
+        }
+    }
+
+    private fun retroactionAmplitude(exercise: Exercice)
+    {
+        if(exercise.warningCanBeDisplayed) {
+            exercise.warningCanBeDisplayed = false
         }
     }
 

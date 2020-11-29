@@ -5,5 +5,6 @@ import java.io.Serializable
 enum class ExerciceType: Serializable {
     CHRONO,
     REPETITION,
-    HOLD
+    HOLD,
+    AMPLITUDE
 }

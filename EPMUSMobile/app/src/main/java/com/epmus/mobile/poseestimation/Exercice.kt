@@ -50,6 +50,11 @@ class Exercice() : Parcelable {
     var holdingStartTime: Long? = null
     var currentHoldTime: Long = 0
 
+    //Variable for type AMPLITUDE
+    var maxAngleReached: Int? = null
+    var maxAngleReachedTime: Long? = null
+    var timeAllowedToReachNewMax: Int = 2
+
     //This is used to make sure that a warning cannot be spammed
     var warningCanBeDisplayed: Boolean = true
 
@@ -216,7 +221,59 @@ class Exercice() : Parcelable {
             ExerciceType.CHRONO -> exerciceVerificationChrono(drawView)
             ExerciceType.REPETITION -> exerciceVerificationRepetition(drawView)
             ExerciceType.HOLD -> exerciceVerificationHold(drawView)
+            ExerciceType.AMPLITUDE -> exerciceVerificationAmplitude(drawView)
             else -> {}
+        }
+    }
+
+    //Verify the state for an exercice type in Amplitude
+    fun exerciceVerificationAmplitude(drawView: DrawView) {
+        //Sets the start time of the exercice if not started
+        if (exerciceStartTime == null) {
+            exerciceStartTime = System.currentTimeMillis() / 1000
+        }
+
+        movementList.forEach()
+        {
+
+            //Calculate new values for this frame
+            calculateMembersLength(it, drawView)
+            calculateAngleV2(it, drawView)
+
+            //Sets new state for movement according to if the angle is matching or not
+            if (isAngleMatching(it)) {
+                when (it.movementState) {
+                    MovementState.INIT -> {
+                        it.movementState = MovementState.STARTING_ANGLE_REACHED
+                        mouvementStartTimer = System.currentTimeMillis()
+                        maxAngleReachedTime = System.currentTimeMillis()
+                    }
+                }
+            }
+
+            if(movementList[0].movementState == MovementState.STARTING_ANGLE_REACHED)
+            {
+                if(sign((it.endingAngle!! - it.startingAngle!!).toDouble()) == 1.0) {
+                    if (maxAngleReached == null || movementList[0].angleAvg!! > maxAngleReached!!) {
+                        maxAngleReached = movementList[0].angleAvg
+                        maxAngleReachedTime = System.currentTimeMillis()
+                    }
+                }
+
+                if(sign((it.endingAngle!! - it.startingAngle!!).toDouble()) == -1.0) {
+                    if (maxAngleReached == null || movementList[0].angleAvg!! < maxAngleReached!!) {
+                        maxAngleReached = movementList[0].angleAvg
+                        maxAngleReachedTime = System.currentTimeMillis()
+                    }
+                }
+            }
+
+            if(maxAngleReachedTime != null)
+            {
+                if (timeAllowedToReachNewMax < (System.currentTimeMillis() - maxAngleReachedTime!!) / 1000) {
+                    exitStateReached = true
+                }
+            }
         }
     }
 
