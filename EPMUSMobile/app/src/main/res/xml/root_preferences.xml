@@ -12,31 +12,11 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/account_settings">
-
-        <EditTextPreference
-            app:key="change_password"
-            app:title="@string/change_password"
-            app:useSimpleSummaryProvider="true" />
-
-    </PreferenceCategory>
-
     <PreferenceCategory app:title="@string/application_settings">
 
         <SwitchPreferenceCompat
             app:key="audio_setting"
             app:title="@string/audio_setting" />
-
-        <SwitchPreferenceCompat
-            app:key="visual_setting"
-            app:title="@string/visual_setting" />
-
-        <!--SwitchPreferenceCompat
-            app:dependency="sync"
-            app:key="attachment"
-            app:summaryOff="@string/attachment_summary_off"
-            app:summaryOn="@string/attachment_summary_on"
-            app:title="@string/attachment_title" /-->
 
     </PreferenceCategory>
 

@@ -2,10 +2,6 @@ package com.epmus.mobile.data
 
 import io.realm.mongodb.User
 
-/**
- * A generic class that holds a value with its loading status.
- * @param <T>
- */
 sealed class Result<out T : Any> {
 
     data class Success<out T : Any>(val data: User?) : Result<T>()
