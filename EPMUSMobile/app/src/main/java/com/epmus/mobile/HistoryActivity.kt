@@ -116,8 +116,8 @@ class HistoryActivity : AppCompatActivity() {
 
             when (ExerciceType.getEnumValue(item.exerciceType)) {
                 ExerciceType.HOLD -> {
-                    holder.idView.setTextColor(Color.parseColor("#EF5350"))
-                    holder.exerciceType.setTextColor(Color.parseColor("#EF5350"))
+                    holder.idView.setTextColor(Color.parseColor("#66BB6A"))
+                    holder.exerciceType.setTextColor(Color.parseColor("#66BB6A"))
                 }
                 ExerciceType.REPETITION -> {
                     holder.idView.setTextColor(Color.parseColor("#FF9800"))

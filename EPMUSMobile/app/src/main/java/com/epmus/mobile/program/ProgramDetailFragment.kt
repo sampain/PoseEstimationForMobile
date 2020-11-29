@@ -49,25 +49,37 @@ class ProgramDetailFragment : Fragment() {
         item?.let {
             rootView.findViewById<TextView>(R.id.program_detail).text = it.description
             it.exercice.movementList.forEachIndexed { index, movement ->
-                if(index == 0){
-                    rootView.findViewById<TextView>(R.id.angleStart).text = movement.startingAngle.toString()
-                    rootView.findViewById<TextView>(R.id.angleEnd).text = movement.endingAngle.toString()
+                if (index == 0) {
+                    rootView.findViewById<TextView>(R.id.angleStart).text =
+                        movement.startingAngle.toString()
+                    rootView.findViewById<TextView>(R.id.angleEnd).text =
+                        movement.endingAngle.toString()
+                } else {
+                    rootView.findViewById<LinearLayout>(R.id.angle2Start_layout).visibility =
+                        View.VISIBLE
+                    rootView.findViewById<LinearLayout>(R.id.angle2End_layout).visibility =
+                        View.VISIBLE
+                    rootView.findViewById<TextView>(R.id.angle2Start).text =
+                        movement.startingAngle.toString()
+                    rootView.findViewById<TextView>(R.id.angle2End).text =
+                        movement.endingAngle.toString()
                 }
-                else{
-                    rootView.findViewById<LinearLayout>(R.id.angle2Start_layout).visibility = View.VISIBLE
-                    rootView.findViewById<LinearLayout>(R.id.angle2End_layout).visibility = View.VISIBLE
-                    rootView.findViewById<TextView>(R.id.angle2Start).text = movement.startingAngle.toString()
-                    rootView.findViewById<TextView>(R.id.angle2End).text = movement.endingAngle.toString()
-                }
-
             }
             if (it.exercice.exerciceType == ExerciceType.HOLD) {
-                rootView.findViewById<TextView>(R.id.repetitionOrHold_text).text = "Temps de maintient : "
+                rootView.findViewById<TextView>(R.id.repetitionOrHold_text).text =
+                    "Temps de maintient : "
+                rootView.findViewById<TextView>(R.id.repetitionOrHold).text =
+                    it.exercice.targetHoldTime.toString()
+            } else {
+                rootView.findViewById<TextView>(R.id.repetitionOrHold).text =
+                    it.exercice.numberOfRepetitionToDo.toString()
             }
-            rootView.findViewById<TextView>(R.id.repetitionOrHold).text = it.exercice.numberOfRepetitionToDo.toString()
-            rootView.findViewById<TextView>(R.id.tempoMin).text = it.exercice.minExecutionTime.toString()
-            rootView.findViewById<TextView>(R.id.tempoMax).text = it.exercice.maxExecutionTime.toString()
-            val id = resources.getIdentifier(it.imagePath, "drawable",
+            rootView.findViewById<TextView>(R.id.tempoMin).text =
+                it.exercice.minExecutionTime.toString()
+            rootView.findViewById<TextView>(R.id.tempoMax).text =
+                it.exercice.maxExecutionTime.toString()
+            val id = resources.getIdentifier(
+                it.imagePath, "drawable",
                 activity?.packageName
             )
             rootView.findViewById<ImageView>(R.id.test).setImageResource(id)
