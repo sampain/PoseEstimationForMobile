@@ -345,15 +345,18 @@ class MongoTransactions {
     ) :
         Runnable {
         override fun run() {
-            val realmInstance = Realm.getInstance(config)
-            realmInstance.executeTransaction { transactionRealm ->
+            val realmInstance1 = Realm.getInstance(config)
+            realmInstance1.executeTransaction { transactionRealm ->
                 transactionRealm.insert(stats)
             }
-            realmInstance.executeTransaction { transactionRealm ->
+            realmInstance1.close()
+
+            val realmInstance2 = Realm.getInstance(config)
+            realmInstance2.executeTransaction { transactionRealm ->
                 transactionRealm.insert(histo)
             }
 
-            realmInstance.close()
+            realmInstance2.close()
         }
     }
 }
