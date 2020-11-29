@@ -70,7 +70,14 @@ class ProgramDetailFragment : Fragment() {
                     "Temps de maintient : "
                 rootView.findViewById<TextView>(R.id.repetitionOrHold).text =
                     it.exercice.targetHoldTime.toString()
-            } else {
+            } else if(it.exercice.exerciceType == ExerciceType.CHRONO)
+            {
+                rootView.findViewById<TextView>(R.id.repetitionOrHold_text).text =
+                    "Temps (s): "
+                rootView.findViewById<TextView>(R.id.repetitionOrHold).text =
+                    it.exercice.allowedTimeForExercice.toString()
+            }
+            else {
                 rootView.findViewById<TextView>(R.id.repetitionOrHold).text =
                     it.exercice.numberOfRepetitionToDo.toString()
             }

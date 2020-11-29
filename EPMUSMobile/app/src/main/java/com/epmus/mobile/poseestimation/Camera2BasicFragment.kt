@@ -18,7 +18,6 @@ package com.epmus.mobile.poseestimation
 import android.annotation.SuppressLint
 import android.app.*
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.res.Configuration
@@ -43,12 +42,10 @@ import androidx.preference.PreferenceManager
 import com.epmus.mobile.MongoDbService.MongoTransactions
 import com.epmus.mobile.R
 import com.epmus.mobile.program.ExerciceData
-import com.epmus.mobile.program.ProgramListActivity
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.IOException
-import java.io.Serializable
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.Semaphore
@@ -990,8 +987,6 @@ class Camera2BasicFragment : Fragment() {
                     delay(2000L)
 
                     //EXIT !
-                    val intent = Intent(getActivity(), ProgramListActivity::class.java)
-                    startActivity(intent)
                     getActivity()?.finish();
                 }
             }

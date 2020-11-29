@@ -303,6 +303,7 @@ class MongoTransactions {
                             exerciceData.exercice.targetHoldTime = exerciceProgram.tenir
                             exerciceData.exercice.numberOfRepetitionToDo =
                                 exerciceProgram.repetition
+                            exerciceData.exercice.allowedTimeForExercice = exerciceProgram.duree
                             var i = 0
                             exercice.movements?.forEach {
                                 val movement = Movement(
@@ -311,8 +312,12 @@ class MongoTransactions {
                                     BodyPart.getEnumValue(it.bodyPart2)?.ordinal!!
                                 )
                                 if (i == 0) {
+                                    if (exerciceData.exercice.exerciceType == ExerciceType.HOLD) {
+                                        movement.endingAngle = exerciceProgram.angle?.hold
+                                    } else {
+                                        movement.endingAngle = exerciceProgram.angle?.fin
+                                    }
                                     movement.startingAngle = exerciceProgram.angle?.debut
-                                    movement.endingAngle = exerciceProgram.angle?.fin
                                     movement.isAngleClockWise =
                                         exerciceProgram.angle?.isClockWise
                                 } else {
@@ -519,6 +524,7 @@ open class exercices(
     _repetition: Int? = null,
     _tenir: Int? = null,
     _tempo: tempo? = null,
+    _duree: Int? = null,
     _dimanche: Boolean? = null,
     _lundi: Boolean? = null,
     _mardi: Boolean? = null,
@@ -535,6 +541,7 @@ open class exercices(
     var repetition = _repetition
     var tenir = _tenir
     var tempo = _tempo
+    var duree = _duree
     var dimanche = _dimanche
     var lundi = _lundi
     var mardi = _mardi
