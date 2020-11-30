@@ -63,7 +63,9 @@ class DrawView : View {
         resources.getColor(R.color.color_r_hip, null),
         resources.getColor(R.color.color_r_knee, null),
         resources.getColor(R.color.color_r_ankle, null),
+        resources.getColor(R.color.color_hip, null),
         resources.getColor(R.color.color_background, null)
+
     )
 
     private val circleRadius: Float by lazy {
@@ -117,6 +119,12 @@ class DrawView : View {
             tempY = point[1][i] / ratio / mRatioY
             mDrawPoint.add(PointF(tempX, tempY))
         }
+
+        //The HIP point has to be manually calculated. The detection library doesn't take the HIP point into account
+        tempX = mDrawPoint[BodyPart.L_HIP.ordinal].x + (mDrawPoint[BodyPart.R_HIP.ordinal].x - mDrawPoint[BodyPart.L_HIP.ordinal].x)/2
+        tempY = mDrawPoint[BodyPart.L_HIP.ordinal].y +(mDrawPoint[BodyPart.R_HIP.ordinal].y - mDrawPoint[BodyPart.L_HIP.ordinal].y)/2
+
+        mDrawPoint.add(PointF(tempX, tempY))
     }
 
     /**
@@ -254,7 +262,7 @@ class DrawView : View {
                     canvas.drawLine(pointF.x, pointF.y, p1.x, p1.y, mPaint)
                 }
                 // 1-2, 1-5, 1-8, 1-11
-                2, 5, 8, 11 -> {
+                2, 5, 8, 11, 14 -> {
                     canvas.drawLine(p1.x, p1.y, pointF.x, pointF.y, mPaint)
                 }
                 else -> {

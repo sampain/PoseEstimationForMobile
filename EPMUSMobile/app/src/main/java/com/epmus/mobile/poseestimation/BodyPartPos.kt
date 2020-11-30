@@ -18,4 +18,5 @@ class BodyPartPos : Serializable {
     var R_HIP: PointPos = PointPos()
     var R_KNEE: PointPos = PointPos()
     var R_ANKLE: PointPos = PointPos()
+    var HIP: PointPos = PointPos()
 }

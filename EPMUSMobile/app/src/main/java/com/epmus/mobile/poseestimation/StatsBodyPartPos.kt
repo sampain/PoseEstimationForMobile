@@ -18,4 +18,5 @@ class StatsBodyPartPos : Serializable {
     var R_HIP = ArrayList<PointPos>()
     var R_KNEE = ArrayList<PointPos>()
     var R_ANKLE = ArrayList<PointPos>()
+    var HIP = ArrayList<PointPos>()
 }
