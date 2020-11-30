@@ -82,7 +82,7 @@ class MongoTransactions {
                                     histoEntry
                             ), "Succeeded History"
                     )
-            val executorService: ExecutorService = Executors.newFixedThreadPool(2)
+            val executorService: ExecutorService = Executors.newFixedThreadPool(1)
             executorService.execute(task)
         }
 
@@ -162,18 +162,18 @@ class MongoTransactions {
                     R_ANKLE
             )
 
-            val numberOfRepetitionRealm = RealmList<simpleInt>()
+            var numberOfRepetitionRealm = RealmList<simpleInt>()
             stats.numberOfRepetition.forEach {
                 val value: Int = it ?: -1
                 numberOfRepetitionRealm.add(simpleInt(value))
             }
-            val speedOfRepetitionRealm = RealmList<simpleDouble>()
+            var speedOfRepetitionRealm = RealmList<simpleDouble>()
             stats.speedOfRepetition.forEach {
                 val value: Double = it?.toDouble() ?: (-1).toDouble()
                 speedOfRepetitionRealm.add(simpleDouble(value))
             }
 
-            val holdTimeRealm = RealmList<simpleDouble>()
+            var holdTimeRealm = RealmList<simpleDouble>()
             stats.holdTime.forEach {
                 val value: Double = it ?: (-1).toDouble()
                 holdTimeRealm.add(simpleDouble(value))
@@ -214,6 +214,14 @@ class MongoTransactions {
                 exerciceEndTime = stats.exerciceEndTime!!
             }
 
+            if (ExerciceType.getEnumValue(stats.exerciceType) == ExerciceType.HOLD) {
+                numberOfRepetitionRealm = RealmList()
+                speedOfRepetitionRealm = RealmList()
+            }
+            else{
+                holdTimeRealm = RealmList()
+            }
+
             val statistics = statistics(
                     stats.exerciceName,
                     stats.exerciceType,
@@ -236,7 +244,8 @@ class MongoTransactions {
                                     statistics
                             ), "Succeeded Statistics"
                     )
-            val executorService: ExecutorService = Executors.newFixedThreadPool(2)
+            val threads = Runtime.getRuntime().availableProcessors()
+            val executorService: ExecutorService = Executors.newFixedThreadPool(threads)
             executorService.execute(task)
         }
 
