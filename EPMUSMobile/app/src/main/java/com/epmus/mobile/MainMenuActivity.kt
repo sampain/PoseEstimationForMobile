@@ -18,7 +18,6 @@ import kotlin.system.exitProcess
 var historic: MutableList<historique> = mutableListOf()
 var globalExerciceList: MutableList<ExerciceData> = mutableListOf()
 lateinit var uiThreadRealmUserId: Realm
-lateinit var uiThreadRealmTempId: Realm
 lateinit var uiThreadRealmExercices: Realm
 
 class MainMenuActivity : AppCompatActivity() {
@@ -57,11 +56,9 @@ class MainMenuActivity : AppCompatActivity() {
 
         //Add listener to Realm
         uiThreadRealmUserId = Realm.getInstance(MongoTransactions.configUserId)
-        uiThreadRealmTempId = Realm.getInstance(MongoTransactions.configTempId)
         uiThreadRealmExercices = Realm.getInstance(MongoTransactions.configExercices)
         MongoTransactions.addChangeListenerToRealm(
             uiThreadRealmUserId,
-            uiThreadRealmTempId,
             uiThreadRealmExercices
         )
     }
@@ -82,7 +79,6 @@ class MainMenuActivity : AppCompatActivity() {
             realmApp.currentUser()?.logOutAsync {
                 if (it.isSuccess) {
                     uiThreadRealmUserId.close()
-                    uiThreadRealmTempId.close()
                     uiThreadRealmExercices.close()
                     finishAffinity()
                     exitProcess(1)

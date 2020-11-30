@@ -33,7 +33,6 @@ class MongoTransactions {
         var programmesList: MutableList<programmes> = mutableListOf()
         var exercicesPhysiotecList: MutableList<exercicesPhysiotec> = mutableListOf()
         val configUserId: SyncConfiguration
-        val configTempId: SyncConfiguration
         val configExercices: SyncConfiguration
         val user: User? = realmApp.currentUser()
         lateinit var historyListener: RealmResults<historique>
@@ -42,8 +41,9 @@ class MongoTransactions {
 
         init {
             val partitionValue: String? = user?.id
-            configUserId = SyncConfiguration.Builder(user, partitionValue).build()
-            configTempId = SyncConfiguration.Builder(user, "5e70fbbd362c587b9cc296e2").build()
+            configUserId =
+                SyncConfiguration.Builder(user, user?.customData?.get("_id").toString())
+                    .build()
             configExercices = SyncConfiguration.Builder(user, "exercices").build()
         }
 
@@ -250,7 +250,6 @@ class MongoTransactions {
 
         fun addChangeListenerToRealm(
             realmUserId: Realm,
-            realmTempId: Realm,
             realmExercices: Realm
         ) {
             historyListener = realmUserId.where<historique>().findAllAsync()
@@ -264,9 +263,9 @@ class MongoTransactions {
                 }
             }
 
-            programListener = realmTempId.where<programmes>().findAllAsync()
+            programListener = realmUserId.where<programmes>().findAllAsync()
             programListener.addChangeListener { collection, _ ->
-                programmesList = realmTempId.copyFromRealm(collection)
+                programmesList = realmUserId.copyFromRealm(collection)
                 globalExerciceList = exerciceList()
             }
 
