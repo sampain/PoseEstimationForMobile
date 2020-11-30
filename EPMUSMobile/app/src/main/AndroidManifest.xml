@@ -38,9 +38,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.epmus.mobile.program.ProgramListActivity" />
         </activity>
-        <activity
-            android:name=".SettingsActivity"
-            android:parentActivityName=".MainMenuActivity" />
+        <activity android:name=".SettingsActivity" />
         <activity
             android:name=".Messaging.MessagingActivity"
             android:parentActivityName=".MainMenuActivity" />

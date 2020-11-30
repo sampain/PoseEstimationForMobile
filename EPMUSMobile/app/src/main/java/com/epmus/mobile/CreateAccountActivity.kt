@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
@@ -103,6 +104,15 @@ class CreateAccountActivity : AppCompatActivity() {
         }
     }
 
+    override fun onOptionsItemSelected(item: MenuItem) =
+        when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+
     private fun showLoginFailed(@StringRes errorString: Int) {
         Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()
     }
@@ -112,10 +122,11 @@ class CreateAccountActivity : AppCompatActivity() {
             if (registerResult.isSuccess) {
                 loginUser(username, password)
             } else {
+                loadingCreate.visibility = View.GONE
                 Toast.makeText(
                     baseContext,
-                    registerResult.error.message
-                        ?: "Mot de passe et/ou nom d'utilisateur invalide, l'utilisateur n'a pas pu être créé.",
+                    registerResult.error.errorMessage
+                        ?: "Compte déjà existant / La connexion n'a pas réussi",
                     Toast.LENGTH_LONG
                 ).show()
             }
@@ -130,7 +141,7 @@ class CreateAccountActivity : AppCompatActivity() {
                 loadingCreate.visibility = View.GONE
                 Toast.makeText(
                     baseContext,
-                    loginResult.error.message ?: "La connexion n'a pas réussi",
+                    loginResult.error.errorMessage ?: "La connexion n'a pas réussi",
                     Toast.LENGTH_LONG
                 ).show()
             }
@@ -152,12 +163,14 @@ class CreateAccountActivity : AppCompatActivity() {
             if (findResult.isSuccess) {
                 val document = findResult.get()
                 if (document == null) {
-                    loadingCreate.visibility = View.GONE
-                    Toast.makeText(
-                        baseContext,
-                        "Il n'y a pas de compte pour faire le lien",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    user.logOutAsync {
+                        loadingCreate.visibility = View.GONE
+                        Toast.makeText(
+                            baseContext,
+                            "Il n'y a pas de compte pour faire le lien",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
                 } else {
                     document["patientId"] = user.id.toString()
 
@@ -166,23 +179,27 @@ class CreateAccountActivity : AppCompatActivity() {
                             if (updateResult.isSuccess) {
                                 logoutLogin(username, password)
                             } else {
-                                Toast.makeText(
-                                    baseContext,
-                                    updateResult.error.message
-                                        ?: "Impossible de faire lien",
-                                    Toast.LENGTH_LONG
-                                ).show()
+                                user.logOutAsync {
+                                    Toast.makeText(
+                                        baseContext,
+                                        updateResult.error.errorMessage
+                                            ?: "Impossible de faire lien",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                }
                             }
                         }
                 }
             } else {
-                loadingCreate.visibility = View.GONE
-                Toast.makeText(
-                    baseContext,
-                    findResult.error.message
-                        ?: "Il n'y a pas de compte pour faire le lien",
-                    Toast.LENGTH_LONG
-                ).show()
+                user.logOutAsync {
+                    loadingCreate.visibility = View.GONE
+                    Toast.makeText(
+                        baseContext,
+                        findResult.error.errorMessage
+                            ?: "Il n'y a pas de compte pour faire le lien",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
             }
         }
     }
