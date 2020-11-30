@@ -1079,7 +1079,9 @@ class Camera2BasicFragment : Fragment() {
         cleanStats.exerciceEndTime = convertLongToTime(s[cpt-1].exerciceEndTime!!)
 
         MongoTransactions.historyEntry(cleanStats)
-        MongoTransactions.insertStatistics(cleanStats)
+
+        //TODO: Seperate statistics in smaller realm so the DB can handle it
+        //MongoTransactions.insertStatistics(cleanStats)
     }
 
     private fun showDebugUI(text: String) {
