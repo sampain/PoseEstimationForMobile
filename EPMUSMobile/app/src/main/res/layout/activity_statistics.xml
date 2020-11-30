@@ -106,6 +106,21 @@
                             android:text="@string/chono_stats"
                             android:textColor="#29B6F6" />
 
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:autoSizeMaxTextSize="30sp"
+                            android:autoSizeMinTextSize="5sp"
+                            android:autoSizeTextType="uniform"
+                            android:gravity="center_vertical"
+                            android:maxLines="1"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp"
+                            android:text="@string/amp_stats"
+                            android:textColor="#774C55" />
+
                     </LinearLayout>
 
                 </LinearLayout>

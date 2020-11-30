@@ -156,6 +156,9 @@ class ProgramListActivity : AppCompatActivity() {
                 ExerciceType.CHRONO -> {
                     holder.contentView.setTextColor(Color.parseColor("#29B6F6"))
                 }
+                ExerciceType.AMPLITUDE -> {
+                    holder.contentView.setTextColor(Color.parseColor("#774C55"))
+                }
             }
 
             with(holder.itemView) {

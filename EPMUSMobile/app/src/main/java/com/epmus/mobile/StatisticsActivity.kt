@@ -83,6 +83,7 @@ class StatisticsActivity : AppCompatActivity() {
         var holdCount = 0
         var repetitionCount = 0
         var chronoCount = 0
+        var ampCount = 0
         var count7 = 0
 
         val localDate = LocalDate.now()
@@ -96,7 +97,10 @@ class StatisticsActivity : AppCompatActivity() {
                 ExerciceType.REPETITION -> {
                     repetitionCount++
                 }
-                else -> {
+                ExerciceType.AMPLITUDE -> {
+                    ampCount++
+                }
+                ExerciceType.CHRONO -> {
                     chronoCount++
                 }
             }
@@ -126,6 +130,12 @@ class StatisticsActivity : AppCompatActivity() {
             PieModel(
                 "Type Chronomètre", chronoCount.toFloat(),
                 Color.parseColor("#29B6F6")
+            )
+        )
+        pieChart.addPieSlice(
+            PieModel(
+                "Type Amplitude", chronoCount.toFloat(),
+                Color.parseColor("#774C55")
             )
         )
 

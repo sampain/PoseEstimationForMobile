@@ -131,6 +131,10 @@ class HistoryActivity : AppCompatActivity() {
                     holder.idView.setTextColor(Color.parseColor("#29B6F6"))
                     holder.exerciceType.setTextColor(Color.parseColor("#29B6F6"))
                 }
+                ExerciceType.AMPLITUDE -> {
+                    holder.idView.setTextColor(Color.parseColor("#774C55"))
+                    holder.exerciceType.setTextColor(Color.parseColor("#774C55"))
+                }
             }
 
             with(holder.itemView) {
