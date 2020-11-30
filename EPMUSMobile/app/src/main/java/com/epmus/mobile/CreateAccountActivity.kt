@@ -13,6 +13,7 @@ import androidx.annotation.StringRes
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.epmus.mobile.MongoDbService.MongoTransactions
 import com.epmus.mobile.ui.login.*
 import io.realm.mongodb.Credentials
 import io.realm.mongodb.mongo.MongoClient
@@ -96,7 +97,7 @@ class CreateAccountActivity : AppCompatActivity() {
             }
 
             createAccoutButton.setOnClickListener {
-                loading.visibility = View.VISIBLE
+                loadingCreate.visibility = View.VISIBLE
                 createUser(username.text.toString(), password.text.toString())
             }
         }
@@ -108,91 +109,110 @@ class CreateAccountActivity : AppCompatActivity() {
 
     private fun createUser(username: String, password: String) {
         realmApp.emailPassword.registerUserAsync(username, password) { registerResult ->
-            if (!registerResult.isSuccess) {
+            if (registerResult.isSuccess) {
+                loginUser(username, password)
+            } else {
                 Toast.makeText(
                     baseContext,
-                    registerResult.error.message ?: "Mot de passe et/ou nom d'utilisateur invalide",
+                    registerResult.error.message
+                        ?: "Mot de passe et/ou nom d'utilisateur invalide, l'utilisateur n'a pas pu être créé.",
                     Toast.LENGTH_LONG
                 ).show()
+            }
+        }
+    }
+
+    private fun loginUser(username: String, password: String) {
+        realmApp.loginAsync(Credentials.emailPassword(username, password)) { loginResult ->
+            if (loginResult.isSuccess) {
+                findAndUpdateCustomData(username, password)
             } else {
-                realmApp.loginAsync(Credentials.emailPassword(username, password)) { loginResult ->
-                    if (loginResult.isSuccess) {
-                        val user = realmApp.currentUser()
-                        val mongoClient: MongoClient =
-                            user?.getMongoClient("mongodb-atlas")!!
-                        val mongoDatabase: MongoDatabase =
-                            mongoClient.getDatabase("iphysioBD-dev")!!
-                        val mongoCollection: MongoCollection<Document> =
-                            mongoDatabase.getCollection("patients")!!
+                loadingCreate.visibility = View.GONE
+                Toast.makeText(
+                    baseContext,
+                    loginResult.error.message ?: "La connexion n'a pas réussi",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+    }
 
-                        mongoCollection.findOne(
-                            Document("email", username)
-                        ).getAsync { findResult ->
-                            if (findResult.isSuccess) {
-                                val document = findResult.get()
+    private fun findAndUpdateCustomData(username: String, password: String) {
+        val user = realmApp.currentUser()
+        val mongoClient: MongoClient =
+            user?.getMongoClient("mongodb-atlas")!!
+        val mongoDatabase: MongoDatabase =
+            mongoClient.getDatabase("iphysioBD-dev")!!
+        val mongoCollection: MongoCollection<Document> =
+            mongoDatabase.getCollection("patients")!!
 
-                                document["patientId"] = user.id.toString()
+        mongoCollection.findOne(
+            Document("email", username)
+        ).getAsync { findResult ->
+            if (findResult.isSuccess) {
+                val document = findResult.get()
+                if (document == null) {
+                    loadingCreate.visibility = View.GONE
+                    Toast.makeText(
+                        baseContext,
+                        "Il n'y a pas de compte pour faire le lien",
+                        Toast.LENGTH_LONG
+                    ).show()
+                } else {
+                    document["patientId"] = user.id.toString()
 
-                                mongoCollection.updateOne(
-                                    Document("email", username),
-                                    document
-                                )
-                                    .getAsync { updateResult ->
-                                        if (updateResult.isSuccess) {
-                                            realmApp.currentUser()?.logOutAsync { logoutUser ->
-                                                if (logoutUser.isSuccess) {
-                                                    realmApp.loginAsync(
-                                                        Credentials.emailPassword(
-                                                            username,
-                                                            password
-                                                        )
-                                                    ) { loginUser ->
-                                                        if (loginUser.isSuccess) {
-                                                            val welcome =
-                                                                getString(R.string.welcome)
-
-                                                            val intent = Intent(
-                                                                this,
-                                                                MainMenuActivity::class.java
-                                                            )
-                                                            startActivity(intent)
-                                                            finish()
-
-                                                            Toast.makeText(
-                                                                applicationContext,
-                                                                "$welcome ${user.customData["name"].toString()}",
-                                                                Toast.LENGTH_LONG
-                                                            ).show()
-                                                        }
-                                                    }
-                                                }
-
-                                            }
-                                        } else {
-                                            Toast.makeText(
-                                                baseContext,
-                                                updateResult.error.message
-                                                    ?: "Il n'y a pas de compte pour faire le lien",
-                                                Toast.LENGTH_LONG
-                                            ).show()
-                                        }
-                                    }
+                    mongoCollection.updateOne(Document("email", username), document)
+                        .getAsync { updateResult ->
+                            if (updateResult.isSuccess) {
+                                logoutLogin(username, password)
                             } else {
                                 Toast.makeText(
                                     baseContext,
-                                    findResult.error.message
-                                        ?: "Il n'y a pas de compte pour faire le lien",
+                                    updateResult.error.message
+                                        ?: "Impossible de faire lien",
                                     Toast.LENGTH_LONG
                                 ).show()
                             }
                         }
+                }
+            } else {
+                loadingCreate.visibility = View.GONE
+                Toast.makeText(
+                    baseContext,
+                    findResult.error.message
+                        ?: "Il n'y a pas de compte pour faire le lien",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+    }
 
-                    } else {
-                        Toast.makeText(
-                            baseContext,
-                            registerResult.error.message ?: "La connexion n'a pas réussi",
-                            Toast.LENGTH_LONG
-                        ).show()
+    private fun logoutLogin(username: String, password: String) {
+        realmApp.currentUser()?.logOutAsync { logoutUser ->
+            if (logoutUser.isSuccess) {
+                realmApp.loginAsync(Credentials.emailPassword(username, password)) { loginUser ->
+                    if (loginUser.isSuccess) {
+                        val user = realmApp.currentUser()
+
+                        val welcome = getString(R.string.welcome)
+
+                        val intent = Intent(this, MainMenuActivity::class.java)
+                        startActivity(intent)
+                        finish()
+
+                        if (MongoTransactions.user?.customData?.get("_id") == null) {
+                            Toast.makeText(
+                                applicationContext,
+                                "Il y a eu une erreur lors de la création du compte",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        } else {
+                            Toast.makeText(
+                                applicationContext,
+                                "$welcome ${user?.customData?.get("name").toString()}",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
                     }
                 }
             }
