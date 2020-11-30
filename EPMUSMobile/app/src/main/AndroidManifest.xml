@@ -42,9 +42,6 @@
             android:name=".SettingsActivity"
             android:parentActivityName=".MainMenuActivity" />
         <activity
-            android:name=".ForgotPasswordActivity"
-            android:parentActivityName=".ui.login.LoginActivity" />
-        <activity
             android:name=".Messaging.MessagingActivity"
             android:parentActivityName=".MainMenuActivity" />
         <activity

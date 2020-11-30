@@ -2,7 +2,6 @@ package com.epmus.mobile.ui.login
 
 import android.app.Activity
 import android.content.Intent
-import android.opengl.Visibility
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -14,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.epmus.mobile.CreateAccountActivity
-import com.epmus.mobile.ForgotPasswordActivity
 import com.epmus.mobile.MainMenuActivity
 import com.epmus.mobile.R
 import io.realm.mongodb.Credentials
@@ -40,17 +38,10 @@ class LoginActivity : AppCompatActivity() {
         val loginDisabled = findViewById<Button>(R.id.loginDisabled)
         val loading = findViewById<ProgressBar>(R.id.loading)
         val createAccount = findViewById<TextView>(R.id.createAccount)
-        val forgetPassword = findViewById<TextView>(R.id.forgotPassword)
 
         createAccount.setOnClickListener {
             val intent = Intent(this@LoginActivity, CreateAccountActivity::class.java)
             startActivity(intent)
-        }
-
-        forgetPassword.setOnClickListener {
-            val intent = Intent(this@LoginActivity, ForgotPasswordActivity::class.java)
-            startActivity(intent)
-            finish()
         }
 
         loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
