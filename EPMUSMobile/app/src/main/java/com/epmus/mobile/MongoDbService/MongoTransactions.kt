@@ -101,6 +101,7 @@ class MongoTransactions {
             val R_HIP: RealmList<pointPos> = RealmList<pointPos>()
             val R_KNEE: RealmList<pointPos> = RealmList<pointPos>()
             val R_ANKLE: RealmList<pointPos> = RealmList<pointPos>()
+            val HIP: RealmList<pointPos> = RealmList<pointPos>()
 
             stats.bodyPartPos.HEAD.forEach {
                 HEAD.add(pointPos(it.X, it.Y))
@@ -144,6 +145,9 @@ class MongoTransactions {
             stats.bodyPartPos.R_ANKLE.forEach {
                 R_ANKLE.add(pointPos(it.X, it.Y))
             }
+            stats.bodyPartPos.HIP.forEach {
+                HIP.add(pointPos(it.X, it.Y))
+            }
 
             val bodypartObj = bodyPartPos(
                 HEAD,
@@ -159,7 +163,8 @@ class MongoTransactions {
                 L_ANKLE,
                 R_HIP,
                 R_KNEE,
-                R_ANKLE
+                R_ANKLE,
+                HIP
             )
 
             var numberOfRepetitionRealm = RealmList<simpleInt>()
@@ -459,7 +464,8 @@ open class bodyPartPos(
     _L_ANKLE: RealmList<pointPos>? = null,
     _R_HIP: RealmList<pointPos>? = null,
     _R_KNEE: RealmList<pointPos>? = null,
-    _R_ANKLE: RealmList<pointPos>? = null
+    _R_ANKLE: RealmList<pointPos>? = null,
+    _HIP: RealmList<pointPos>? = null
 ) :
     RealmObject() {
     var HEAD = _HEAD
@@ -476,6 +482,7 @@ open class bodyPartPos(
     var R_HIP = _R_HIP
     var R_KNEE = _R_KNEE
     var R_ANKLE = _R_ANKLE
+    var HIP = _HIP
 }
 
 @RealmClass(embedded = true)
