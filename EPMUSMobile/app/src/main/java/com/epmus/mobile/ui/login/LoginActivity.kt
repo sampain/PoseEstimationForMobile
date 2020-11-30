@@ -2,6 +2,7 @@ package com.epmus.mobile.ui.login
 
 import android.app.Activity
 import android.content.Intent
+import android.opengl.Visibility
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -36,6 +37,7 @@ class LoginActivity : AppCompatActivity() {
         val username = findViewById<EditText>(R.id.username)
         val password = findViewById<EditText>(R.id.password)
         val login = findViewById<Button>(R.id.login)
+        val loginDisabled = findViewById<Button>(R.id.loginDisabled)
         val loading = findViewById<ProgressBar>(R.id.loading)
         val createAccount = findViewById<TextView>(R.id.createAccount)
         val forgetPassword = findViewById<TextView>(R.id.forgotPassword)
@@ -59,6 +61,14 @@ class LoginActivity : AppCompatActivity() {
 
             // disable login button unless both username / password is valid
             login.isEnabled = loginState.isDataValid
+            if(loginState.isDataValid){
+                loginDisabled.visibility = View.GONE
+                login.visibility = View.VISIBLE
+            }
+            else{
+                loginDisabled.visibility = View.VISIBLE
+                login.visibility = View.GONE
+            }
 
             if (loginState.usernameError != null) {
                 username.error = getString(loginState.usernameError)

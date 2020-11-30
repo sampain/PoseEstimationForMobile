@@ -48,6 +48,26 @@
         app:layout_constraintTop_toBottomOf="@+id/username" />
 
     <Button
+        android:id="@+id/loginDisabled"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="64dp"
+        android:background="@drawable/button_disabled"
+        android:enabled="false"
+        android:text="@string/action_sign_in"
+        android:textColor="#BCBBBB"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/forgotPassword"
+        app:layout_constraintVertical_bias="0.07999998" />
+
+    <Button
         android:id="@+id/login"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -61,6 +81,7 @@
         android:text="@string/action_sign_in"
         android:textColor="@android:color/white"
         android:textSize="30sp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
