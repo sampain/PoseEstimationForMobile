@@ -14,7 +14,8 @@ enum class BodyPart(val bodyPart: String) {
     L_ANKLE("L_ANKLE"),
     R_HIP("R_HIP"),
     R_KNEE("R_KNEE"),
-    R_ANKLE("R_ANKLE");
+    R_ANKLE("R_ANKLE"),
+    HIP("HIP");
 
     companion object {
         fun getEnumValue(value: String): BodyPart? =
