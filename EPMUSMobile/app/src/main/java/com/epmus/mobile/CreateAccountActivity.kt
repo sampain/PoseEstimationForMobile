@@ -57,25 +57,44 @@ class CreateAccountActivity : AppCompatActivity() {
                         ).getAsync { findResult ->
                             if (findResult.isSuccess) {
                                 val document = findResult.get()
+
                                 document["patientId"] = user.id.toString()
 
                                 mongoCollection.updateOne(
                                     Document("email", username),
                                     document
                                 )
-                                    .getAsync() { updateResult ->
+                                    .getAsync { updateResult ->
                                         if (updateResult.isSuccess) {
-                                            val welcome = getString(R.string.welcome)
+                                            realmApp.currentUser()?.logOutAsync { logoutUser ->
+                                                if (logoutUser.isSuccess) {
+                                                    realmApp.loginAsync(
+                                                        Credentials.emailPassword(
+                                                            username,
+                                                            password
+                                                        )
+                                                    ) { loginUser ->
+                                                        if (loginUser.isSuccess) {
+                                                            val welcome =
+                                                                getString(R.string.welcome)
 
-                                            val intent = Intent(this, MainMenuActivity::class.java)
-                                            startActivity(intent)
-                                            finish()
+                                                            val intent = Intent(
+                                                                this,
+                                                                MainMenuActivity::class.java
+                                                            )
+                                                            startActivity(intent)
+                                                            finish()
 
-                                            Toast.makeText(
-                                                applicationContext,
-                                                "$welcome ${user.customData["name"].toString()}",
-                                                Toast.LENGTH_LONG
-                                            ).show()
+                                                            Toast.makeText(
+                                                                applicationContext,
+                                                                "$welcome ${user.customData["name"].toString()}",
+                                                                Toast.LENGTH_LONG
+                                                            ).show()
+                                                        }
+                                                    }
+                                                }
+
+                                            }
                                         } else {
                                             Toast.makeText(
                                                 baseContext,
