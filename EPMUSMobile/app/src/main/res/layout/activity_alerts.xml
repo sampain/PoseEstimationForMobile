@@ -7,7 +7,7 @@
     tools:context=".AlertsActivity">
 
 
-    <Button
+    <ToggleButton
         android:id="@+id/btn_notify"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
