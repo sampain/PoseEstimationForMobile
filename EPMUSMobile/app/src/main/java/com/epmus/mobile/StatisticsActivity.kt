@@ -134,7 +134,7 @@ class StatisticsActivity : AppCompatActivity() {
         )
         pieChart.addPieSlice(
             PieModel(
-                "Type Amplitude", chronoCount.toFloat(),
+                "Type Amplitude", ampCount.toFloat(),
                 Color.parseColor("#774C55")
             )
         )
