@@ -65,21 +65,27 @@ class ProgramDetailFragment : Fragment() {
                         movement.endingAngle.toString()
                 }
             }
-            if (it.exercice.exerciceType == ExerciceType.HOLD) {
-                rootView.findViewById<TextView>(R.id.repetitionOrHold_text).text =
-                    "Temps de maintient : "
-                rootView.findViewById<TextView>(R.id.repetitionOrHold).text =
-                    it.exercice.targetHoldTime.toString()
-            } else if(it.exercice.exerciceType == ExerciceType.CHRONO)
-            {
-                rootView.findViewById<TextView>(R.id.repetitionOrHold_text).text =
-                    "Temps (s): "
-                rootView.findViewById<TextView>(R.id.repetitionOrHold).text =
-                    it.exercice.allowedTimeForExercice.toString()
-            }
-            else {
-                rootView.findViewById<TextView>(R.id.repetitionOrHold).text =
-                    it.exercice.numberOfRepetitionToDo.toString()
+            when (it.exercice.exerciceType) {
+                ExerciceType.HOLD -> {
+                    rootView.findViewById<TextView>(R.id.repetitionOrHold_text).text =
+                        "Temps de maintient : "
+                    rootView.findViewById<TextView>(R.id.repetitionOrHold).text =
+                        it.exercice.targetHoldTime.toString()
+                }
+                ExerciceType.CHRONO -> {
+                    rootView.findViewById<TextView>(R.id.repetitionOrHold_text).text =
+                        "Temps (s): "
+                    rootView.findViewById<TextView>(R.id.repetitionOrHold).text =
+                        it.exercice.allowedTimeForExercice.toString()
+                }
+                ExerciceType.AMPLITUDE -> {
+                    rootView.findViewById<LinearLayout>(R.id.repetition_layout).visibility =
+                        View.GONE
+                }
+                ExerciceType.REPETITION -> {
+                    rootView.findViewById<TextView>(R.id.repetitionOrHold).text =
+                        it.exercice.numberOfRepetitionToDo.toString()
+                }
             }
             rootView.findViewById<TextView>(R.id.tempoMin).text =
                 it.exercice.minExecutionTime.toString()
