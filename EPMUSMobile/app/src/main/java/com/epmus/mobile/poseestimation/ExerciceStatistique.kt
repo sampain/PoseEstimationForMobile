@@ -5,11 +5,15 @@ import java.io.Serializable
 class ExerciceStatistique : Serializable {
     var exerciceName = ""
     var exerciceType = ""
+    var exerciceID: String = ""
 
+    var timestampOfRepetition = ArrayList<String?>()
     var numberOfRepetition = ArrayList<Int?>()
-    var speedOfRepetition = ArrayList<Float?>()
-    var holdTime = ArrayList<Double?>()
-    var timeStamp = ArrayList<String?>()
+
+    var holdTimeStartTime = ArrayList<String?>()
+    var holdTimeEndTime = ArrayList<String?>()
+
+    var maxAngleAmplitude: Int? = null
 
     var initStartTime: String? = null
     var exerciceStartTime: String? = null
@@ -17,7 +21,6 @@ class ExerciceStatistique : Serializable {
 
     var movements = ArrayList<MovementStatistics>()
 
+    var timestampBodyPart = ArrayList<String?>()
     var bodyPartPos: StatsBodyPartPos = StatsBodyPartPos()
-
-    var exerciceID: String = ""
 }

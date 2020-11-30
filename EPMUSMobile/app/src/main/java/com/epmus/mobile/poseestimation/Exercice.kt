@@ -118,6 +118,8 @@ class Exercice() : Parcelable {
         bp.R_KNEE.Y = round(dv.mDrawPoint[BodyPart.R_KNEE.ordinal].y).toInt()
         bp.R_ANKLE.X = round(dv.mDrawPoint[BodyPart.R_ANKLE.ordinal].x).toInt()
         bp.R_ANKLE.Y = round(dv.mDrawPoint[BodyPart.R_ANKLE.ordinal].y).toInt()
+        bp.HIP.X = round(dv.mDrawPoint[BodyPart.HIP.ordinal].x).toInt()
+        bp.HIP.Y = round(dv.mDrawPoint[BodyPart.HIP.ordinal].y).toInt()
     }
 
     fun initialisationVerification(drawView: DrawView) {
@@ -383,6 +385,7 @@ class Exercice() : Parcelable {
                 exitStateReached = true
                 exerciceEndTime = System.currentTimeMillis()
                 holdTime += currentHoldTime
+                isHolding = false
                 currentHoldTime = 0
             }
         }
@@ -827,6 +830,8 @@ class Exercice() : Parcelable {
         exercices.bp.R_KNEE.Y = bp.R_KNEE.Y
         exercices.bp.R_ANKLE.X = bp.R_ANKLE.X
         exercices.bp.R_ANKLE.Y = bp.R_ANKLE.Y
+        exercices.bp.HIP.X = bp.HIP.X
+        exercices.bp.HIP.Y = bp.HIP.Y
 
         return exercices
     }

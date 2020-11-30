@@ -48,7 +48,7 @@ class MongoTransactions {
         }
 
         fun historyEntry(stats: ExerciceStatistique) {
-            val exerciceType = stats.exerciceType
+            /*val exerciceType = stats.exerciceType
             val exerciceTypeEnum = ExerciceType.getEnumValue(exerciceType)
 
             var nbrRepetitionOrHoldTime = stats.numberOfRepetition.last().toString()
@@ -83,10 +83,10 @@ class MongoTransactions {
                     ), "Succeeded History"
                 )
             val executorService: ExecutorService = Executors.newFixedThreadPool(1)
-            executorService.execute(task)
+            executorService.execute(task)*/
         }
 
-        fun insertStatistics(stats: ExerciceStatistique) {
+        fun insertStatistics(stats: ExerciceStatistique) {/*
             val HEAD: RealmList<pointPos> = RealmList<pointPos>()
             val NECK: RealmList<pointPos> = RealmList<pointPos>()
             val L_SHOULDER: RealmList<pointPos> = RealmList<pointPos>()
@@ -250,7 +250,7 @@ class MongoTransactions {
                 )
             val threads = Runtime.getRuntime().availableProcessors()
             val executorService: ExecutorService = Executors.newFixedThreadPool(threads)
-            executorService.execute(task)
+            executorService.execute(task)*/
         }
 
         fun addChangeListenerToRealm(

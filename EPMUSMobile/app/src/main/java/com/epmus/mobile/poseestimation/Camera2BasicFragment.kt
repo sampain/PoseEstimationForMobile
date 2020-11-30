@@ -1031,6 +1031,8 @@ class Camera2BasicFragment : Fragment() {
         return format.format(date)
     }
 
+
+
     fun adjustStats(s: ArrayList<Exercice>) {
         val cleanStats = ExerciceStatistique()
 
@@ -1044,36 +1046,76 @@ class Camera2BasicFragment : Fragment() {
             cleanStats.movements.add(tmpMovStats)
         }
 
+        var exerciceStarted = false
+        var lastRepetition = -1
+        var isHolding = false
+        var lastState = ArrayList<MovementState?>()
+        s[0].movementList.forEach() {
+            lastState.add(MovementState.ENDING_ANGLE_REACHED)
+        }
         // Add all infos
-        s.forEachIndexed() { id, e ->
-            cleanStats.timeStamp.add(convertLongToTime(e.timeStamp!!))
-            cleanStats.numberOfRepetition.add(e.numberOfRepetition)
-            cleanStats.speedOfRepetition.add(e.mouvementSpeedTime)
-            val hold: Double = (e.holdTime.toDouble() + e.currentHoldTime.toDouble()) / 1000
-            cleanStats.holdTime.add(hold)
+        s.forEach() {
+            if (exerciceStarted) {
+                if (cleanStats.exerciceType == "REPETITION" || cleanStats.exerciceType == "CHRONO") {
+                    if (lastRepetition != it.numberOfRepetition) {
+                        cleanStats.timestampOfRepetition.add(convertLongToTime(it.timeStamp!!))
+                        cleanStats.numberOfRepetition.add(it.numberOfRepetition)
+                        lastRepetition = it.numberOfRepetition
+                    }
+                }
+                else if (cleanStats.exerciceType == "HOLD") {
+                    if (isHolding != it.isHolding) {
+                        if (it.isHolding) {
+                            cleanStats.holdTimeStartTime.add(convertLongToTime(it.timeStamp!!))
+                        } else {
+                            cleanStats.holdTimeEndTime.add(convertLongToTime(it.timeStamp!!))
+                        }
+                        isHolding = !isHolding
+                    }
+                }
+            }
+            else {
+                if (it.exerciceStartTime != null) {
+                    if (cleanStats.exerciceType == "REPETITION" || cleanStats.exerciceType == "CHRONO") {
+                        cleanStats.timestampOfRepetition.add(convertLongToTime(it.timeStamp!!))
+                        cleanStats.numberOfRepetition.add(0)
+                        lastRepetition = 0
+                    }
+                    exerciceStarted = true
+                }
+            }
 
-            cleanStats.bodyPartPos.HEAD.add(PointPos(e.bp.HEAD.X, e.bp.HEAD.Y))
-            cleanStats.bodyPartPos.NECK.add(PointPos(e.bp.NECK.X, e.bp.NECK.Y))
-            cleanStats.bodyPartPos.L_SHOULDER.add(PointPos(e.bp.L_SHOULDER.X, e.bp.L_SHOULDER.Y))
-            cleanStats.bodyPartPos.L_ELBOW.add(PointPos(e.bp.L_ELBOW.X, e.bp.L_ELBOW.Y))
-            cleanStats.bodyPartPos.L_WRIST.add(PointPos(e.bp.L_WRIST.X, e.bp.L_WRIST.Y))
-            cleanStats.bodyPartPos.R_SHOULDER.add(PointPos(e.bp.R_SHOULDER.X, e.bp.R_SHOULDER.Y))
-            cleanStats.bodyPartPos.R_ELBOW.add(PointPos(e.bp.R_ELBOW.X, e.bp.R_ELBOW.Y))
-            cleanStats.bodyPartPos.R_WRIST.add(PointPos(e.bp.R_WRIST.X, e.bp.R_WRIST.Y))
-            cleanStats.bodyPartPos.L_HIP.add(PointPos(e.bp.L_HIP.X, e.bp.L_HIP.Y))
-            cleanStats.bodyPartPos.L_KNEE.add(PointPos(e.bp.L_KNEE.X, e.bp.L_KNEE.Y))
-            cleanStats.bodyPartPos.L_ANKLE.add(PointPos(e.bp.L_ANKLE.X, e.bp.L_ANKLE.Y))
-            cleanStats.bodyPartPos.R_HIP.add(PointPos(e.bp.R_HIP.X, e.bp.R_HIP.Y))
-            cleanStats.bodyPartPos.R_KNEE.add(PointPos(e.bp.R_KNEE.X, e.bp.R_KNEE.Y))
-            cleanStats.bodyPartPos.R_ANKLE.add(PointPos(e.bp.R_ANKLE.X, e.bp.R_ANKLE.Y))
+            for (i in 0..it.movementList.count()-1) {
+                if (lastState[i] != it.movementList[i].movementState) {
+                    cleanStats.movements[i].timestampState.add(convertLongToTime(it.timeStamp!!))
+                    cleanStats.movements[i].state.add(it.movementList[i].movementState)
+                    lastState[i] = it.movementList[i].movementState
+                }
+            }
 
-            for (i in 0..e.movementList.count()-1) {
-                cleanStats.movements[i].angleAvg.add(e.movementList[i].angleAvg)
-                cleanStats.movements[i].state.add(e.movementList[i].movementState)
+            if (exerciceStarted) {
+                cleanStats.timestampBodyPart.add(convertLongToTime(it.timeStamp!!))
+                cleanStats.bodyPartPos.HEAD.add(PointPos(it.bp.HEAD.X, it.bp.HEAD.Y))
+                cleanStats.bodyPartPos.NECK.add(PointPos(it.bp.NECK.X, it.bp.NECK.Y))
+                cleanStats.bodyPartPos.L_SHOULDER.add(PointPos(it.bp.L_SHOULDER.X, it.bp.L_SHOULDER.Y))
+                cleanStats.bodyPartPos.L_ELBOW.add(PointPos(it.bp.L_ELBOW.X, it.bp.L_ELBOW.Y))
+                cleanStats.bodyPartPos.L_WRIST.add(PointPos(it.bp.L_WRIST.X, it.bp.L_WRIST.Y))
+                cleanStats.bodyPartPos.R_SHOULDER.add(PointPos(it.bp.R_SHOULDER.X, it.bp.R_SHOULDER.Y))
+                cleanStats.bodyPartPos.R_ELBOW.add(PointPos(it.bp.R_ELBOW.X, it.bp.R_ELBOW.Y))
+                cleanStats.bodyPartPos.R_WRIST.add(PointPos(it.bp.R_WRIST.X, it.bp.R_WRIST.Y))
+                cleanStats.bodyPartPos.L_HIP.add(PointPos(it.bp.L_HIP.X, it.bp.L_HIP.Y))
+                cleanStats.bodyPartPos.L_KNEE.add(PointPos(it.bp.L_KNEE.X, it.bp.L_KNEE.Y))
+                cleanStats.bodyPartPos.L_ANKLE.add(PointPos(it.bp.L_ANKLE.X, it.bp.L_ANKLE.Y))
+                cleanStats.bodyPartPos.R_HIP.add(PointPos(it.bp.R_HIP.X, it.bp.R_HIP.Y))
+                cleanStats.bodyPartPos.R_KNEE.add(PointPos(it.bp.R_KNEE.X, it.bp.R_KNEE.Y))
+                cleanStats.bodyPartPos.R_ANKLE.add(PointPos(it.bp.R_ANKLE.X, it.bp.R_ANKLE.Y))
+                cleanStats.bodyPartPos.HIP.add(PointPos(it.bp.HIP.X, it.bp.HIP.Y))
             }
         }
 
         val cpt = s.count()
+        cleanStats.maxAngleAmplitude = s[cpt-1].maxAngleReached
+
         cleanStats.initStartTime = convertLongToTime(s[cpt-1].initStartTimer!!)
         cleanStats.exerciceStartTime = convertLongToTime(s[cpt-1].exerciceStartTime!!)
         cleanStats.exerciceEndTime = convertLongToTime(s[cpt-1].exerciceEndTime!!)
