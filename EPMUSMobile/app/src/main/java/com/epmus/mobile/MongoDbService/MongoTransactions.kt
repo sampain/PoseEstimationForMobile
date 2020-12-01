@@ -85,7 +85,10 @@ class MongoTransactions {
             executorService.execute(task)
         }
 
-        fun insertStatistics(stats: ExerciceStatistique) { /*
+        fun insertStatistics(stats: ExerciceStatistique) {
+            //TODO Pretreat the data, realm will have an error if the realmlist is too long
+            val maxArray = 150
+
             val HEAD: RealmList<pointPos> = RealmList<pointPos>()
             val NECK: RealmList<pointPos> = RealmList<pointPos>()
             val L_SHOULDER: RealmList<pointPos> = RealmList<pointPos>()
@@ -102,49 +105,50 @@ class MongoTransactions {
             val R_ANKLE: RealmList<pointPos> = RealmList<pointPos>()
             val HIP: RealmList<pointPos> = RealmList<pointPos>()
 
-            stats.bodyPartPos.HEAD.forEach {
+
+            stats.bodyPartPos.HEAD.take(maxArray).forEach {
                 HEAD.add(pointPos(it.X, it.Y))
             }
-            stats.bodyPartPos.NECK.forEach {
+            stats.bodyPartPos.NECK.take(maxArray).forEach {
                 NECK.add(pointPos(it.X, it.Y))
             }
-            stats.bodyPartPos.L_SHOULDER.forEach {
+            stats.bodyPartPos.L_SHOULDER.take(maxArray).forEach {
                 L_SHOULDER.add(pointPos(it.X, it.Y))
             }
-            stats.bodyPartPos.L_ELBOW.forEach {
+            stats.bodyPartPos.L_ELBOW.take(maxArray).forEach {
                 L_ELBOW.add(pointPos(it.X, it.Y))
             }
-            stats.bodyPartPos.L_WRIST.forEach {
+            stats.bodyPartPos.L_WRIST.take(maxArray).forEach {
                 L_WRIST.add(pointPos(it.X, it.Y))
             }
-            stats.bodyPartPos.R_SHOULDER.forEach {
+            stats.bodyPartPos.R_SHOULDER.take(maxArray).forEach {
                 R_SHOULDER.add(pointPos(it.X, it.Y))
             }
-            stats.bodyPartPos.R_ELBOW.forEach {
+            stats.bodyPartPos.R_ELBOW.take(maxArray).forEach {
                 R_ELBOW.add(pointPos(it.X, it.Y))
             }
-            stats.bodyPartPos.R_WRIST.forEach {
+            stats.bodyPartPos.R_WRIST.take(maxArray).forEach {
                 R_WRIST.add(pointPos(it.X, it.Y))
             }
-            stats.bodyPartPos.L_HIP.forEach {
+            stats.bodyPartPos.L_HIP.take(maxArray).forEach {
                 L_HIP.add(pointPos(it.X, it.Y))
             }
-            stats.bodyPartPos.L_KNEE.forEach {
+            stats.bodyPartPos.L_KNEE.take(maxArray).forEach {
                 L_KNEE.add(pointPos(it.X, it.Y))
             }
-            stats.bodyPartPos.L_ANKLE.forEach {
+            stats.bodyPartPos.L_ANKLE.take(maxArray).forEach {
                 L_ANKLE.add(pointPos(it.X, it.Y))
             }
-            stats.bodyPartPos.R_HIP.forEach {
+            stats.bodyPartPos.R_HIP.take(maxArray).forEach {
                 R_HIP.add(pointPos(it.X, it.Y))
             }
-            stats.bodyPartPos.R_KNEE.forEach {
+            stats.bodyPartPos.R_KNEE.take(maxArray).forEach {
                 R_KNEE.add(pointPos(it.X, it.Y))
             }
-            stats.bodyPartPos.R_ANKLE.forEach {
+            stats.bodyPartPos.R_ANKLE.take(maxArray).forEach {
                 R_ANKLE.add(pointPos(it.X, it.Y))
             }
-            stats.bodyPartPos.HIP.forEach {
+            stats.bodyPartPos.HIP.take(maxArray).forEach {
                 HIP.add(pointPos(it.X, it.Y))
             }
 
@@ -167,50 +171,43 @@ class MongoTransactions {
             )
 
             val timestampOfRepetition = RealmList<simpleString>()
-            stats.timestampOfRepetition.forEach {
+            stats.timestampOfRepetition.take(maxArray).forEach {
                 if (it != null) {
                     timestampOfRepetition.add(simpleString(it))
                 }
             }
 
             val numberOfRepetition = RealmList<simpleInt>()
-            stats.numberOfRepetition.forEach {
+            stats.numberOfRepetition.take(maxArray).forEach {
                 if (it != null) {
                     numberOfRepetition.add(simpleInt(it))
                 }
             }
 
             val holdTimeStartTime = RealmList<simpleString>()
-            stats.holdTimeStartTime.forEach {
+            stats.holdTimeStartTime.take(maxArray).forEach {
                 if (it != null) {
                     holdTimeStartTime.add(simpleString(it))
                 }
             }
 
             val holdTimeEndTime = RealmList<simpleString>()
-            stats.holdTimeEndTime.forEach {
-                if (it != null) {
-                    holdTimeEndTime.add(simpleString(it))
-                }
-            }
-
-            val timestampBodyPart = RealmList<simpleString>()
-            stats.timestampBodyPart.forEach {
+            stats.holdTimeEndTime.take(maxArray).forEach {
                 if (it != null) {
                     holdTimeEndTime.add(simpleString(it))
                 }
             }
 
             val movementRealm = RealmList<movement>()
-            stats.movements.forEach {
+            stats.movements.take(maxArray).forEach {
                 val timestampState = RealmList<simpleString>()
                 val state = RealmList<simpleString>()
-                it.timestampState.forEach { timestamp ->
+                it.timestampState.take(maxArray).forEach { timestamp ->
                     if (timestamp != null) {
                         timestampState.add(simpleString(timestamp))
                     }
                 }
-                it.state.forEach { movement ->
+                it.state.take(maxArray).forEach { movement ->
                     state.add(simpleString(movement.toString()))
                 }
                 movementRealm.add(movement(timestampState, state))
@@ -230,7 +227,7 @@ class MongoTransactions {
                 stats.exerciceStartTime,
                 stats.exerciceEndTime,
                 movementRealm,
-                timestampBodyPart,
+                stats.avgFps,
                 bodypartObj
             )
 
@@ -243,7 +240,7 @@ class MongoTransactions {
                 )
             val threads = Runtime.getRuntime().availableProcessors()
             val executorService: ExecutorService = Executors.newFixedThreadPool(threads)
-            executorService.execute(task)*/
+            executorService.execute(task)
         }
 
         fun addChangeListenerToRealm(
@@ -253,6 +250,7 @@ class MongoTransactions {
             historyListener = realmUserId.where<historique>().findAllAsync()
             historyListener.addChangeListener { collection, _ ->
 
+                collection.sort("")
                 historic = realmUserId.copyFromRealm(collection)
 
                 if (historyView != null) {
@@ -408,7 +406,7 @@ open class statistics(
     _exerciceStartTime: String? = null,
     _exerciceEndTime: String? = null,
     _movement: RealmList<movement> = RealmList<movement>(),
-    _timestampBodyPart: RealmList<simpleString> = RealmList<simpleString>(),
+    _avgFPS: Double = -1.0,
     _bodyPartPos: bodyPartPos? = bodyPartPos(),
 ) :
     RealmObject() {
@@ -433,7 +431,7 @@ open class statistics(
 
     var movement = _movement
 
-    var timestampBodyPart = _timestampBodyPart
+    var avgFPS = _avgFPS
     var bodyPartPos = _bodyPartPos
 }
 
