@@ -50,6 +50,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.Semaphore
 import java.util.concurrent.TimeUnit
+import kotlin.math.roundToInt
 
 
 /**
@@ -1046,6 +1047,19 @@ class Camera2BasicFragment : Fragment() {
             cleanStats.movements.add(tmpMovStats)
         }
 
+        val cpt = s.count()
+
+        cleanStats.maxAngleAmplitude = s[cpt-1].maxAngleReached
+
+        cleanStats.initStartTime = convertLongToTime(s[cpt-1].initStartTimer!!)
+        cleanStats.exerciceStartTime = convertLongToTime(s[cpt-1].exerciceStartTime!!)
+        cleanStats.exerciceEndTime = convertLongToTime(s[cpt-1].exerciceEndTime!!)
+
+        // Remove few values to have around 5 fps for bodyPart.
+        // Needed or the the insert to DB will make the DB crash
+        val delayOfFrameTarget: Long = 170 // ~5fps
+        var delayTimer: Long = s[0].timeStamp!!
+
         var exerciceStarted = false
         var lastRepetition = -1
         var isHolding = false
@@ -1094,33 +1108,34 @@ class Camera2BasicFragment : Fragment() {
             }
 
             if (exerciceStarted) {
-                cleanStats.timestampBodyPart.add(convertLongToTime(it.timeStamp!!))
-                cleanStats.bodyPartPos.HEAD.add(PointPos(it.bp.HEAD.X, it.bp.HEAD.Y))
-                cleanStats.bodyPartPos.NECK.add(PointPos(it.bp.NECK.X, it.bp.NECK.Y))
-                cleanStats.bodyPartPos.L_SHOULDER.add(PointPos(it.bp.L_SHOULDER.X, it.bp.L_SHOULDER.Y))
-                cleanStats.bodyPartPos.L_ELBOW.add(PointPos(it.bp.L_ELBOW.X, it.bp.L_ELBOW.Y))
-                cleanStats.bodyPartPos.L_WRIST.add(PointPos(it.bp.L_WRIST.X, it.bp.L_WRIST.Y))
-                cleanStats.bodyPartPos.R_SHOULDER.add(PointPos(it.bp.R_SHOULDER.X, it.bp.R_SHOULDER.Y))
-                cleanStats.bodyPartPos.R_ELBOW.add(PointPos(it.bp.R_ELBOW.X, it.bp.R_ELBOW.Y))
-                cleanStats.bodyPartPos.R_WRIST.add(PointPos(it.bp.R_WRIST.X, it.bp.R_WRIST.Y))
-                cleanStats.bodyPartPos.L_HIP.add(PointPos(it.bp.L_HIP.X, it.bp.L_HIP.Y))
-                cleanStats.bodyPartPos.L_KNEE.add(PointPos(it.bp.L_KNEE.X, it.bp.L_KNEE.Y))
-                cleanStats.bodyPartPos.L_ANKLE.add(PointPos(it.bp.L_ANKLE.X, it.bp.L_ANKLE.Y))
-                cleanStats.bodyPartPos.R_HIP.add(PointPos(it.bp.R_HIP.X, it.bp.R_HIP.Y))
-                cleanStats.bodyPartPos.R_KNEE.add(PointPos(it.bp.R_KNEE.X, it.bp.R_KNEE.Y))
-                cleanStats.bodyPartPos.R_ANKLE.add(PointPos(it.bp.R_ANKLE.X, it.bp.R_ANKLE.Y))
-                cleanStats.bodyPartPos.HIP.add(PointPos(it.bp.HIP.X, it.bp.HIP.Y))
+                if (it.timeStamp!! >= delayTimer) {
+                    cleanStats.bodyPartPos.HEAD.add(PointPos(it.bp.HEAD.X, it.bp.HEAD.Y))
+                    cleanStats.bodyPartPos.NECK.add(PointPos(it.bp.NECK.X, it.bp.NECK.Y))
+                    cleanStats.bodyPartPos.L_SHOULDER.add(PointPos(it.bp.L_SHOULDER.X, it.bp.L_SHOULDER.Y))
+                    cleanStats.bodyPartPos.L_ELBOW.add(PointPos(it.bp.L_ELBOW.X, it.bp.L_ELBOW.Y))
+                    cleanStats.bodyPartPos.L_WRIST.add(PointPos(it.bp.L_WRIST.X, it.bp.L_WRIST.Y))
+                    cleanStats.bodyPartPos.R_SHOULDER.add(PointPos(it.bp.R_SHOULDER.X, it.bp.R_SHOULDER.Y))
+                    cleanStats.bodyPartPos.R_ELBOW.add(PointPos(it.bp.R_ELBOW.X, it.bp.R_ELBOW.Y))
+                    cleanStats.bodyPartPos.R_WRIST.add(PointPos(it.bp.R_WRIST.X, it.bp.R_WRIST.Y))
+                    cleanStats.bodyPartPos.L_HIP.add(PointPos(it.bp.L_HIP.X, it.bp.L_HIP.Y))
+                    cleanStats.bodyPartPos.L_KNEE.add(PointPos(it.bp.L_KNEE.X, it.bp.L_KNEE.Y))
+                    cleanStats.bodyPartPos.L_ANKLE.add(PointPos(it.bp.L_ANKLE.X, it.bp.L_ANKLE.Y))
+                    cleanStats.bodyPartPos.R_HIP.add(PointPos(it.bp.R_HIP.X, it.bp.R_HIP.Y))
+                    cleanStats.bodyPartPos.R_KNEE.add(PointPos(it.bp.R_KNEE.X, it.bp.R_KNEE.Y))
+                    cleanStats.bodyPartPos.R_ANKLE.add(PointPos(it.bp.R_ANKLE.X, it.bp.R_ANKLE.Y))
+                    cleanStats.bodyPartPos.HIP.add(PointPos(it.bp.HIP.X, it.bp.HIP.Y))
+                    delayTimer = it.timeStamp!! + delayOfFrameTarget
+                }
             }
         }
 
-        val cpt = s.count()
-        cleanStats.maxAngleAmplitude = s[cpt-1].maxAngleReached
 
-        cleanStats.initStartTime = convertLongToTime(s[cpt-1].initStartTimer!!)
-        cleanStats.exerciceStartTime = convertLongToTime(s[cpt-1].exerciceStartTime!!)
-        cleanStats.exerciceEndTime = convertLongToTime(s[cpt-1].exerciceEndTime!!)
+        cleanStats.avgFps = ((s[cpt-1].exerciceEndTime!!.toDouble() -
+                s[cpt-1].exerciceStartTime!!.toDouble())/1000)
+        cleanStats.avgFps = cleanStats.bodyPartPos.HEAD.count() / cleanStats.avgFps
 
-        MongoTransactions.historyEntry(cleanStats)
+
+                MongoTransactions.historyEntry(cleanStats)
 
         //TODO: Seperate statistics in smaller realm so the DB can handle it
         //MongoTransactions.insertStatistics(cleanStats)

@@ -21,6 +21,6 @@ class ExerciceStatistique : Serializable {
 
     var movements = ArrayList<MovementStatistics>()
 
-    var timestampBodyPart = ArrayList<String?>()
+    var avgFps: Double = -1.0
     var bodyPartPos: StatsBodyPartPos = StatsBodyPartPos()
 }

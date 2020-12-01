@@ -85,7 +85,7 @@ class MongoTransactions {
             executorService.execute(task)
         }
 
-        fun insertStatistics(stats: ExerciceStatistique) {
+        fun insertStatistics(stats: ExerciceStatistique) { /*
             val HEAD: RealmList<pointPos> = RealmList<pointPos>()
             val NECK: RealmList<pointPos> = RealmList<pointPos>()
             val L_SHOULDER: RealmList<pointPos> = RealmList<pointPos>()
@@ -243,7 +243,7 @@ class MongoTransactions {
                 )
             val threads = Runtime.getRuntime().availableProcessors()
             val executorService: ExecutorService = Executors.newFixedThreadPool(threads)
-            executorService.execute(task)
+            executorService.execute(task)*/
         }
 
         fun addChangeListenerToRealm(
