@@ -31,7 +31,6 @@ class MainMenuActivity : AppCompatActivity() {
         val program = findViewById<Button>(R.id.activity_program)
         val statistics = findViewById<Button>(R.id.activity_statistics)
         val messaging = findViewById<Button>(R.id.activity_messaging)
-        val alerts = findViewById<Button>(R.id.activity_alerts)
 
         program.setOnClickListener {
             val intent = Intent(this, ProgramListActivity::class.java)
@@ -45,11 +44,6 @@ class MainMenuActivity : AppCompatActivity() {
 
         messaging.setOnClickListener {
             val intent = Intent(this, MessagingActivity::class.java)
-            startActivity(intent)
-        }
-
-        alerts.setOnClickListener {
-            val intent = Intent(this, AlertsActivity::class.java)
             startActivity(intent)
         }
 

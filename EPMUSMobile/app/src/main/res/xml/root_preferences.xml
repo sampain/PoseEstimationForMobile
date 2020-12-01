@@ -18,6 +18,10 @@
             app:key="audio_setting"
             app:title="@string/audio_setting" />
 
+        <SwitchPreferenceCompat
+            app:key="alarms_setting"
+            app:title="@string/alarms_setting" />
+
     </PreferenceCategory>
 
 </PreferenceScreen>

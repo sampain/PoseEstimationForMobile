@@ -9,20 +9,18 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.*
 import android.widget.ImageButton
-import androidx.core.widget.NestedScrollView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.RecyclerView
-import androidx.appcompat.widget.Toolbar
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import android.widget.TextView
-import com.epmus.mobile.Messaging.MessagingActivity
-import com.epmus.mobile.R
-import com.epmus.mobile.SettingsActivity
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.core.widget.NestedScrollView
+import androidx.preference.PreferenceManager
+import androidx.recyclerview.widget.RecyclerView
 import com.epmus.mobile.*
 import com.epmus.mobile.poseestimation.CameraActivity
 import com.epmus.mobile.poseestimation.ExerciceType
 import com.epmus.mobile.poseestimation.ExerciceTypeUI
 import com.epmus.mobile.ui.login.realmApp
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.time.DayOfWeek
 import java.util.*
 import kotlin.system.exitProcess
@@ -198,69 +196,122 @@ class ProgramListActivity : AppCompatActivity() {
 
     private fun createAlarms() {
         val repeatInterval = AlarmManager.INTERVAL_DAY * 7
-        val hourOfDay = 12
-        val minuteOfDay = 0
+        val hourOfDay = 14
+        val minuteOfDay = 51
+
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
 
         notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager!!.cancelAll()
 
         val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
 
-        val intentMonday = Intent(this, AlarmReceiver::class.java).let { intent ->
+        val intent = Intent(this, AlarmReceiver::class.java)
+
+        val mondayUp = (PendingIntent.getBroadcast(
+            this,
+            NOTIFICATION_ID_MONDAY,
+            intent,
+            PendingIntent.FLAG_NO_CREATE
+        ) != null)
+
+        val tuesdayUp = (PendingIntent.getBroadcast(
+            this,
+            NOTIFICATION_ID_TUESDAY,
+            intent,
+            PendingIntent.FLAG_NO_CREATE
+        ) != null)
+
+        val wednesdayUp = (PendingIntent.getBroadcast(
+            this,
+            NOTIFICATION_ID_WEDNESDAY,
+            intent,
+            PendingIntent.FLAG_NO_CREATE
+        ) != null)
+
+        val thursdayUp = (PendingIntent.getBroadcast(
+            this,
+            NOTIFICATION_ID_THURSDAY,
+            intent,
+            PendingIntent.FLAG_NO_CREATE
+        ) != null)
+
+        val fridayUp = (PendingIntent.getBroadcast(
+            this,
+            NOTIFICATION_ID_FRIDAY,
+            intent,
+            PendingIntent.FLAG_NO_CREATE
+        ) != null)
+
+        val saturdayUp = (PendingIntent.getBroadcast(
+            this,
+            NOTIFICATION_ID_SATURDAY,
+            intent,
+            PendingIntent.FLAG_NO_CREATE
+        ) != null)
+
+        val sundayUp = (PendingIntent.getBroadcast(
+            this,
+            NOTIFICATION_ID_SUNDAY,
+            intent,
+            PendingIntent.FLAG_NO_CREATE
+        ) != null)
+
+        val intentMonday =
             PendingIntent.getBroadcast(
                 this,
                 NOTIFICATION_ID_MONDAY,
                 intent,
-                0
+                PendingIntent.FLAG_UPDATE_CURRENT
             )
-        }
-        val intentTuesday = Intent(this, AlarmReceiver::class.java).let { intent ->
+
+        val intentTuesday =
             PendingIntent.getBroadcast(
                 this,
                 NOTIFICATION_ID_TUESDAY,
                 intent,
-                0
+                PendingIntent.FLAG_UPDATE_CURRENT
             )
-        }
-        val intentWednesday = Intent(this, AlarmReceiver::class.java).let { intent ->
+
+        val intentWednesday =
             PendingIntent.getBroadcast(
                 this,
                 NOTIFICATION_ID_WEDNESDAY,
                 intent,
-                0
+                PendingIntent.FLAG_UPDATE_CURRENT
             )
-        }
-        val intentThursday = Intent(this, AlarmReceiver::class.java).let { intent ->
+
+        val intentThursday =
             PendingIntent.getBroadcast(
                 this,
                 NOTIFICATION_ID_THURSDAY,
                 intent,
-                0
+                PendingIntent.FLAG_UPDATE_CURRENT
             )
-        }
-        val intentFriday = Intent(this, AlarmReceiver::class.java).let { intent ->
+
+        val intentFriday =
             PendingIntent.getBroadcast(
                 this,
                 NOTIFICATION_ID_FRIDAY,
                 intent,
-                0
+                PendingIntent.FLAG_UPDATE_CURRENT
             )
-        }
-        val intentSaturday = Intent(this, AlarmReceiver::class.java).let { intent ->
+
+        val intentSaturday =
             PendingIntent.getBroadcast(
                 this,
                 NOTIFICATION_ID_SATURDAY,
                 intent,
-                0
+                PendingIntent.FLAG_UPDATE_CURRENT
             )
-        }
-        val intentSunday = Intent(this, AlarmReceiver::class.java).let { intent ->
+
+        val intentSunday =
             PendingIntent.getBroadcast(
                 this,
                 NOTIFICATION_ID_SUNDAY,
                 intent,
-                0
+                PendingIntent.FLAG_UPDATE_CURRENT
             )
-        }
 
         val calendarMonday: Calendar = Calendar.getInstance().apply {
             timeInMillis = System.currentTimeMillis()
@@ -305,74 +356,90 @@ class ProgramListActivity : AppCompatActivity() {
             set(Calendar.DAY_OF_WEEK, DayOfWeek.SUNDAY.ordinal)
         }
 
-        if (monday.isNotEmpty()) {
-            alarmManager.setRepeating(
-                AlarmManager.RTC_WAKEUP,
-                calendarMonday.timeInMillis, repeatInterval,
-                intentMonday
-            )
+        if (monday.isNotEmpty() && !sharedPreferences?.getBoolean("alarms_setting", false)!!) {
+            if (!mondayUp) {
+                alarmManager.setRepeating(
+                    AlarmManager.RTC_WAKEUP,
+                    calendarMonday.timeInMillis, repeatInterval,
+                    intentMonday
+                )
+            }
         } else {
             alarmManager.cancel(intentMonday)
         }
-        if (tuesday.isNotEmpty()) {
-            alarmManager.setRepeating(
-                AlarmManager.RTC_WAKEUP,
-                calendarTuesday.timeInMillis, repeatInterval,
-                intentTuesday
-            )
+        if (tuesday.isNotEmpty() && !sharedPreferences?.getBoolean("alarms_setting", false)!!) {
+            if (!tuesdayUp) {
+                alarmManager.setRepeating(
+                    AlarmManager.RTC_WAKEUP,
+                    calendarTuesday.timeInMillis, repeatInterval,
+                    intentTuesday
+                )
+            }
 
         } else {
             alarmManager.cancel(intentTuesday)
         }
-        if (wednesday.isNotEmpty()) {
-            alarmManager.setRepeating(
-                AlarmManager.RTC_WAKEUP,
-                calendarWednesday.timeInMillis, repeatInterval,
-                intentWednesday
-            )
+        if (wednesday.isNotEmpty() && !sharedPreferences?.getBoolean("alarms_setting", false)!!) {
+            if (!wednesdayUp) {
+                alarmManager.setRepeating(
+                    AlarmManager.RTC_WAKEUP,
+                    calendarWednesday.timeInMillis, repeatInterval,
+                    intentWednesday
+                )
+            }
         } else {
             alarmManager.cancel(intentWednesday)
         }
-        if (thursday.isNotEmpty()) {
-            alarmManager.setRepeating(
-                AlarmManager.RTC_WAKEUP,
-                calendarThursday.timeInMillis, repeatInterval,
-                intentThursday
-            )
+        if (thursday.isNotEmpty() && !sharedPreferences?.getBoolean("alarms_setting", false)!!) {
+            if (!thursdayUp) {
+                alarmManager.setRepeating(
+                    AlarmManager.RTC_WAKEUP,
+                    calendarThursday.timeInMillis, repeatInterval,
+                    intentThursday
+                )
+            }
 
         } else {
             alarmManager.cancel(intentThursday)
         }
-        if (friday.isNotEmpty()) {
-            alarmManager.setRepeating(
-                AlarmManager.RTC_WAKEUP,
-                calendarFriday.timeInMillis, repeatInterval,
-                intentFriday
-            )
+        if (friday.isNotEmpty() && !sharedPreferences?.getBoolean("alarms_setting", false)!!) {
+            if (!fridayUp) {
+                alarmManager.setRepeating(
+                    AlarmManager.RTC_WAKEUP,
+                    calendarFriday.timeInMillis, repeatInterval,
+                    intentFriday
+                )
+            }
 
         } else {
             alarmManager.cancel(intentFriday)
         }
-        if (saturday.isNotEmpty()) {
-            alarmManager.setRepeating(
-                AlarmManager.RTC_WAKEUP,
-                calendarSaturday.timeInMillis, repeatInterval,
-                intentSaturday
-            )
+        if (saturday.isNotEmpty() && !sharedPreferences?.getBoolean("alarms_setting", false)!!) {
+            if (!saturdayUp) {
+                alarmManager.setRepeating(
+                    AlarmManager.RTC_WAKEUP,
+                    calendarSaturday.timeInMillis, repeatInterval,
+                    intentSaturday
+                )
+            }
 
         } else {
             alarmManager.cancel(intentSaturday)
         }
-        if (sunday.isNotEmpty()) {
-            alarmManager.setRepeating(
-                AlarmManager.RTC_WAKEUP,
-                calendarSunday.timeInMillis, repeatInterval,
-                intentSunday
-            )
+        if (sunday.isNotEmpty() && !sharedPreferences?.getBoolean("alarms_setting", false)!!) {
+            if (!sundayUp) {
+                alarmManager.setRepeating(
+                    AlarmManager.RTC_WAKEUP,
+                    calendarSunday.timeInMillis, repeatInterval,
+                    intentSunday
+                )
+            }
         } else {
             alarmManager.cancel(intentSunday)
         }
-        createNotificationChannel()
+        if (!sharedPreferences?.getBoolean("alarms_setting", false)!!) {
+            createNotificationChannel()
+        }
     }
 
     private fun getExerciseDay() {

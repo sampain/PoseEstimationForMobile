@@ -47,9 +47,6 @@
             android:label="@string/title_activity_messaging"
             android:parentActivityName=".MainMenuActivity" />
         <activity
-            android:name=".AlertsActivity"
-            android:parentActivityName=".MainMenuActivity" />
-        <activity
             android:name=".StatisticsActivity"
             android:label="@string/title_statistics"
             android:parentActivityName=".MainMenuActivity" />

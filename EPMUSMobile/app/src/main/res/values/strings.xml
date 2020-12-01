@@ -74,6 +74,7 @@
     <string name="language">Langue</string>
 
     <string name="audio_setting">Désactiver l\'audio</string>
+    <string name="alarms_setting">Désactiver les alarmes</string>
     <string name="visual_setting">Désactiver l\'aide visuel</string>
 
     <string name="new_message">New Message</string>
