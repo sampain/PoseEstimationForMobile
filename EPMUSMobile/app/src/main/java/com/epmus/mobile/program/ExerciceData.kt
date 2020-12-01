@@ -10,6 +10,13 @@ class ExerciceData() : Parcelable {
     var description: String = ""
     var imagePath: String = ""
     var exercice: Exercice = Exercice()
+    var mondayAlarm : Boolean = false
+    var tuesdayAlarm : Boolean = false
+    var wednesdayAlarm : Boolean = false
+    var thursdayAlarm : Boolean = false
+    var fridayAlarm : Boolean = false
+    var saturdayAlarm : Boolean = false
+    var sundayAlarm : Boolean = false
 
     constructor(parcel: Parcel) : this() {
         id = parcel.readString().toString()

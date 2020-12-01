@@ -320,6 +320,13 @@ class MongoTransactions {
                     currentExerciceList.forEach { exercice ->
                         val exerciceData = ExerciceData()
                         if (exerciceProgram.exerciceId == exercice._id.toString()) {
+                            exerciceData.mondayAlarm = exerciceProgram.lundi ?: false
+                            exerciceData.tuesdayAlarm = exerciceProgram.mardi ?: false
+                            exerciceData.wednesdayAlarm = exerciceProgram.mercredi ?: false
+                            exerciceData.thursdayAlarm = exerciceProgram.jeudi ?: false
+                            exerciceData.fridayAlarm = exerciceProgram.vendredi ?: false
+                            exerciceData.saturdayAlarm = exerciceProgram.samedi ?: false
+                            exerciceData.sundayAlarm = exerciceProgram.dimanche ?: false
                             exerciceData.exercice.minExecutionTime =
                                 exerciceProgram.tempo?.min?.toFloat()
                             exerciceData.exercice.maxExecutionTime =
