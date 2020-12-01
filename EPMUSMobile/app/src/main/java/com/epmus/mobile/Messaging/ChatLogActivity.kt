@@ -55,7 +55,7 @@ class ChatLogActivity : AppCompatActivity() {
     }
 
     private fun ListenForMessages() {
-        val fromId = "Aida"
+        val fromId = "Mobile"
 
         val username = intent.getStringExtra(MessagingActivity.USER_KEY)
         val toId = username
@@ -67,7 +67,7 @@ class ChatLogActivity : AppCompatActivity() {
                 val chatMessage = p0.getValue((ChatMessage::class.java))
                 Log.d(TAG, chatMessage?.message.toString())
 
-                if(chatMessage?.fromId == "Aida"){
+                if(chatMessage?.fromId == "Mobile"){
                     adapter.add(ChatFItem(chatMessage?.message.toString()))
                 }
 
@@ -100,7 +100,7 @@ class ChatLogActivity : AppCompatActivity() {
         val message = Text_chat_log.text.toString()
 
         //val fromId = FirebaseAuth.getInstance().uid ?: return
-        val fromId = "Aida"
+        val fromId = "Mobile"
 
         val username = intent.getStringExtra(MessagingActivity.USER_KEY)
         val toId = username
