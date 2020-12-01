@@ -251,12 +251,12 @@ class MongoTransactions {
             historyListener = realmUserId.where<historique>().findAllAsync()
             historyListener.addChangeListener { collection, _ ->
 
+                val historicSort: MutableList<HistoryData> = mutableListOf()
 
-                val historyCopy = realmUserId.copyFromRealm(collection)
-                historyCopy.forEach {
+                collection.forEach {
                     val formatterFrom = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
                     val dateTime = LocalDateTime.parse(it.date!!, formatterFrom)
-                    historic.add(
+                    historicSort.add(
                         HistoryData(
                             it.exerciceName,
                             it.exerciceType,
@@ -267,7 +267,9 @@ class MongoTransactions {
                     )
                 }
 
-                historic.sortByDescending { it.date }
+                historicSort.sortByDescending { it.date }
+
+                historic = historicSort
 
                 if (historyView != null) {
                     historyView!!.adapter =
