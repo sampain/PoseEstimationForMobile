@@ -40,7 +40,6 @@ class MongoTransactions {
         lateinit var exercicesPhysiotecListener: RealmResults<exercicesPhysiotec>
 
         init {
-            val partitionValue: String? = user?.id
             configUserId =
                 SyncConfiguration.Builder(user, user?.customData?.get("_id").toString())
                     .build()
@@ -48,13 +47,13 @@ class MongoTransactions {
         }
 
         fun historyEntry(stats: ExerciceStatistique) {
-            /*val exerciceType = stats.exerciceType
+            val exerciceType = stats.exerciceType
             val exerciceTypeEnum = ExerciceType.getEnumValue(exerciceType)
 
             var nbrRepetitionOrHoldTime = stats.numberOfRepetition.last().toString()
 
             if (exerciceTypeEnum == ExerciceType.HOLD) {
-                nbrRepetitionOrHoldTime = stats.holdTime.last().toString()
+                nbrRepetitionOrHoldTime = 0.toString()
             }
 
             val dates = SimpleDateFormat("yyyy-mm-dd hh:mm:ss")
@@ -83,10 +82,10 @@ class MongoTransactions {
                     ), "Succeeded History"
                 )
             val executorService: ExecutorService = Executors.newFixedThreadPool(1)
-            executorService.execute(task)*/
+            executorService.execute(task)
         }
 
-        fun insertStatistics(stats: ExerciceStatistique) {/*
+        fun insertStatistics(stats: ExerciceStatistique) {
             val HEAD: RealmList<pointPos> = RealmList<pointPos>()
             val NECK: RealmList<pointPos> = RealmList<pointPos>()
             val L_SHOULDER: RealmList<pointPos> = RealmList<pointPos>()
@@ -167,78 +166,72 @@ class MongoTransactions {
                 HIP
             )
 
-            var numberOfRepetitionRealm = RealmList<simpleInt>()
-            stats.numberOfRepetition.forEach {
-                val value: Int = it ?: -1
-                numberOfRepetitionRealm.add(simpleInt(value))
-            }
-            var speedOfRepetitionRealm = RealmList<simpleDouble>()
-            stats.speedOfRepetition.forEach {
-                val value: Double = it?.toDouble() ?: (-1).toDouble()
-                speedOfRepetitionRealm.add(simpleDouble(value))
+            val timestampOfRepetition = RealmList<simpleString>()
+            stats.timestampOfRepetition.forEach {
+                if (it != null) {
+                    timestampOfRepetition.add(simpleString(it))
+                }
             }
 
-            var holdTimeRealm = RealmList<simpleDouble>()
-            stats.holdTime.forEach {
-                val value: Double = it ?: (-1).toDouble()
-                holdTimeRealm.add(simpleDouble(value))
+            val numberOfRepetition = RealmList<simpleInt>()
+            stats.numberOfRepetition.forEach {
+                if (it != null) {
+                    numberOfRepetition.add(simpleInt(it))
+                }
             }
-            val timeStampRealm = RealmList<simpleString>()
-            stats.timeStamp.forEach {
-                val value: String = it ?: ""
-                timeStampRealm.add(simpleString(value))
+
+            val holdTimeStartTime = RealmList<simpleString>()
+            stats.holdTimeStartTime.forEach {
+                if (it != null) {
+                    holdTimeStartTime.add(simpleString(it))
+                }
+            }
+
+            val holdTimeEndTime = RealmList<simpleString>()
+            stats.holdTimeEndTime.forEach {
+                if (it != null) {
+                    holdTimeEndTime.add(simpleString(it))
+                }
+            }
+
+            val timestampBodyPart = RealmList<simpleString>()
+            stats.timestampBodyPart.forEach {
+                if (it != null) {
+                    holdTimeEndTime.add(simpleString(it))
+                }
             }
 
             val movementRealm = RealmList<movement>()
             stats.movements.forEach {
-                val angleAvg = RealmList<simpleInt>()
+                val timestampState = RealmList<simpleString>()
                 val state = RealmList<simpleString>()
-                it.angleAvg.forEach { angle ->
-                    val value: Int = angle ?: -1
-                    angleAvg.add(simpleInt(value))
+                it.timestampState.forEach { timestamp ->
+                    if (timestamp != null) {
+                        timestampState.add(simpleString(timestamp))
+                    }
                 }
                 it.state.forEach { movement ->
-                    val value: String = movement.toString()
-                    state.add(simpleString(value))
+                    state.add(simpleString(movement.toString()))
                 }
-                movementRealm.add(movement(angleAvg, state))
+                movementRealm.add(movement(timestampState, state))
             }
 
-            var initStartTime = ""
-            if (stats.initStartTime != null) {
-                initStartTime = stats.initStartTime!!
-            }
-
-            var exerciceStartTime = ""
-            if (stats.exerciceStartTime != null) {
-                exerciceStartTime = stats.exerciceStartTime!!
-            }
-
-            var exerciceEndTime = ""
-            if (stats.exerciceEndTime != null) {
-                exerciceEndTime = stats.exerciceEndTime!!
-            }
-
-            if (ExerciceType.getEnumValue(stats.exerciceType) == ExerciceType.HOLD) {
-                numberOfRepetitionRealm = RealmList()
-                speedOfRepetitionRealm = RealmList()
-            } else {
-                holdTimeRealm = RealmList()
-            }
 
             val statistics = statistics(
                 stats.exerciceName,
                 stats.exerciceType,
-                numberOfRepetitionRealm,
-                speedOfRepetitionRealm,
-                holdTimeRealm,
-                timeStampRealm,
-                initStartTime,
-                exerciceStartTime,
-                exerciceEndTime,
+                stats.exerciceID,
+                timestampOfRepetition,
+                numberOfRepetition,
+                holdTimeStartTime,
+                holdTimeEndTime,
+                stats.maxAngleAmplitude,
+                stats.initStartTime,
+                stats.exerciceStartTime,
+                stats.exerciceEndTime,
                 movementRealm,
-                bodypartObj,
-                stats.exerciceID
+                timestampBodyPart,
+                bodypartObj
             )
 
             val task: FutureTask<String> =
@@ -250,7 +243,7 @@ class MongoTransactions {
                 )
             val threads = Runtime.getRuntime().availableProcessors()
             val executorService: ExecutorService = Executors.newFixedThreadPool(threads)
-            executorService.execute(task)*/
+            executorService.execute(task)
         }
 
         fun addChangeListenerToRealm(
@@ -405,16 +398,18 @@ open class historique(
 open class statistics(
     _exerciceName: String = "",
     _exerciceType: String = "",
+    _exerciceID: String = "",
+    _timestampOfRepetition: RealmList<simpleString> = RealmList<simpleString>(),
     _numberOfRepetition: RealmList<simpleInt> = RealmList<simpleInt>(),
-    _speedOfRepetition: RealmList<simpleDouble> = RealmList<simpleDouble>(),
-    _holdTime: RealmList<simpleDouble> = RealmList<simpleDouble>(),
-    _timeStamp: RealmList<simpleString> = RealmList<simpleString>(),
-    _initStartTime: String = "",
-    _exerciceStartTime: String = "",
-    _exerciceEndTime: String = "",
+    _holdTimeStartTime: RealmList<simpleString> = RealmList<simpleString>(),
+    _holdTimeEndTime: RealmList<simpleString> = RealmList<simpleString>(),
+    _maxAngleAmplitude: Int? = 0,
+    _initStartTime: String? = null,
+    _exerciceStartTime: String? = null,
+    _exerciceEndTime: String? = null,
     _movement: RealmList<movement> = RealmList<movement>(),
+    _timestampBodyPart: RealmList<simpleString> = RealmList<simpleString>(),
     _bodyPartPos: bodyPartPos? = bodyPartPos(),
-    _exerciceID: String? = "",
 ) :
     RealmObject() {
     @PrimaryKey
@@ -422,11 +417,15 @@ open class statistics(
 
     var exerciceName = _exerciceName
     var exerciceType = _exerciceType
+    var exerciceID = _exerciceID
 
+    var timestampOfRepetition = _timestampOfRepetition
     var numberOfRepetition = _numberOfRepetition
-    var speedOfRepetition = _speedOfRepetition
-    var holdTime = _holdTime
-    var timeStamp = _timeStamp
+
+    var holdTimeStartTime = _holdTimeStartTime
+    var holdTimeEndTime = _holdTimeEndTime
+
+    var maxAngleAmplitude = _maxAngleAmplitude
 
     var initStartTime = _initStartTime
     var exerciceStartTime = _exerciceStartTime
@@ -434,18 +433,17 @@ open class statistics(
 
     var movement = _movement
 
+    var timestampBodyPart = _timestampBodyPart
     var bodyPartPos = _bodyPartPos
-
-    var exerciceID = _exerciceID
 }
 
 @RealmClass(embedded = true)
 open class movement(
-    _angleAvg: RealmList<simpleInt> = RealmList<simpleInt>(),
+    _timestampState: RealmList<simpleString> = RealmList<simpleString>(),
     _state: RealmList<simpleString> = RealmList<simpleString>(),
 ) :
     RealmObject() {
-    var angleAvg = _angleAvg
+    var timestampState = _timestampState
     var state = _state
 }
 
@@ -506,14 +504,6 @@ open class simpleInt(
 @RealmClass(embedded = true)
 open class simpleString(
     _value: String = "",
-) :
-    RealmObject() {
-    var value = _value
-}
-
-@RealmClass(embedded = true)
-open class simpleDouble(
-    _value: Double = 0.toDouble(),
 ) :
     RealmObject() {
     var value = _value
