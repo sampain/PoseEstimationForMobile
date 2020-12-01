@@ -8,14 +8,13 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.epmus.mobile.Messaging.NewMessageActivity
 import com.epmus.mobile.MongoDbService.MongoTransactions
-import com.epmus.mobile.MongoDbService.historique
 import com.epmus.mobile.program.ExerciceData
 import com.epmus.mobile.program.ProgramListActivity
 import com.epmus.mobile.ui.login.realmApp
 import io.realm.Realm
 import kotlin.system.exitProcess
 
-var historic: MutableList<historique> = mutableListOf()
+var historic: MutableList<HistoryData> = mutableListOf()
 var globalExerciceList: MutableList<ExerciceData> = mutableListOf()
 lateinit var uiThreadRealmUserId: Realm
 lateinit var uiThreadRealmExercices: Realm

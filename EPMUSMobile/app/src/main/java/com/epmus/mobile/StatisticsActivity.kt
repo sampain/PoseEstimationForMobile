@@ -102,7 +102,7 @@ class StatisticsActivity : AppCompatActivity() {
                 }
             }
 
-            if (LocalDate.parse(it.date, formatter).compareTo(localDate) >= -7) {
+            if (it.date?.toLocalDate()?.compareTo(localDate)!! >= -7) {
                 count7++
             }
         }

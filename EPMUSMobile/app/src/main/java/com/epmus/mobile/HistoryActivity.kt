@@ -12,10 +12,12 @@ import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.epmus.mobile.MongoDbService.historique
 import com.epmus.mobile.poseestimation.ExerciceType
 import com.epmus.mobile.poseestimation.ExerciceTypeUI
 import com.epmus.mobile.ui.login.realmApp
+import io.realm.RealmObject
+import io.realm.annotations.PrimaryKey
+import org.bson.types.ObjectId
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.system.exitProcess
@@ -68,7 +70,7 @@ class HistoryActivity : AppCompatActivity() {
     }
 
     class SimpleItemRecyclerViewAdapter(
-        private val values: List<historique>,
+        private val values: List<HistoryData>,
     ) :
         RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder>() {
 
@@ -99,15 +101,13 @@ class HistoryActivity : AppCompatActivity() {
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val item = values[position]
             holder.idView.text = item.exerciceName
-            holder.contentView.text = item.date
+            holder.contentView.text = item.date.toString()
             holder.exerciceType.text = ExerciceTypeUI.getEnumValue(item.exerciceType).toString()
             holder.time.text = item.duree
             holder.nbr.text = item.nbrRepetitionOrHoldTime
 
-            val formatterFrom = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
             val formatterTo = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
-            val dateTime = LocalDateTime.parse(item.date!!, formatterFrom)
-            holder.contentView.text = dateTime.format(formatterTo)
+            holder.contentView.text = item.date?.format(formatterTo) ?: ""
 
             val exerciceTypeEnum = ExerciceType.getEnumValue(item.exerciceType)
 
@@ -152,4 +152,22 @@ class HistoryActivity : AppCompatActivity() {
             val hiddenDetails: LinearLayout = view.findViewById(R.id.hidden_details)
         }
     }
+}
+
+class HistoryData(
+    _exerciceName: String = "",
+    _exerciceType: String = "",
+    _date: LocalDateTime? = null,
+    _duree: String = "",
+    _nbrRepetitionOrHoldTime: String = ""
+) {
+    var date = _date
+
+    var duree = _duree
+
+    var exerciceName = _exerciceName
+
+    var exerciceType = _exerciceType
+
+    var nbrRepetitionOrHoldTime = _nbrRepetitionOrHoldTime
 }

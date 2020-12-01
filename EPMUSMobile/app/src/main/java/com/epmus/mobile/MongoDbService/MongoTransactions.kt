@@ -1,6 +1,7 @@
 package com.epmus.mobile.MongoDbService
 
 // Base Realm Packages
+
 import com.epmus.mobile.*
 import com.epmus.mobile.poseestimation.BodyPart
 import com.epmus.mobile.poseestimation.ExerciceStatistique
@@ -16,13 +17,13 @@ import io.realm.annotations.PrimaryKey
 import io.realm.annotations.RealmClass
 import io.realm.kotlin.where
 import io.realm.mongodb.User
-
 import io.realm.mongodb.sync.SyncConfiguration
-
 import org.bson.types.ObjectId
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -250,8 +251,23 @@ class MongoTransactions {
             historyListener = realmUserId.where<historique>().findAllAsync()
             historyListener.addChangeListener { collection, _ ->
 
-                collection.sort("")
-                historic = realmUserId.copyFromRealm(collection)
+
+                val historyCopy = realmUserId.copyFromRealm(collection)
+                historyCopy.forEach {
+                    val formatterFrom = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
+                    val dateTime = LocalDateTime.parse(it.date!!, formatterFrom)
+                    historic.add(
+                        HistoryData(
+                            it.exerciceName,
+                            it.exerciceType,
+                            dateTime,
+                            it.duree,
+                            it.nbrRepetitionOrHoldTime
+                        )
+                    )
+                }
+
+                historic.sortByDescending { it.date }
 
                 if (historyView != null) {
                     historyView!!.adapter =
