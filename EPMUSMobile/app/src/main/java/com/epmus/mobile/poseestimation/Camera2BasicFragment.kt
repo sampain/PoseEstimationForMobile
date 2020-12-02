@@ -441,7 +441,7 @@ class Camera2BasicFragment : Fragment() {
             }
 
             ExerciceType.REPETITION -> {
-                infoLeft = "Nombre de répétition: " + exercises.numberOfRepetition
+                infoLeft = "Nombre de répétition: " + exercises.numberOfRepetition +  "/" + exercises.numberOfRepetitionToDo
                 infoRight = ""
             }
 
