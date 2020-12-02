@@ -1,4 +1,4 @@
-package com.anshdeep.kotlinmessenger.models
+package com.epmus.mobile.models
 
 class ChatMessage(
         val id: String,

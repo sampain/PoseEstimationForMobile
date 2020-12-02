@@ -32,17 +32,13 @@ class MessagingActivity : AppCompatActivity() {
         setSupportActionBar(findViewById(R.id.toolbar_Messaging))
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-
         fetchUsers()
-    }
-
-    companion object{
-        val USER_KEY = "USER_KEY"
     }
 
     private fun fetchUsers() {
         val ref = FirebaseDatabase.getInstance().getReference("/users")
-        ref.addListenerForSingleValueEvent(object: ValueEventListener {
+
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
                 val adapter = GroupAdapter<ViewHolder>()
 
@@ -53,16 +49,12 @@ class MessagingActivity : AppCompatActivity() {
 
                 }
 
-                adapter.setOnItemClickListener{ item, view->
+                adapter.setOnItemClickListener { item, view ->
                     val userItem = item as UserItem
 
                     val intent = Intent(view.context, ChatLogActivity::class.java)
-                   // intent.putExtra(USER_KEY, userItem.user.nickname)
                     intent.putExtra(USER_KEY, userItem.user.nickname)
                     startActivity(intent)
-
-                    finish()
-
                 }
 
                 recyclerview_newmessage.adapter = adapter
@@ -100,14 +92,16 @@ class MessagingActivity : AppCompatActivity() {
             super.onOptionsItemSelected(item)
         }
     }
+
+    companion object {
+        const val USER_KEY = "USER_KEY"
+    }
 }
 
 
 class UserItem(val user: MessagingUser, val context: Context) : Item<ViewHolder>() {
-    override fun bind(viewHolder: ViewHolder, position: Int){
+    override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.username_textview_new_message.text = user.nickname
-
-        // Picasso.get().load(user.profileImageUrl).into(viewHolder.itemView.imageview_new_message)
     }
 
     override fun getLayout(): Int {

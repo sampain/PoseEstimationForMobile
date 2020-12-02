@@ -49,10 +49,10 @@ class Test_messagerie {
             onView(withId(R.id.activity_messaging)).perform(click())
             onView(withId(R.id.recyclerview_newmessage)).check(matches(isDisplayed()))
             onView(withId(R.id.recyclerview_newmessage)).perform(actionOnItemAtPosition<ViewHolder>(0, click()))
-            onView(withId(R.id.envoyer_button_chat_log)).check(matches(isDisplayed()))
+            onView(withId(R.id.send_button_chat_log)).check(matches(isDisplayed()))
             onView(withId(R.id.Text_chat_log)).perform(typeText("test"))
             // Bouton envoyer pas encore fonctionnel
-            onView(withId(R.id.envoyer_button_chat_log)).perform(click())
+            onView(withId(R.id.send_button_chat_log)).perform(click())
             // Deconnexion
             Espresso.pressBack()
             Espresso.pressBack()

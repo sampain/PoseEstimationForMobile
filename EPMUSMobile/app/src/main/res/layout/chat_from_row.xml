@@ -6,7 +6,7 @@
     android:layout_marginBottom="12dp">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textView_from"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -16,22 +16,21 @@
         android:paddingTop="8dp"
         android:paddingEnd="16dp"
         android:paddingBottom="8dp"
-        android:text="Ça c'est mon message"
         android:textColor="@android:color/white"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
-        app:layout_constraintTop_toTopOf="@+id/imageView" />
+        app:layout_constraintStart_toEndOf="@+id/imageView_from"
+        app:layout_constraintTop_toTopOf="@+id/imageView_from" />
 
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/imageView_from"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_account_circle_24px" />
+        app:srcCompat="@drawable/ic_account_circle_black_24dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
