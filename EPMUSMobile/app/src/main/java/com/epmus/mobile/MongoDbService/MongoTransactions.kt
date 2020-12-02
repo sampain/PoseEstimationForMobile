@@ -249,8 +249,7 @@ class MongoTransactions {
             historyListener = realmUserId.where<historique>().findAllAsync()
             historyListener.addChangeListener { collection, _ ->
 
-                val historicSort: MutableList<HistoryData> = mutableListOf()
-
+                val historicSort = mutableListOf<HistoryData>()
                 collection.forEach {
                     val formatterFrom = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
                     val dateTime = LocalDateTime.parse(it.date!!, formatterFrom)
@@ -362,7 +361,10 @@ class MongoTransactions {
         }
     }
 
-    class BackgroundInsertEntry(private val config: SyncConfiguration, private val histoEntry: historique) :
+    class BackgroundInsertEntry(
+        private val config: SyncConfiguration,
+        private val histoEntry: historique
+    ) :
         Runnable {
         override fun run() {
             val realmInstance = Realm.getInstance(config)
@@ -375,7 +377,10 @@ class MongoTransactions {
         }
     }
 
-    class BackgroundInsertStatsEntry(private val config: SyncConfiguration, private val histoEntry: statistics) :
+    class BackgroundInsertStatsEntry(
+        private val config: SyncConfiguration,
+        private val histoEntry: statistics
+    ) :
         Runnable {
         override fun run() {
             val realmInstance = Realm.getInstance(config)

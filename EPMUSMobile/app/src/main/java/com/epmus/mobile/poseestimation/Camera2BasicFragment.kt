@@ -75,7 +75,7 @@ class Camera2BasicFragment : Fragment() {
     private var drawView: DrawView? = null
     private var classifier: ImageClassifier? = null
 
-    private var debugMode: Boolean = true
+    private var debugMode: Boolean = false
     private var audioIsPlaying: Boolean = false
 
     private var isClosing: Boolean = false

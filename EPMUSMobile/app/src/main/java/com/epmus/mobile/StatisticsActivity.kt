@@ -14,7 +14,6 @@ import com.epmus.mobile.ui.login.realmApp
 import org.eazegraph.lib.charts.PieChart
 import org.eazegraph.lib.models.PieModel
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import kotlin.system.exitProcess
 
 class StatisticsActivity : AppCompatActivity() {
@@ -84,7 +83,6 @@ class StatisticsActivity : AppCompatActivity() {
         var count7 = 0
 
         val localDate = LocalDate.now()
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
         historic.forEach {
 
             when (ExerciceType.getEnumValue(it.exerciceType)) {

@@ -142,14 +142,10 @@ class Exercice() : Parcelable {
             }
 
             //Calculate average (mean) and standart deviation (ecart type)
-            var meanX: Float = -1.0f
-            var meanY: Float = -1.0f
-            var stdDevX: Float = -1.0f
-            var stdDevY: Float = -1.0f
             if (item.count() == drawView.frameCounterMaxInit) {
                 //sum
-                var totalX: Float = 0.0000f
-                var totalY: Float = 0.0000f
+                var totalX = 0.0000f
+                var totalY = 0.0000f
                 item.forEach()
                 {
                     totalX += it.x
@@ -157,12 +153,12 @@ class Exercice() : Parcelable {
                 }
 
                 //mean
-                meanX = totalX / item.count()
-                meanY = totalY / item.count()
+                val meanX = totalX / item.count()
+                val meanY = totalY / item.count()
 
                 //Variance
-                var varianceX: Float = 0.0000f
-                var varianceY: Float = 0.0000f
+                var varianceX = 0.0000f
+                var varianceY = 0.0000f
                 item.forEach()
                 {
                     val differenceX = it.x - meanX
@@ -172,8 +168,8 @@ class Exercice() : Parcelable {
                 }
 
                 //standart deviation
-                stdDevX = sqrt(varianceX)
-                stdDevY = sqrt(varianceX)
+                val stdDevX = sqrt(varianceX)
+                val stdDevY = sqrt(varianceX)
 
                 //if std is below max, target is not moving
                 notMovingInitList[index] = stdDevX <= stdMax && stdDevY <= stdMax
@@ -186,7 +182,7 @@ class Exercice() : Parcelable {
         }
 
         //look if every body part are not moving
-        var isNotMoving: Boolean = true
+        var isNotMoving = true
         notMovingInitList.forEach()
         {
             if (!it) {
@@ -543,12 +539,9 @@ class Exercice() : Parcelable {
         }
 
         //Fourth quadrant
-        else if(sign(deltaX).toInt() == 1 && sign(deltaY).toInt() == -1){
+        else if (sign(deltaX).toInt() == 1 && sign(deltaY).toInt() == -1) {
             // nothing
-        }
-
-        else if(sign(deltaX).toInt() == -1 && sign(deltaY).toInt() == 0)
-        {
+        } else if (sign(deltaX).toInt() == -1 && sign(deltaY).toInt() == 0) {
             angleDeg = 180.0
         }
 
@@ -739,7 +732,6 @@ class Exercice() : Parcelable {
         mouvementStartTimer = System.currentTimeMillis()
         return timeInSecond
     }
-
 
 
     fun copy(): Exercice {
