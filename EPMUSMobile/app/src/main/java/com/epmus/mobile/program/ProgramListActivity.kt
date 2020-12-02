@@ -16,6 +16,7 @@ import androidx.core.widget.NestedScrollView
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import com.epmus.mobile.*
+import com.epmus.mobile.Messaging.MessagingActivity
 import com.epmus.mobile.poseestimation.CameraActivity
 import com.epmus.mobile.poseestimation.ExerciceType
 import com.epmus.mobile.poseestimation.ExerciceTypeUI
