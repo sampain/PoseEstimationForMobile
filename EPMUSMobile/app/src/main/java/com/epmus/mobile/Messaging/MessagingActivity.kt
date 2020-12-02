@@ -72,6 +72,11 @@ class MessagingActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        android.R.id.home -> {
+            finish()
+            true
+        }
+
         R.id.action_settings -> {
             val intent = Intent(this, SettingsActivity::class.java)
             startActivity(intent)
