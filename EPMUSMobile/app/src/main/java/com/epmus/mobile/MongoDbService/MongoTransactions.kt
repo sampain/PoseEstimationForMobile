@@ -49,10 +49,15 @@ class MongoTransactions {
             val exerciceType = stats.exerciceType
             val exerciceTypeEnum = ExerciceType.getEnumValue(exerciceType)
 
-            var nbrRepetitionOrHoldTime = stats.numberOfRepetition.last().toString()
+            var nbrRepetitionOrHoldTime = 0.toString()
 
             if (exerciceTypeEnum == ExerciceType.HOLD) {
                 nbrRepetitionOrHoldTime = 0.toString()
+            } else if(exerciceTypeEnum == ExerciceType.AMPLITUDE){
+                nbrRepetitionOrHoldTime = stats.maxAngleAmplitude.toString()
+            }
+            else {
+                stats.numberOfRepetition.last().toString()
             }
 
             val dates = SimpleDateFormat("yyyy-mm-dd hh:mm:ss")

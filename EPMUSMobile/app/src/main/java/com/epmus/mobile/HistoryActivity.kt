@@ -110,6 +110,8 @@ class HistoryActivity : AppCompatActivity() {
 
             if (exerciceTypeEnum == ExerciceType.HOLD) {
                 holder.nbrText.text = "Temps soutenu"
+            } else if(exerciceTypeEnum == ExerciceType.AMPLITUDE){
+                holder.nbrText.text = "Angle maximal (°)"
             }
 
             when (ExerciceType.getEnumValue(item.exerciceType)) {
