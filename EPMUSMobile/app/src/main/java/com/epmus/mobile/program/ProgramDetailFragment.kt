@@ -89,6 +89,9 @@ class ProgramDetailFragment : Fragment() {
             }
             rootView.findViewById<TextView>(R.id.tempoMin).text =
                 it.exercice.minExecutionTime.toString()
+            if (it.exercice.maxExecutionTime!! > 999.0) {
+                rootView.findViewById<LinearLayout>(R.id.tempoMax_layout).visibility = View.GONE
+            }
             rootView.findViewById<TextView>(R.id.tempoMax).text =
                 it.exercice.maxExecutionTime.toString()
             val id = resources.getIdentifier(

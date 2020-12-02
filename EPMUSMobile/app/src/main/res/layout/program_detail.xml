@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingStart="16dp"
-            android:paddingEnd="0dp"
+            android:paddingEnd="5dp"
             android:text="@string/tempo_minimum"
             android:textIsSelectable="true" />
 
@@ -37,6 +37,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/tempoMax_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -46,7 +47,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingStart="16dp"
-            android:paddingEnd="0dp"
+            android:paddingEnd="5dp"
             android:text="@string/tempo_maximum"
             android:textIsSelectable="true" />
 
@@ -70,7 +71,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingStart="16dp"
-            android:paddingEnd="0dp"
+            android:paddingEnd="5dp"
             android:text="@string/repet_nbr"
             android:textIsSelectable="true" />
 
@@ -92,7 +93,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingStart="16dp"
-            android:paddingEnd="0dp"
+            android:paddingEnd="5dp"
             android:text="@string/angle1_start"
             android:textIsSelectable="true" />
 
@@ -115,7 +116,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingStart="16dp"
-            android:paddingEnd="0dp"
+            android:paddingEnd="5dp"
             android:text="@string/angle1_end"
             android:textIsSelectable="true" />
 
@@ -140,7 +141,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingStart="16dp"
-            android:paddingEnd="0dp"
+            android:paddingEnd="5dp"
             android:text="@string/angle2_start"
             android:textIsSelectable="true" />
 
@@ -164,7 +165,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingStart="16dp"
-            android:paddingEnd="0dp"
+            android:paddingEnd="5dp"
             android:text="@string/angle2_end"
             android:textIsSelectable="true" />
 
