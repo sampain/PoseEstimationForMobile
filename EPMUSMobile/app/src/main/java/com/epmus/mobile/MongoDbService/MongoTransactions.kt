@@ -57,7 +57,7 @@ class MongoTransactions {
                 nbrRepetitionOrHoldTime = stats.maxAngleAmplitude.toString()
             }
             else {
-                stats.numberOfRepetition.last().toString()
+                nbrRepetitionOrHoldTime = stats.numberOfRepetition.last().toString()
             }
 
             val dates = SimpleDateFormat("yyyy-mm-dd hh:mm:ss")
