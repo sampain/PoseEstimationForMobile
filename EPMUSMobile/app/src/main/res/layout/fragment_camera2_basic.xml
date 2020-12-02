@@ -92,21 +92,20 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:paddingBottom="@dimen/margin_large"
-        android:text="@string/hello"
         android:textColor="@color/black"
         android:textSize="32sp"
         android:textStyle="bold"
-        tools:text="asd" />
+        tools:text="@string/hello" />
 
     <TextView
         android:id="@+id/debug"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:text="@string/debug"
         android:textColor="@color/black"
         android:textSize="32sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        tools:text="@string/debug" />
 
     <TextView
         android:id="@+id/background_initialize"

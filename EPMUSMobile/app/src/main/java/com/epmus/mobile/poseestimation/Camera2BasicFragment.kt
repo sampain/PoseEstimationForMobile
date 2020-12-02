@@ -254,27 +254,25 @@ class Camera2BasicFragment : Fragment() {
         }
     }
 
-    private fun retroaction(exercise: Exercice)
-    {
+    private fun retroaction(exercise: Exercice) {
         when (exercise.exerciceType) {
             ExerciceType.CHRONO -> retroactionChrono(exercise)
             ExerciceType.REPETITION -> retroactionRepetition(exercise)
             ExerciceType.HOLD -> retroactionHold(exercise)
             ExerciceType.AMPLITUDE -> retroactionAmplitude(exercise)
-            else -> {}
+            else -> {
+            }
         }
     }
 
-    private fun retroactionAmplitude(exercise: Exercice)
-    {
-        if(exercise.warningCanBeDisplayed) {
+    private fun retroactionAmplitude(exercise: Exercice) {
+        if (exercise.warningCanBeDisplayed) {
             exercise.warningCanBeDisplayed = false
         }
     }
 
-    private fun retroactionChrono(exercise: Exercice)
-    {
-        if(exercise.warningCanBeDisplayed) {
+    private fun retroactionChrono(exercise: Exercice) {
+        if (exercise.warningCanBeDisplayed) {
             exercise.warningCanBeDisplayed = false
             if (exercise.mouvementSpeedTime != null) {
                 if (exercise.mouvementSpeedTime!! < exercise.minExecutionTime!!) {
@@ -286,26 +284,23 @@ class Camera2BasicFragment : Fragment() {
         }
     }
 
-    private fun retroactionRepetition(exercise: Exercice)
-    {
-        if(exercise.warningCanBeDisplayed) {
+    private fun retroactionRepetition(exercise: Exercice) {
+        if (exercise.warningCanBeDisplayed) {
             exercise.warningCanBeDisplayed = false
             if (exercise.mouvementSpeedTime != null) {
                 if (exercise.mouvementSpeedTime!! < exercise.minExecutionTime!!) {
                     playAndShowRetroaction("Ralentissez", R.raw.ralentissez)
-                }
-                else if (exercise.mouvementSpeedTime!! > exercise.maxExecutionTime!!) {
+                } else if (exercise.mouvementSpeedTime!! > exercise.maxExecutionTime!!) {
                     playAndShowRetroaction("Accélérez", R.raw.accelerez)
                 }
             }
         }
     }
 
-    private fun retroactionHold(exercise: Exercice)
-    {
-        if(exercise.warningCanBeDisplayed) {
+    private fun retroactionHold(exercise: Exercice) {
+        if (exercise.warningCanBeDisplayed) {
             exercise.warningCanBeDisplayed = false
-            if(exercise.isHolding != null) {
+            if (exercise.isHolding != null) {
                 if (exercise.isHolding) {
                     playAndShowRetroaction("Tenez la position", R.raw.tenez_la_position)
                 } else if (!exercise.isHolding) {
@@ -315,17 +310,15 @@ class Camera2BasicFragment : Fragment() {
         }
     }
 
-    private fun playAndShowRetroaction(message: String, audioFile: Int)
-    {
-        if(!audioIsPlaying)
-        {
+    private fun playAndShowRetroaction(message: String, audioFile: Int) {
+        if (!audioIsPlaying) {
             audioIsPlaying = true
             // must do a separate thread
             GlobalScope.launch {
                 //Play the audio file
                 val mediaPlayer: MediaPlayer? = MediaPlayer.create(context, audioFile)
 
-                if(!sharedPreferences?.getBoolean("audio_setting", false)!!) {
+                if (!sharedPreferences?.getBoolean("audio_setting", false)!!) {
                     mediaPlayer?.start()
                 }
 
@@ -373,7 +366,7 @@ class Camera2BasicFragment : Fragment() {
 
     private fun showDebugValues(exercises: Exercice) {
 
-        var labelVitesse= ""
+        var labelVitesse = ""
         if (exercises.mouvementSpeedTime != null) {
             if (exercises.mouvementSpeedTime!! < exercises.minExecutionTime!!) {
                 labelVitesse = "-"
@@ -430,7 +423,7 @@ class Camera2BasicFragment : Fragment() {
         var infoRight = ""
         when (exercises.exerciceType) {
             ExerciceType.HOLD -> {
-                val holdValue = if(exercises.isHolding) {
+                val holdValue = if (exercises.isHolding) {
                     "<font color='#00A600'>" + ((exercises.holdTime + exercises.currentHoldTime) / 1000).toInt() +
                             "</font>/" + exercises.targetHoldTime
                 } else {
@@ -443,7 +436,8 @@ class Camera2BasicFragment : Fragment() {
             }
 
             ExerciceType.REPETITION -> {
-                infoLeft = "Nombre de répétition: " + exercises.numberOfRepetition +  "/" + exercises.numberOfRepetitionToDo
+                infoLeft =
+                    "Nombre de répétition: " + exercises.numberOfRepetition + "/" + exercises.numberOfRepetitionToDo
                 infoRight = ""
             }
 
@@ -888,7 +882,9 @@ class Camera2BasicFragment : Fragment() {
      */
     private fun classifyFrame() {
         if (classifier == null || activity == null || cameraDevice == null) {
-            showToast("Uninitialized Classifier or invalid context.")
+            if (debugMode) {
+                showToast("Uninitialized Classifier or invalid context.")
+            }
             return
         }
         val bitmap = textureView!!.getBitmap(classifier!!.imageSizeX, classifier!!.imageSizeY)
@@ -927,7 +923,8 @@ class Camera2BasicFragment : Fragment() {
                 ) {
                     val activity = activity
                     activity?.runOnUiThread {
-                        val textViewBackground: TextView? = view?.findViewById(R.id.background_initialize)
+                        val textViewBackground: TextView? =
+                            view?.findViewById(R.id.background_initialize)
                         textViewBackground!!.alpha = 0.5F
 
                         val textViewCountdown: TextView? = view?.findViewById(R.id.countdown)
@@ -939,12 +936,11 @@ class Camera2BasicFragment : Fragment() {
 
                         drawView!!.invalidate()
                     }
-                }
-
-                else {
+                } else {
                     val activity = activity
                     activity?.runOnUiThread {
-                        val textViewBackground: TextView? = view?.findViewById(R.id.background_initialize)
+                        val textViewBackground: TextView? =
+                            view?.findViewById(R.id.background_initialize)
                         textViewBackground!!.alpha = 0.5F
 
                         val textViewInstruction: TextView? = view?.findViewById(R.id.instructions)
@@ -959,7 +955,7 @@ class Camera2BasicFragment : Fragment() {
             }
         }
         // Done -> exit exercise
-        else if (drawView!!.exercice!!.exitStateReached && !isClosing ) {
+        else if (drawView!!.exercice!!.exitStateReached && !isClosing) {
             isClosing = true
 
             adjustStats(rawStats)
@@ -977,13 +973,12 @@ class Camera2BasicFragment : Fragment() {
                 // must do a separate thread or the background wont show
                 GlobalScope.launch {
 
-                    while(audioIsPlaying)
-                    {
+                    while (audioIsPlaying) {
                         delay(20L)
                     }
 
                     //Play the audio file
-                    if(!sharedPreferences?.getBoolean("audio_setting", false)!!) {
+                    if (!sharedPreferences?.getBoolean("audio_setting", false)!!) {
                         val mediaPlayer: MediaPlayer? = MediaPlayer.create(context, R.raw.termine)
                         mediaPlayer?.start()
                         delay(mediaPlayer?.duration!!.toLong())
@@ -995,8 +990,7 @@ class Camera2BasicFragment : Fragment() {
                     getActivity()?.finish()
                 }
             }
-        }
-        else if(!isClosing) {
+        } else if (!isClosing) {
 
             val activity = activity
             activity?.runOnUiThread {
@@ -1018,7 +1012,7 @@ class Camera2BasicFragment : Fragment() {
             // Verify angle
             drawView!!.exercice!!.exerciceVerification(drawView!!)
 
-            if(debugMode){
+            if (debugMode) {
                 showDebugValues(drawView!!.exercice!!)
             }
 
@@ -1037,7 +1031,6 @@ class Camera2BasicFragment : Fragment() {
     }
 
 
-
     private fun adjustStats(s: ArrayList<Exercice>) {
         val cleanStats = ExerciceStatistique()
 
@@ -1053,11 +1046,11 @@ class Camera2BasicFragment : Fragment() {
 
         val cpt = s.count()
 
-        cleanStats.maxAngleAmplitude = s[cpt-1].maxAngleReached
+        cleanStats.maxAngleAmplitude = s[cpt - 1].maxAngleReached
 
-        cleanStats.initStartTime = convertLongToTime(s[cpt-1].initStartTimer!!)
-        cleanStats.exerciceStartTime = convertLongToTime(s[cpt-1].exerciceStartTime!!)
-        cleanStats.exerciceEndTime = convertLongToTime(s[cpt-1].exerciceEndTime!!)
+        cleanStats.initStartTime = convertLongToTime(s[cpt - 1].initStartTimer!!)
+        cleanStats.exerciceStartTime = convertLongToTime(s[cpt - 1].exerciceStartTime!!)
+        cleanStats.exerciceEndTime = convertLongToTime(s[cpt - 1].exerciceEndTime!!)
 
         // Remove few values to have around 5 fps for bodyPart.
         // Needed or the the insert to DB will make the DB crash
@@ -1080,8 +1073,7 @@ class Camera2BasicFragment : Fragment() {
                         cleanStats.numberOfRepetition.add(it.numberOfRepetition)
                         lastRepetition = it.numberOfRepetition
                     }
-                }
-                else if (cleanStats.exerciceType == "HOLD") {
+                } else if (cleanStats.exerciceType == "HOLD") {
                     if (isHolding != it.isHolding) {
                         if (it.isHolding) {
                             cleanStats.holdTimeStartTime.add(convertLongToTime(it.timeStamp!!))
@@ -1091,8 +1083,7 @@ class Camera2BasicFragment : Fragment() {
                         isHolding = !isHolding
                     }
                 }
-            }
-            else {
+            } else {
                 if (it.exerciceStartTime != null) {
                     if (cleanStats.exerciceType == "REPETITION" || cleanStats.exerciceType == "CHRONO") {
                         cleanStats.timestampOfRepetition.add(convertLongToTime(it.timeStamp!!))
@@ -1115,10 +1106,20 @@ class Camera2BasicFragment : Fragment() {
                 if (it.timeStamp!! >= delayTimer) {
                     cleanStats.bodyPartPos.HEAD.add(PointPos(it.bp.HEAD.X, it.bp.HEAD.Y))
                     cleanStats.bodyPartPos.NECK.add(PointPos(it.bp.NECK.X, it.bp.NECK.Y))
-                    cleanStats.bodyPartPos.L_SHOULDER.add(PointPos(it.bp.L_SHOULDER.X, it.bp.L_SHOULDER.Y))
+                    cleanStats.bodyPartPos.L_SHOULDER.add(
+                        PointPos(
+                            it.bp.L_SHOULDER.X,
+                            it.bp.L_SHOULDER.Y
+                        )
+                    )
                     cleanStats.bodyPartPos.L_ELBOW.add(PointPos(it.bp.L_ELBOW.X, it.bp.L_ELBOW.Y))
                     cleanStats.bodyPartPos.L_WRIST.add(PointPos(it.bp.L_WRIST.X, it.bp.L_WRIST.Y))
-                    cleanStats.bodyPartPos.R_SHOULDER.add(PointPos(it.bp.R_SHOULDER.X, it.bp.R_SHOULDER.Y))
+                    cleanStats.bodyPartPos.R_SHOULDER.add(
+                        PointPos(
+                            it.bp.R_SHOULDER.X,
+                            it.bp.R_SHOULDER.Y
+                        )
+                    )
                     cleanStats.bodyPartPos.R_ELBOW.add(PointPos(it.bp.R_ELBOW.X, it.bp.R_ELBOW.Y))
                     cleanStats.bodyPartPos.R_WRIST.add(PointPos(it.bp.R_WRIST.X, it.bp.R_WRIST.Y))
                     cleanStats.bodyPartPos.L_HIP.add(PointPos(it.bp.L_HIP.X, it.bp.L_HIP.Y))
@@ -1134,8 +1135,8 @@ class Camera2BasicFragment : Fragment() {
         }
 
 
-        cleanStats.avgFps = ((s[cpt-1].exerciceEndTime!!.toDouble() -
-                s[cpt-1].exerciceStartTime!!.toDouble())/1000)
+        cleanStats.avgFps = ((s[cpt - 1].exerciceEndTime!!.toDouble() -
+                s[cpt - 1].exerciceStartTime!!.toDouble()) / 1000)
         cleanStats.avgFps = cleanStats.bodyPartPos.HEAD.count() / cleanStats.avgFps
 
 
