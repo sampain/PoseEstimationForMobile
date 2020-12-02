@@ -60,6 +60,8 @@ class ChatLogActivity : AppCompatActivity() {
                 } else {
                     adapter.add(ChatTItem(chatMessage.message))
                 }
+
+                recyclerview_chat_log.scrollToPosition(adapter.itemCount -1)
             }
 
             override fun onCancelled(p0: DatabaseError) {
@@ -84,6 +86,10 @@ class ChatLogActivity : AppCompatActivity() {
     private fun performSendMessage() {
 
         val message = Text_chat_log.text.toString()
+
+        if(message.trim().isEmpty()){
+            return
+        }
 
         val fromId = "Mobile"
 
