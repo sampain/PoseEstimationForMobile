@@ -60,7 +60,7 @@ class Test_exercices {
 
             // Accès à la messagerie
             onView(withId(R.id.fab_messaging)).perform(click())
-            onView(withId(R.id.recyclerView_newMessage)).check(matches(isDisplayed()))
+            onView(withId(R.id.recyclerview_newmessage)).check(matches(isDisplayed()))
             pressBack()
             // Accès à un exercice
             onView(withId(R.id.program_list)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
