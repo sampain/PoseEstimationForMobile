@@ -8,9 +8,6 @@ class LoginRepository(val dataSource: LoginDataSource) {
     var user: User? = null
         private set
 
-    val isLoggedIn: Boolean
-        get() = user != null
-
     init {
         user = null
     }

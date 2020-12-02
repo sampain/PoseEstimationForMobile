@@ -7,7 +7,8 @@ import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.intent.Intents.intended
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.espresso.intent.rule.IntentsTestRule
-import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.epmus.mobile.MainMenuActivity
@@ -15,7 +16,6 @@ import com.epmus.mobile.R
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.util.regex.Pattern.matches
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
@@ -32,7 +32,7 @@ class LoginActivityTest {
         onView(withId(R.id.password)).perform(typeText("admin1"))
         onView(withId(R.id.login)).perform(click())
         //Temporary sleep until proper solution is found
-        Thread.sleep(1000);
+        Thread.sleep(1000)
         intended(hasComponent(MainMenuActivity::class.java.name))
     }
 

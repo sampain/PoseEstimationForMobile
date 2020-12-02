@@ -19,6 +19,6 @@ enum class BodyPart(val bodyPart: String) {
 
     companion object {
         fun getEnumValue(value: String): BodyPart? =
-            BodyPart.values().find { it.bodyPart == value }
+            values().find { it.bodyPart == value }
     }
 }

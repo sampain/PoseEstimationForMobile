@@ -104,4 +104,5 @@
     <string name="angle1_end">Angle de fin (1) :</string>
     <string name="angle2_start">Angle de départ (2) :</string>
     <string name="angle2_end">Angle de fin (2) :</string>
+    <string name="end_string">Terminé</string>
 </resources>

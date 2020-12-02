@@ -155,12 +155,12 @@ class DrawView : View {
         }
     }
 
-    fun movementIndicator(canvas: Canvas) {
+    private fun movementIndicator(canvas: Canvas) {
         this.exercice!!.movementList.forEach()
         {
             if (mDrawPoint[it.bodyPart1_Index] != null) {
-                var pX = mDrawPoint[it.bodyPart1_Index].x
-                var pY = mDrawPoint[it.bodyPart1_Index].y
+                val pX = mDrawPoint[it.bodyPart1_Index].x
+                val pY = mDrawPoint[it.bodyPart1_Index].y
 
                 var angleDeg: Int? = null
 
@@ -227,17 +227,17 @@ class DrawView : View {
 
                 if (it.angleOffset != null) {
 
-                    var bottom = pY.toInt()
-                    var top = bottom + it.member2Length!!
+                    val bottom = pY.toInt()
+                    val top = bottom + it.member2Length!!
 
-                    var angleVariationRad = it.acceptableAngleVariation * PI / 180
+                    val angleVariationRad = it.acceptableAngleVariation * PI / 180
 
-                    var left =
+                    val left =
                         (pX - (it.member2Length!! * kotlin.math.sin(angleVariationRad))).toInt()
-                    var right =
+                    val right =
                         (pX + (it.member2Length!! * kotlin.math.sin(angleVariationRad))).toInt()
 
-                    var rect = Rect(left, top, right, bottom)
+                    val rect = Rect(left, top, right, bottom)
 
                     canvas.save()
                     canvas.rotate((it.angleOffset!! + angleDeg - 90).toFloat(), pX, pY)

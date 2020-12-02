@@ -16,7 +16,8 @@
 package com.epmus.mobile.poseestimation
 
 import android.annotation.SuppressLint
-import android.app.*
+import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
@@ -33,7 +34,9 @@ import android.text.Html
 import android.util.Log
 import android.util.Size
 import android.view.*
-import android.widget.*
+import android.widget.FrameLayout
+import android.widget.TextView
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
@@ -50,7 +53,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.Semaphore
 import java.util.concurrent.TimeUnit
-import kotlin.math.roundToInt
 
 
 /**
@@ -59,7 +61,7 @@ import kotlin.math.roundToInt
 class Camera2BasicFragment : Fragment() {
     private var sharedPreferences: SharedPreferences? = null
     private val rawStats = ArrayList<Exercice>()
-    lateinit var exerciceData: ExerciceData
+    private lateinit var exerciceData: ExerciceData
 
     private val lock = Any()
     private var runClassifier = false
@@ -333,7 +335,7 @@ class Camera2BasicFragment : Fragment() {
                 activity?.runOnUiThread {
                     val textViewWarning: TextView? = view?.findViewById(R.id.warningPopUp)
                     textViewWarning!!.alpha = 1.0F
-                    textViewWarning!!.text = message
+                    textViewWarning.text = message
 
                     //Hide the exercise information
                     val textViewInfoLeft: TextView? = view?.findViewById(R.id.infoLeft)
@@ -352,7 +354,7 @@ class Camera2BasicFragment : Fragment() {
                 activity?.runOnUiThread {
                     val textViewWarning: TextView? = view?.findViewById(R.id.warningPopUp)
                     textViewWarning!!.alpha = 0.0F
-                    textViewWarning!!.text = ""
+                    textViewWarning.text = ""
 
                     //Show exercise information
                     val textViewInfoLeft: TextView? = view?.findViewById(R.id.infoLeft)
@@ -428,7 +430,7 @@ class Camera2BasicFragment : Fragment() {
         var infoRight = ""
         when (exercises.exerciceType) {
             ExerciceType.HOLD -> {
-                val holdValue = if(exercises!!.isHolding) {
+                val holdValue = if(exercises.isHolding) {
                     "<font color='#00EE00'>" + ((exercises.holdTime + exercises.currentHoldTime) / 1000).toInt() + "</font>"
                 } else {
                     "<font color='#EE0000'>" + ((exercises.holdTime + exercises.currentHoldTime) / 1000).toInt() + "</font>"
@@ -451,8 +453,8 @@ class Camera2BasicFragment : Fragment() {
 
         val activity = activity
         activity?.runOnUiThread {
-            this.infoLeft!!.setText(Html.fromHtml(infoLeft))
-            this.infoRight!!.setText(Html.fromHtml(infoRight))
+            this.infoLeft!!.text = Html.fromHtml(infoLeft)
+            this.infoRight!!.text = Html.fromHtml(infoRight)
             drawView!!.invalidate()
         }
     }
@@ -899,7 +901,7 @@ class Camera2BasicFragment : Fragment() {
         if (drawView!!.exercice!!.initList.count() == 0) {
             repeat(enumValues<BodyPart>().count()) {
                 val pF = PointF(-1.0f, -1.0f)
-                val aList = arrayListOf<PointF>(pF)
+                val aList = arrayListOf(pF)
                 drawView!!.exercice!!.initList.add(aList)
                 drawView!!.exercice!!.notMovingInitList.add(false)
             }
@@ -928,7 +930,7 @@ class Camera2BasicFragment : Fragment() {
 
                         val textViewCountdown: TextView? = view?.findViewById(R.id.countdown)
                         textViewCountdown!!.text = drawView!!.exercice!!.notMovingTimer.toString()
-                        textViewCountdown!!.alpha = 1.0F
+                        textViewCountdown.alpha = 1.0F
 
                         val textViewInstruction: TextView? = view?.findViewById(R.id.instructions)
                         textViewInstruction!!.alpha = 0.0F
@@ -988,7 +990,7 @@ class Camera2BasicFragment : Fragment() {
                     delay(2000L)
 
                     //EXIT !
-                    getActivity()?.finish();
+                    getActivity()?.finish()
                 }
             }
         }
@@ -1026,7 +1028,7 @@ class Camera2BasicFragment : Fragment() {
         }
     }
 
-    fun convertLongToTime(time: Long): String {
+    private fun convertLongToTime(time: Long): String {
         val date = Date(time)
         val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")
         return format.format(date)
@@ -1034,7 +1036,7 @@ class Camera2BasicFragment : Fragment() {
 
 
 
-    fun adjustStats(s: ArrayList<Exercice>) {
+    private fun adjustStats(s: ArrayList<Exercice>) {
         val cleanStats = ExerciceStatistique()
 
         cleanStats.exerciceID = exerciceData.id
@@ -1043,7 +1045,7 @@ class Camera2BasicFragment : Fragment() {
 
         // initialize the movements list
         val tmpMovStats = MovementStatistics()
-        drawView!!.exercice!!.movementList.forEach() {
+        repeat(drawView!!.exercice!!.movementList.size) {
             cleanStats.movements.add(tmpMovStats)
         }
 
@@ -1063,12 +1065,12 @@ class Camera2BasicFragment : Fragment() {
         var exerciceStarted = false
         var lastRepetition = -1
         var isHolding = false
-        var lastState = ArrayList<MovementState?>()
-        s[0].movementList.forEach() {
+        val lastState = ArrayList<MovementState?>()
+        repeat(s[0].movementList.size) {
             lastState.add(MovementState.ENDING_ANGLE_REACHED)
         }
         // Add all infos
-        s.forEach() {
+        s.forEach {
             if (exerciceStarted) {
                 if (cleanStats.exerciceType == "REPETITION" || cleanStats.exerciceType == "CHRONO") {
                     if (lastRepetition != it.numberOfRepetition) {
@@ -1099,7 +1101,7 @@ class Camera2BasicFragment : Fragment() {
                 }
             }
 
-            for (i in 0..it.movementList.count()-1) {
+            for (i in 0 until it.movementList.count()) {
                 if (lastState[i] != it.movementList[i].movementState) {
                     cleanStats.movements[i].timestampState.add(convertLongToTime(it.timeStamp!!))
                     cleanStats.movements[i].state.add(it.movementList[i].movementState)

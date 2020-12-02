@@ -15,9 +15,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.epmus.mobile.poseestimation.ExerciceType
 import com.epmus.mobile.poseestimation.ExerciceTypeUI
 import com.epmus.mobile.ui.login.realmApp
-import io.realm.RealmObject
-import io.realm.annotations.PrimaryKey
-import org.bson.types.ObjectId
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.system.exitProcess

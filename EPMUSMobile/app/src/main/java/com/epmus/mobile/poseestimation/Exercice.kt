@@ -10,7 +10,7 @@ class Exercice() : Parcelable {
     // add to fun .copy() if there is a modif
     var maxExecutionTime: Float? = null
     var minExecutionTime: Float? = null
-    var mouvementStartTimer: Long? = null
+    private var mouvementStartTimer: Long? = null
     var mouvementSpeedTime: Float? = null
 
     var timeStamp: Long? = null
@@ -26,10 +26,10 @@ class Exercice() : Parcelable {
     var notMovingInitList = ArrayList<Boolean>()
     var isInit: Boolean = false
     var exerciceStartTime: Long? = null
-    var notMovingStartTime: Long? = null
+    private var notMovingStartTime: Long? = null
     var notMovingTimer: Int = -1
     var targetTime: Long = 4000
-    var stdMax: Int = 150
+    private var stdMax: Int = 150
     var exerciceEndTime: Long? = null
 
     var exerciceType: ExerciceType? = null
@@ -41,15 +41,15 @@ class Exercice() : Parcelable {
     //Variable for type HOLD
     var targetHoldTime: Int? = null
     var holdTime: Long = 0.toLong()
-    var wasHolding: Boolean = false
+    private var wasHolding: Boolean = false
     var isHolding: Boolean = false
-    var holdingStartTime: Long? = null
+    private var holdingStartTime: Long? = null
     var currentHoldTime: Long = 0
 
     //Variable for type AMPLITUDE
     var maxAngleReached: Int? = null
-    var maxAngleReachedTime: Long? = null
-    var timeAllowedToReachNewMax: Int = 2
+    private var maxAngleReachedTime: Long? = null
+    private var timeAllowedToReachNewMax: Int = 2
 
     //This is used to make sure that a warning cannot be spammed
     var warningCanBeDisplayed: Boolean = true
@@ -189,7 +189,7 @@ class Exercice() : Parcelable {
         var isNotMoving: Boolean = true
         notMovingInitList.forEach()
         {
-            if (it == false) {
+            if (!it) {
                 isNotMoving = false
             }
         }
@@ -226,7 +226,7 @@ class Exercice() : Parcelable {
     }
 
     //Verify the state for an exercice type in Amplitude
-    fun exerciceVerificationAmplitude(drawView: DrawView) {
+    private fun exerciceVerificationAmplitude(drawView: DrawView) {
         movementList.forEach()
         {
 
@@ -271,7 +271,7 @@ class Exercice() : Parcelable {
     }
 
     //Verify the state for an exercice type in CHRONO
-    fun exerciceVerificationChrono(drawView: DrawView) {
+    private fun exerciceVerificationChrono(drawView: DrawView) {
         movementList.forEach()
         {
 
@@ -335,7 +335,7 @@ class Exercice() : Parcelable {
         }
     }
 
-    fun exerciceVerificationHold(drawView: DrawView) {
+    private fun exerciceVerificationHold(drawView: DrawView) {
         movementList.forEach()
         {
 
@@ -403,7 +403,7 @@ class Exercice() : Parcelable {
         this.isHolding = isHolding
     }
 
-    fun exerciceVerificationRepetition(drawView: DrawView) {
+    private fun exerciceVerificationRepetition(drawView: DrawView) {
         movementList.forEach()
         {
 
@@ -466,7 +466,7 @@ class Exercice() : Parcelable {
     }
 
     //Calculates the length of member1 and member2 for a given movement
-    fun calculateMembersLength(movement: Movement, drawView: DrawView) {
+    private fun calculateMembersLength(movement: Movement, drawView: DrawView) {
         val pointX0: Float = drawView.mDrawPoint[movement.bodyPart0_Index].x
         val pointY0: Float = drawView.mDrawPoint[movement.bodyPart0_Index].y
         val pointX1: Float = drawView.mDrawPoint[movement.bodyPart1_Index].x
@@ -577,7 +577,7 @@ class Exercice() : Parcelable {
         return repetitionDone
     }
 
-    fun correctAngle(
+    private fun correctAngle(
         needToCorrectClockWise: Boolean,
         isClockWise: Boolean,
         angles: Double
@@ -598,7 +598,7 @@ class Exercice() : Parcelable {
     }
 
     //Calculates the angle between the three points in a movement
-    fun calculateAngleV2(movement: Movement, drawView: DrawView) {
+    private fun calculateAngleV2(movement: Movement, drawView: DrawView) {
         //*-1 because Y is inverted
         val pointX0: Float = drawView.mDrawPoint[movement.bodyPart0_Index].x
         val pointY0: Float = drawView.mDrawPoint[movement.bodyPart0_Index].y
@@ -713,7 +713,7 @@ class Exercice() : Parcelable {
 
 
     //Verify if the angle is matching according to the state of the movement
-    fun isAngleMatching(movement: Movement): Boolean {
+    private fun isAngleMatching(movement: Movement): Boolean {
         if (movement.angleAvg != null) {
             when (movement.movementState) {
                 MovementState.INIT, MovementState.ENDING_ANGLE_REACHED, MovementState.WAITING_FOR_OTHER_MOVEMENT_STARTING_ANGLE -> {
@@ -755,7 +755,7 @@ class Exercice() : Parcelable {
         exercices.numberOfRepetition = numberOfRepetition
         exercices.exitStateReached = exitStateReached
 
-        movementList.forEach() {
+        movementList.forEach {
             val tmpMovement = Movement(it.bodyPart0_Index, it.bodyPart1_Index, it.bodyPart2_Index)
             tmpMovement.startingAngle = it.startingAngle
             tmpMovement.endingAngle = it.endingAngle

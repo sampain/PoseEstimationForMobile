@@ -44,41 +44,43 @@
         android:layout_width="match_parent"
         android:layout_height="91dp"
         android:layout_gravity="center_horizontal"
-        android:textAlignment="center"
-        android:textColor="@color/black"
+        android:alpha="0.0"
         android:orientation="horizontal"
-        android:alpha = "0.0"
         android:paddingStart="10dp"
         android:paddingEnd="0dp"
+        android:textAlignment="center"
+        android:textColor="@color/black"
         android:textSize="40sp"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 
     <LinearLayout
         android:id="@+id/exerciseInfo"
         android:layout_width="match_parent"
         android:layout_height="91dp"
         android:layout_gravity="top"
-        android:orientation="horizontal"
         android:background="#1c000000"
+        android:orientation="horizontal"
         android:paddingStart="10dp"
         android:paddingEnd="0dp">
 
         <TextView
             android:id="@+id/infoLeft"
-            android:layout_weight="1"
-            android:layout_height="fill_parent"
             android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:paddingStart="0dp"
+            android:paddingEnd="@dimen/margin_large"
             android:textColor="@color/black"
-            android:paddingRight="@dimen/margin_large"
             android:textSize="26sp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/infoRight"
-            android:layout_weight="1"
-            android:layout_height="fill_parent"
             android:layout_width="0dp"
-            android:paddingLeft="@dimen/margin_large"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:paddingStart="@dimen/margin_large"
+            android:paddingEnd="0dp"
             android:textColor="@color/black"
             android:textSize="26sp"
             android:textStyle="bold" />
@@ -88,9 +90,9 @@
         android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello"
         android:layout_gravity="bottom"
         android:paddingBottom="@dimen/margin_large"
+        android:text="@string/hello"
         android:textColor="@color/black"
         android:textSize="32sp"
         android:textStyle="bold"
@@ -120,41 +122,41 @@
         android:layout_height="304dp"
         android:layout_gravity="center"
         android:alpha="0.0"
+        android:autoSizeMaxTextSize="100sp"
+        android:autoSizeMinTextSize="12sp"
+        android:autoSizeStepGranularity="2sp"
+        android:autoSizeTextType="uniform"
         android:gravity="center"
         android:textColor="#33b6e5"
-        android:textStyle="bold"
-        android:autoSizeTextType="uniform"
-        android:autoSizeMinTextSize="12sp"
-        android:autoSizeMaxTextSize="100sp"
-        android:autoSizeStepGranularity="2sp"/>
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/instructions"
         android:layout_width="match_parent"
         android:layout_height="304dp"
         android:layout_gravity="center"
-        android:gravity="center"
         android:alpha="0.0"
+        android:autoSizeMaxTextSize="50sp"
+        android:autoSizeMinTextSize="12sp"
+        android:autoSizeStepGranularity="2sp"
+        android:autoSizeTextType="uniform"
+        android:gravity="center"
         android:text="@string/instructions"
         android:textColor="#33b6e5"
-        android:textStyle="bold"
-        android:autoSizeTextType="uniform"
-        android:autoSizeMinTextSize="12sp"
-        android:autoSizeMaxTextSize="50sp"
-        android:autoSizeStepGranularity="2sp"/>
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/termine"
         android:layout_width="match_parent"
         android:layout_height="304dp"
         android:layout_gravity="center"
-        android:gravity="center"
         android:alpha="0.0"
-        android:text="Terminé"
-        android:textColor="#33b6e5"
-        android:textStyle="bold"
-        android:autoSizeTextType="uniform"
-        android:autoSizeMinTextSize="12sp"
         android:autoSizeMaxTextSize="100sp"
-        android:autoSizeStepGranularity="2sp"/>
+        android:autoSizeMinTextSize="12sp"
+        android:autoSizeStepGranularity="2sp"
+        android:autoSizeTextType="uniform"
+        android:gravity="center"
+        android:text="@string/end_string"
+        android:textColor="#33b6e5"
+        android:textStyle="bold" />
 </FrameLayout>

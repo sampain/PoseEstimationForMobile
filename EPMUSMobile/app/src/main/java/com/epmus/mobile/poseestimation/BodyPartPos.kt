@@ -1,6 +1,5 @@
 package com.epmus.mobile.poseestimation
 
-import android.graphics.PointF
 import java.io.Serializable
 
 class BodyPartPos : Serializable {

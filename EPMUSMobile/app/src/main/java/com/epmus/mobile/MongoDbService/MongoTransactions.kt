@@ -1,7 +1,5 @@
 package com.epmus.mobile.MongoDbService
 
-// Base Realm Packages
-
 import com.epmus.mobile.*
 import com.epmus.mobile.poseestimation.BodyPart
 import com.epmus.mobile.poseestimation.ExerciceStatistique
@@ -31,14 +29,14 @@ import java.util.concurrent.FutureTask
 
 class MongoTransactions {
     companion object {
-        var programmesList: MutableList<programmes> = mutableListOf()
-        var exercicesPhysiotecList: MutableList<exercicesPhysiotec> = mutableListOf()
+        private var programmesList: MutableList<programmes> = mutableListOf()
+        private var exercicesPhysiotecList: MutableList<exercicesPhysiotec> = mutableListOf()
         val configUserId: SyncConfiguration
         val configExercices: SyncConfiguration
         val user: User? = realmApp.currentUser()
-        lateinit var historyListener: RealmResults<historique>
-        lateinit var programListener: RealmResults<programmes>
-        lateinit var exercicesPhysiotecListener: RealmResults<exercicesPhysiotec>
+        private lateinit var historyListener: RealmResults<historique>
+        private lateinit var programListener: RealmResults<programmes>
+        private lateinit var exercicesPhysiotecListener: RealmResults<exercicesPhysiotec>
 
         init {
             configUserId =
@@ -364,7 +362,7 @@ class MongoTransactions {
         }
     }
 
-    class BackgroundInsertEntry(val config: SyncConfiguration, val histoEntry: historique) :
+    class BackgroundInsertEntry(private val config: SyncConfiguration, private val histoEntry: historique) :
         Runnable {
         override fun run() {
             val realmInstance = Realm.getInstance(config)
@@ -377,7 +375,7 @@ class MongoTransactions {
         }
     }
 
-    class BackgroundInsertStatsEntry(val config: SyncConfiguration, val histoEntry: statistics) :
+    class BackgroundInsertStatsEntry(private val config: SyncConfiguration, private val histoEntry: statistics) :
         Runnable {
         override fun run() {
             val realmInstance = Realm.getInstance(config)
