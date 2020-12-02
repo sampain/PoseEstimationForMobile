@@ -431,9 +431,11 @@ class Camera2BasicFragment : Fragment() {
         when (exercises.exerciceType) {
             ExerciceType.HOLD -> {
                 val holdValue = if(exercises.isHolding) {
-                    "<font color='#00A600'>" + ((exercises.holdTime + exercises.currentHoldTime) / 1000).toInt() + "</font>"
+                    "<font color='#00A600'>" + ((exercises.holdTime + exercises.currentHoldTime) / 1000).toInt() +
+                            "</font>/" + exercises.targetHoldTime
                 } else {
-                    "<font color='#EE0000'>" + ((exercises.holdTime + exercises.currentHoldTime) / 1000).toInt() + "</font>"
+                    "<font color='#EE0000'>" + ((exercises.holdTime + exercises.currentHoldTime) / 1000).toInt() +
+                            "</font>/" + exercises.targetHoldTime
                 }
 
                 infoRight = ""
@@ -446,7 +448,7 @@ class Camera2BasicFragment : Fragment() {
             }
 
             ExerciceType.CHRONO -> {
-                infoLeft = "Temps restant: " + "<font color='#EE0000'>" + exercises.chronoTime!! + "</font>"
+                infoLeft = "Temps restant: " + exercises.chronoTime!!
                 infoRight = "Nombre de répétition: " + exercises.numberOfRepetition
             }
         }
