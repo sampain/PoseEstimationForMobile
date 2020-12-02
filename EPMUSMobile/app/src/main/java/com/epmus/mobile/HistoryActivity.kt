@@ -108,10 +108,16 @@ class HistoryActivity : AppCompatActivity() {
 
             val exerciceTypeEnum = ExerciceType.getEnumValue(item.exerciceType)
 
-            if (exerciceTypeEnum == ExerciceType.HOLD) {
-                holder.nbrText.text = "Temps soutenu"
-            } else if(exerciceTypeEnum == ExerciceType.AMPLITUDE){
-                holder.nbrText.text = "Angle maximal (°)"
+            when (exerciceTypeEnum) {
+                ExerciceType.HOLD -> {
+                    holder.nbrText.text = "Temps soutenu"
+                }
+                ExerciceType.AMPLITUDE -> {
+                    holder.nbrText.text = "Angle maximal (°)"
+                }
+                else -> {
+                    holder.nbrText.text = "Nombre de répétitions"
+                }
             }
 
             when (ExerciceType.getEnumValue(item.exerciceType)) {
