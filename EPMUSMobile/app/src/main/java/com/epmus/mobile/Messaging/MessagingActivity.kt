@@ -1,29 +1,26 @@
 package com.epmus.mobile.Messaging
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import androidx.core.content.ContextCompat
 import androidx.appcompat.app.AppCompatActivity
-import android.util.Log
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.recyclerview.widget.RecyclerView
 import com.epmus.mobile.R
 import com.epmus.mobile.SettingsActivity
-import com.epmus.mobile.ui.login.LoginActivity
 import com.epmus.mobile.ui.login.realmApp
+import com.epmus.mobile.uiThreadRealmExercices
+import com.epmus.mobile.uiThreadRealmUserId
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
-import io.realm.mongodb.User
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_messaging.*
 import kotlinx.android.synthetic.main.user_row_message.view.*
+import kotlin.system.exitProcess
 
 
 class MessagingActivity : AppCompatActivity() {
@@ -32,7 +29,6 @@ class MessagingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_messaging)
 
-        // toolbar support
         setSupportActionBar(findViewById(R.id.toolbar_Messaging))
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -92,10 +88,10 @@ class MessagingActivity : AppCompatActivity() {
 
         R.id.action_logout -> {
             realmApp.currentUser()?.logOutAsync {
-                if (it.isSuccess) {
-                    val intent = Intent(this, LoginActivity::class.java)
-                    startActivity(intent)
-                }
+                uiThreadRealmUserId.close()
+                uiThreadRealmExercices.close()
+                finishAffinity()
+                exitProcess(1)
             }
             true
         }

@@ -15,7 +15,6 @@ import com.epmus.mobile.Messaging.MessagingActivity
 import com.epmus.mobile.R
 import com.epmus.mobile.SettingsActivity
 import com.epmus.mobile.*
-import com.epmus.mobile.Messaging.NewMessageActivity
 import com.epmus.mobile.poseestimation.CameraActivity
 import com.epmus.mobile.poseestimation.ExerciceType
 import com.epmus.mobile.poseestimation.ExerciceTypeUI

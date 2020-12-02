@@ -10,8 +10,9 @@ import androidx.appcompat.widget.Toolbar
 import com.anshdeep.kotlinmessenger.models.ChatMessage
 import com.epmus.mobile.R
 import com.epmus.mobile.SettingsActivity
-import com.epmus.mobile.ui.login.LoginActivity
 import com.epmus.mobile.ui.login.realmApp
+import com.epmus.mobile.uiThreadRealmExercices
+import com.epmus.mobile.uiThreadRealmUserId
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -21,6 +22,7 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import kotlinx.android.synthetic.main.activity_chat_log.*
 import kotlinx.android.synthetic.main.chat_f_row.view.*
+import kotlin.system.exitProcess
 
 class ChatLogActivity : AppCompatActivity() {
 
@@ -144,10 +146,10 @@ class ChatLogActivity : AppCompatActivity() {
 
         R.id.action_logout -> {
             realmApp.currentUser()?.logOutAsync {
-                if (it.isSuccess) {
-                    val intent = Intent(this, LoginActivity::class.java)
-                    startActivity(intent)
-                }
+                uiThreadRealmUserId.close()
+                uiThreadRealmExercices.close()
+                finishAffinity()
+                exitProcess(1)
             }
             true
         }

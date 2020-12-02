@@ -7,7 +7,6 @@ import android.view.MenuItem
 import android.widget.Button
 import com.epmus.mobile.Messaging.MessagingActivity
 import androidx.appcompat.app.AppCompatActivity
-import com.epmus.mobile.Messaging.NewMessageActivity
 import com.epmus.mobile.MongoDbService.MongoTransactions
 import com.epmus.mobile.program.ExerciceData
 import com.epmus.mobile.program.ProgramListActivity
