@@ -6,7 +6,6 @@ import android.text.format.DateUtils
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.epmus.mobile.Messaging.DateUtils.getFormattedTimeChatLog
@@ -129,8 +128,8 @@ class ChatLogActivity : AppCompatActivity() {
 
     private fun performSendMessage() {
         val text = Text_chat_log.text.toString()
-        if (text.isEmpty()) {
-            Toast.makeText(this, "Le message ne peut être vide", Toast.LENGTH_SHORT).show()
+
+        if (text.trim().isEmpty()) {
             return
         }
 
