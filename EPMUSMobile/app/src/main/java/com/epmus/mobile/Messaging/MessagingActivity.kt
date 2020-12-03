@@ -1,25 +1,19 @@
 package com.epmus.mobile.Messaging
 
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
+import android.view.*
+import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
+import com.epmus.mobile.*
 import com.epmus.mobile.R
-import com.epmus.mobile.SettingsActivity
 import com.epmus.mobile.ui.login.realmApp
-import com.epmus.mobile.uiThreadRealmExercices
-import com.epmus.mobile.uiThreadRealmUserId
-import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.Item
-import com.xwray.groupie.ViewHolder
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-import kotlinx.android.synthetic.main.activity_messaging.*
-import kotlinx.android.synthetic.main.user_row_message.view.*
+import io.realm.mongodb.mongo.MongoClient
+import io.realm.mongodb.mongo.MongoCollection
+import io.realm.mongodb.mongo.MongoDatabase
+import org.bson.Document
+import org.bson.types.ObjectId
 import kotlin.system.exitProcess
 
 
@@ -32,39 +26,31 @@ class MessagingActivity : AppCompatActivity() {
         setSupportActionBar(findViewById(R.id.toolbar_Messaging))
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        fetchUsers()
+        val users = realmApp.currentUser()?.customData?.get("physio_associe") as List<String>
+
+        val user = realmApp.currentUser()
+        val mongoClient: MongoClient =
+            user?.getMongoClient("mongodb-atlas")!!
+        val mongoDatabase: MongoDatabase =
+            mongoClient.getDatabase("iphysioBD-dev")!!
+        val mongoCollection: MongoCollection<Document> =
+            mongoDatabase.getCollection("physios")!!
+
+        val userList: MutableList<MessagingUser> = mutableListOf()
+        users.forEach { physio ->
+            mongoCollection.findOne(
+                Document("_id", ObjectId(physio))
+            ).getAsync { findResult ->
+                if (findResult.isSuccess) {
+                    val name = findResult.get()["name"].toString()
+                    val messagingUser = MessagingUser(physio, name)
+                    userList.add(messagingUser)
+                    setupRecyclerView(findViewById(R.id.recyclerview_newmessage), userList)
+                }
+            }
+        }
     }
 
-    private fun fetchUsers() {
-        val ref = FirebaseDatabase.getInstance().getReference("/users")
-
-        ref.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(p0: DataSnapshot) {
-                val adapter = GroupAdapter<ViewHolder>()
-
-                p0.children.forEach { users ->
-                    users.getValue(MessagingUser::class.java)?.let { user ->
-                        adapter.add(UserItem(user, this@MessagingActivity))
-                    }
-
-                }
-
-                adapter.setOnItemClickListener { item, view ->
-                    val userItem = item as UserItem
-
-                    val intent = Intent(view.context, ChatLogActivity::class.java)
-                    intent.putExtra(USER_KEY, userItem.user.nickname)
-                    startActivity(intent)
-                }
-
-                recyclerview_newmessage.adapter = adapter
-            }
-
-            override fun onCancelled(p0: DatabaseError) {
-
-            }
-        })
-    }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.toolbar_actions, menu)
@@ -98,19 +84,53 @@ class MessagingActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupRecyclerView(recyclerView: RecyclerView, users: MutableList<MessagingUser>) {
+        recyclerView.adapter =
+            SimpleItemRecyclerViewAdapter(users)
+    }
+
+    class SimpleItemRecyclerViewAdapter(
+        private val values: MutableList<MessagingUser>
+    ) :
+        RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder>() {
+
+        private val onClickListener: View.OnClickListener
+
+        init {
+            onClickListener = View.OnClickListener { v ->
+                val item = v.tag as MessagingUser
+                val intent = Intent(v.context, ChatLogActivity::class.java).apply {
+                    putExtra(USER_KEY, item)
+                }
+                v.context.startActivity(intent)
+            }
+        }
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            val view = LayoutInflater.from(parent.context)
+                .inflate(R.layout.user_row_message, parent, false)
+            return ViewHolder(view)
+        }
+
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            val item = values[position]
+            holder.idView.text = item.nickname
+
+            with(holder.itemView) {
+                tag = item
+                setOnClickListener(onClickListener)
+            }
+        }
+
+        override fun getItemCount() = values.size
+
+        inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+            val idView: TextView = view.findViewById(R.id.username_textview_new_message)
+        }
+    }
+
     companion object {
         const val USER_KEY = "USER_KEY"
-    }
-}
-
-
-class UserItem(val user: MessagingUser, val context: Context) : Item<ViewHolder>() {
-    override fun bind(viewHolder: ViewHolder, position: Int) {
-        viewHolder.itemView.username_textview_new_message.text = user.nickname
-    }
-
-    override fun getLayout(): Int {
-        return R.layout.user_row_message
     }
 }
 

@@ -1,34 +1,63 @@
 {
   "project_info": {
-    "project_number": "887494519381",
-    "firebase_url": "https://iphysio-55674.firebaseio.com",
-    "project_id": "iphysio-55674",
-    "storage_bucket": "iphysio-55674.appspot.com"
+    "project_number": "700650294972",
+    "firebase_url": "https://iphysio-223df-default-rtdb.firebaseio.com/",
+    "project_id": "iphysio-223df",
+    "storage_bucket": "iphysio-223df.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:887494519381:android:b09a4baa0c904dee47c2dc",
+        "mobilesdk_app_id": "1:700650294972:android:24fbcc63838770e7228ab9",
         "android_client_info": {
           "package_name": "com.epmus.mobile"
         }
       },
       "oauth_client": [
         {
-          "client_id": "887494519381-l35c67frgjokgedo5v4apf1slja5vho4.apps.googleusercontent.com",
+          "client_id": "700650294972-86qb74rkp2tsghlfioq6m1dn2np7gem0.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDYuqgLc5Wlxj30J1-wyf25Gd6W2huy3xs"
+          "current_key": "AIzaSyAs1W_Z266lEL9W58Yyiyqb2LIaRzLVUiI"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "887494519381-l35c67frgjokgedo5v4apf1slja5vho4.apps.googleusercontent.com",
+              "client_id": "700650294972-86qb74rkp2tsghlfioq6m1dn2np7gem0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:700650294972:android:ff471a1e844a1ae8228ab9",
+        "android_client_info": {
+          "package_name": "com.epmus.mobile.messaging"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "700650294972-86qb74rkp2tsghlfioq6m1dn2np7gem0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAs1W_Z266lEL9W58Yyiyqb2LIaRzLVUiI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "700650294972-86qb74rkp2tsghlfioq6m1dn2np7gem0.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

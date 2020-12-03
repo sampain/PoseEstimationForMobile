@@ -1,32 +1,42 @@
 package com.epmus.mobile.Messaging
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.format.DateUtils
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import com.epmus.mobile.models.ChatMessage
+import com.epmus.mobile.Messaging.DateUtils.getFormattedTimeChatLog
 import com.epmus.mobile.R
 import com.epmus.mobile.SettingsActivity
+import com.epmus.mobile.models.ChatMessage
 import com.epmus.mobile.ui.login.realmApp
 import com.epmus.mobile.uiThreadRealmExercices
 import com.epmus.mobile.uiThreadRealmUserId
-import com.google.firebase.database.ChildEventListener
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.xwray.groupie.ViewHolder
+import com.google.firebase.database.*
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
+import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.activity_chat_log.*
 import kotlinx.android.synthetic.main.chat_from_row.view.*
 import kotlinx.android.synthetic.main.chat_to_row.view.*
+import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.system.exitProcess
 
 class ChatLogActivity : AppCompatActivity() {
 
+    companion object {
+        val TAG = ChatLogActivity::class.java.simpleName
+    }
+
     val adapter = GroupAdapter<ViewHolder>()
+
+    private val toUser: MessagingUser
+        get() = intent.getParcelableExtra(MessagingActivity.USER_KEY)!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,82 +45,15 @@ class ChatLogActivity : AppCompatActivity() {
         val toolbar = findViewById<Toolbar>(R.id.toolbar_ChatLogMessaging)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
         recyclerview_chat_log.adapter = adapter
 
-        val username = intent.getStringExtra(MessagingActivity.USER_KEY)
-        supportActionBar?.title = username
+        supportActionBar?.title = toUser.nickname
+
+        listenForMessages()
 
         send_button_chat_log.setOnClickListener {
             performSendMessage()
         }
-
-        listenForMessages()
-    }
-
-    private fun listenForMessages() {
-        val ref = FirebaseDatabase.getInstance().getReference("/chats")
-
-        ref.addChildEventListener(object : ChildEventListener {
-            override fun onChildAdded(p0: DataSnapshot, p1: String?) {
-                val chatMessage = p0.getValue((ChatMessage::class.java))
-
-                if (chatMessage?.fromId != "Mobile") {
-                    adapter.add(ChatFItem(chatMessage?.message.toString()))
-                } else {
-                    adapter.add(ChatTItem(chatMessage.message))
-                }
-
-                recyclerview_chat_log.scrollToPosition(adapter.itemCount -1)
-            }
-
-            override fun onCancelled(p0: DatabaseError) {
-
-            }
-
-            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-                TODO("Not yet implemented")
-            }
-
-            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-                TODO("Not yet implemented")
-            }
-
-            override fun onChildRemoved(snapshot: DataSnapshot) {
-                TODO("Not yet implemented")
-            }
-        })
-
-    }
-
-    private fun performSendMessage() {
-
-        val message = Text_chat_log.text.toString()
-
-        if(message.trim().isEmpty()){
-            return
-        }
-
-        val fromId = "Mobile"
-
-        val username = intent.getStringExtra(MessagingActivity.USER_KEY)
-
-        val reference = FirebaseDatabase.getInstance().getReference("/chats").push()
-
-        val chatMessage = username?.let {
-            ChatMessage(
-                reference.key!!,
-                message,
-                fromId,
-                it,
-                System.currentTimeMillis() / 1000
-            )
-        }
-        reference.setValue(chatMessage)
-            .addOnSuccessListener {
-                Text_chat_log.text.clear()
-                recyclerview_chat_log.scrollToPosition(adapter.itemCount - 1)
-            }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -139,24 +82,142 @@ class ChatLogActivity : AppCompatActivity() {
             super.onOptionsItemSelected(item)
         }
     }
+
+    private fun listenForMessages() {
+
+        val fromId = realmApp.currentUser()?.id
+        val toId = toUser.uid
+        val ref = FirebaseDatabase.getInstance().getReference("/user-messages/$fromId/$toId")
+
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.d(TAG, "database error: " + databaseError.message)
+            }
+
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                Log.d(TAG, "has children: " + dataSnapshot.hasChildren())
+            }
+        })
+
+        ref.addChildEventListener(object : ChildEventListener {
+            override fun onCancelled(databaseError: DatabaseError) {
+            }
+
+            override fun onChildMoved(dataSnapshot: DataSnapshot, previousChildName: String?) {
+            }
+
+            override fun onChildChanged(dataSnapshot: DataSnapshot, previousChildName: String?) {
+            }
+
+            override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
+                dataSnapshot.getValue(ChatMessage::class.java)?.let {
+                    if (it.fromId != realmApp.currentUser()?.id) {
+                        adapter.add(ChatFromItem(it.message, it.timestamp))
+                    } else {
+                        adapter.add(ChatToItem(it.message, it.timestamp))
+                    }
+                }
+                recyclerview_chat_log.scrollToPosition(adapter.itemCount - 1)
+            }
+
+            override fun onChildRemoved(dataSnapshot: DataSnapshot) {
+            }
+
+        })
+
+    }
+
+    private fun performSendMessage() {
+        val text = Text_chat_log.text.toString()
+        if (text.isEmpty()) {
+            Toast.makeText(this, "Le message ne peut être vide", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val fromId = realmApp.currentUser()?.id
+        val toId = toUser.uid
+
+        val reference =
+            FirebaseDatabase.getInstance().getReference("/user-messages/$fromId/$toId").push()
+        val toReference =
+            FirebaseDatabase.getInstance().getReference("/user-messages/$toId/$fromId").push()
+
+        val chatMessage =
+            ChatMessage(reference.key!!, text, fromId!!, toId, System.currentTimeMillis() / 1000)
+        reference.setValue(chatMessage)
+            .addOnSuccessListener {
+                Text_chat_log.text.clear()
+                recyclerview_chat_log.smoothScrollToPosition(adapter.itemCount - 1)
+            }
+
+        toReference.setValue(chatMessage)
+    }
+
 }
 
-class ChatFItem(val text: String) : Item<ViewHolder>() {
+class ChatFromItem(val text: String, val timestamp: Long) : Item<ViewHolder>() {
+
     override fun bind(viewHolder: ViewHolder, position: Int) {
+
         viewHolder.itemView.textView_from.text = text
+        viewHolder.itemView.from_msg_time.text = getFormattedTimeChatLog(timestamp)
     }
 
     override fun getLayout(): Int {
         return R.layout.chat_from_row
     }
+
 }
 
-class ChatTItem(val text: String) : Item<ViewHolder>() {
+class ChatToItem(val text: String, val timestamp: Long) :
+    Item<ViewHolder>() {
+
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.textView_to.text = text
+        viewHolder.itemView.to_msg_time.text = getFormattedTimeChatLog(timestamp)
     }
 
     override fun getLayout(): Int {
         return R.layout.chat_to_row
+    }
+
+}
+
+object DateUtils {
+
+    val fullFormattedTime = SimpleDateFormat("d MMM, h:mm a", Locale.US) // the format of your date
+    private val onlyTime = SimpleDateFormat("h:mm a", Locale.US) // the format of your date
+    private val onlyDate = SimpleDateFormat("d MMM", Locale.US) // the format of your date
+
+    fun getFormattedTime(timeInMilis: Long): String {
+        val date = Date(timeInMilis * 1000L) // *1000 is to convert seconds to milliseconds
+
+        return when {
+            isToday(date) -> onlyTime.format(date)
+            isYesterday(date) -> "Yesterday"
+            else -> onlyDate.format(date)
+        }
+
+    }
+
+    fun getFormattedTimeChatLog(timeInMilis: Long): String {
+        val date = Date(timeInMilis * 1000L) // *1000 is to convert seconds to milliseconds
+        val fullFormattedTime =
+            SimpleDateFormat("d MMM, h:mm a", Locale.US) // the format of your date
+        val onlyTime = SimpleDateFormat("h:mm a", Locale.US) // the format of your date
+
+        return when {
+            isToday(date) -> onlyTime.format(date)
+            else -> fullFormattedTime.format(date)
+        }
+
+    }
+
+    fun isYesterday(d: Date): Boolean {
+        return DateUtils.isToday(d.time + DateUtils.DAY_IN_MILLIS)
+    }
+
+    fun isToday(d: Date): Boolean {
+        return DateUtils.isToday(d.time)
     }
 }
