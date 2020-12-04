@@ -36,6 +36,8 @@ class ChatLogActivity : AppCompatActivity() {
 
     private val toUser: MessagingUser
         get() = intent.getParcelableExtra(MessagingActivity.USER_KEY)!!
+    private val fromUserId: String
+        get() = realmApp.currentUser()?.customData?.get("_id").toString()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,9 +86,8 @@ class ChatLogActivity : AppCompatActivity() {
 
     private fun listenForMessages() {
 
-        val fromId = realmApp.currentUser()?.id
         val toId = toUser.uid
-        val ref = FirebaseDatabase.getInstance().getReference("/user-messages/$fromId/$toId")
+        val ref = FirebaseDatabase.getInstance().getReference("/user-messages/$fromUserId/$toId")
 
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onCancelled(databaseError: DatabaseError) {
@@ -110,7 +111,7 @@ class ChatLogActivity : AppCompatActivity() {
 
             override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
                 dataSnapshot.getValue(ChatMessage::class.java)?.let {
-                    if (it.fromId != realmApp.currentUser()?.id) {
+                    if (it.fromId != fromUserId) {
                         adapter.add(ChatFromItem(it.message, it.timestamp))
                     } else {
                         adapter.add(ChatToItem(it.message, it.timestamp))
@@ -133,16 +134,15 @@ class ChatLogActivity : AppCompatActivity() {
             return
         }
 
-        val fromId = realmApp.currentUser()?.id
         val toId = toUser.uid
 
         val reference =
-            FirebaseDatabase.getInstance().getReference("/user-messages/$fromId/$toId").push()
+            FirebaseDatabase.getInstance().getReference("/user-messages/$fromUserId/$toId").push()
         val toReference =
-            FirebaseDatabase.getInstance().getReference("/user-messages/$toId/$fromId").push()
+            FirebaseDatabase.getInstance().getReference("/user-messages/$toId/$fromUserId").push()
 
         val chatMessage =
-            ChatMessage(reference.key!!, text, fromId!!, toId, System.currentTimeMillis() / 1000)
+            ChatMessage(reference.key!!, text, fromUserId, toId, System.currentTimeMillis() / 1000)
         reference.setValue(chatMessage)
             .addOnSuccessListener {
                 Text_chat_log.text.clear()
