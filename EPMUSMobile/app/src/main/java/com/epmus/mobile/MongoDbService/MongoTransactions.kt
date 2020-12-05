@@ -32,9 +32,10 @@ class MongoTransactions {
 
         var historic: MutableList<HistoryData> = mutableListOf()
         var exerciceList: MutableList<ExerciceData> = mutableListOf()
-        val configUserId: SyncConfiguration
-        val configExercices: SyncConfiguration
-        private val user: User? = realmApp.currentUser()
+        var uiThreadRealmUserId: Realm
+        var uiThreadRealmExercices: Realm
+        private val configUserId: SyncConfiguration
+        private val configExercices: SyncConfiguration
         private var programmesList: MutableList<programmes> = mutableListOf()
         private var exercicesPhysiotecList: MutableList<exercicesPhysiotec> = mutableListOf()
         private lateinit var historyListener: RealmResults<historique>
@@ -42,10 +43,13 @@ class MongoTransactions {
         private lateinit var exercicesPhysiotecListener: RealmResults<exercicesPhysiotec>
 
         init {
+            val user: User? = realmApp.currentUser()
             configUserId =
-                SyncConfiguration.Builder(user, user?.customData?.get("_id").toString())
-                    .build()
+                SyncConfiguration.Builder(user, user?.customData?.get("_id").toString()).build()
             configExercices = SyncConfiguration.Builder(user, "exercices").build()
+            uiThreadRealmUserId = Realm.getInstance(configUserId)
+            uiThreadRealmExercices = Realm.getInstance(configExercices)
+            addChangeListenerToRealm()
         }
 
         fun historyEntry(stats: ExerciceStatistique) {
@@ -249,11 +253,8 @@ class MongoTransactions {
             executorService.execute(task)
         }
 
-        fun addChangeListenerToRealm(
-            realmUserId: Realm,
-            realmExercices: Realm
-        ) {
-            historyListener = realmUserId.where<historique>().findAllAsync()
+        private fun addChangeListenerToRealm() {
+            historyListener = uiThreadRealmUserId.where<historique>().findAllAsync()
             historyListener.addChangeListener { collection, _ ->
 
                 val historicSort = mutableListOf<HistoryData>()
@@ -281,15 +282,16 @@ class MongoTransactions {
                 }
             }
 
-            programListener = realmUserId.where<programmes>().findAllAsync()
+            programListener = uiThreadRealmUserId.where<programmes>().findAllAsync()
             programListener.addChangeListener { collection, _ ->
-                programmesList = realmUserId.copyFromRealm(collection)
+                programmesList = uiThreadRealmUserId.copyFromRealm(collection)
                 exerciceList = exerciceList()
             }
 
-            exercicesPhysiotecListener = realmExercices.where<exercicesPhysiotec>().findAllAsync()
+            exercicesPhysiotecListener =
+                uiThreadRealmExercices.where<exercicesPhysiotec>().findAllAsync()
             exercicesPhysiotecListener.addChangeListener { collection, _ ->
-                exercicesPhysiotecList = realmExercices.copyFromRealm(collection)
+                exercicesPhysiotecList = uiThreadRealmExercices.copyFromRealm(collection)
                 exerciceList = exerciceList()
             }
         }

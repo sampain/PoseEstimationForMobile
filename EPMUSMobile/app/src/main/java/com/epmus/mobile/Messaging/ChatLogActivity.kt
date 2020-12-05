@@ -9,12 +9,11 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.epmus.mobile.Messaging.DateUtils.getFormattedTimeChatLog
+import com.epmus.mobile.MongoDbService.MongoTransactions
 import com.epmus.mobile.R
 import com.epmus.mobile.SettingsActivity
 import com.epmus.mobile.models.ChatMessage
 import com.epmus.mobile.ui.login.realmApp
-import com.epmus.mobile.uiThreadRealmExercices
-import com.epmus.mobile.uiThreadRealmUserId
 import com.google.firebase.database.*
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
@@ -71,8 +70,8 @@ class ChatLogActivity : AppCompatActivity() {
 
         R.id.action_logout -> {
             realmApp.currentUser()?.logOutAsync {
-                uiThreadRealmUserId.close()
-                uiThreadRealmExercices.close()
+                MongoTransactions.uiThreadRealmUserId.close()
+                MongoTransactions.uiThreadRealmExercices.close()
                 finishAffinity()
                 exitProcess(1)
             }

@@ -7,6 +7,7 @@ import android.view.*
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.epmus.mobile.*
+import com.epmus.mobile.MongoDbService.MongoTransactions
 import com.epmus.mobile.R
 import com.epmus.mobile.ui.login.realmApp
 import io.realm.mongodb.mongo.MongoClient
@@ -71,8 +72,8 @@ class MessagingActivity : AppCompatActivity() {
 
         R.id.action_logout -> {
             realmApp.currentUser()?.logOutAsync {
-                uiThreadRealmUserId.close()
-                uiThreadRealmExercices.close()
+                MongoTransactions.uiThreadRealmUserId.close()
+                MongoTransactions.uiThreadRealmExercices.close()
                 finishAffinity()
                 exitProcess(1)
             }

@@ -84,8 +84,8 @@ class ProgramListActivity : AppCompatActivity() {
 
         R.id.action_logout -> {
             realmApp.currentUser()?.logOutAsync {
-                uiThreadRealmUserId.close()
-                uiThreadRealmExercices.close()
+                MongoTransactions.uiThreadRealmUserId.close()
+                MongoTransactions.uiThreadRealmExercices.close()
                 finishAffinity()
                 exitProcess(1)
             }

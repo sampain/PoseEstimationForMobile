@@ -10,13 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.epmus.mobile.MongoDbService.MongoTransactions
 import com.epmus.mobile.program.ProgramListActivity
 import com.epmus.mobile.ui.login.realmApp
-import io.realm.Realm
 import kotlin.system.exitProcess
-
-var historic: MutableList<HistoryData> = mutableListOf()
-
-lateinit var uiThreadRealmUserId: Realm
-lateinit var uiThreadRealmExercices: Realm
 
 class MainMenuActivity : AppCompatActivity() {
 
@@ -46,13 +40,7 @@ class MainMenuActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        //Add listener to Realm
-        uiThreadRealmUserId = Realm.getInstance(MongoTransactions.configUserId)
-        uiThreadRealmExercices = Realm.getInstance(MongoTransactions.configExercices)
-        MongoTransactions.addChangeListenerToRealm(
-            uiThreadRealmUserId,
-            uiThreadRealmExercices
-        )
+        MongoTransactions
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -69,8 +57,8 @@ class MainMenuActivity : AppCompatActivity() {
 
         R.id.action_logout -> {
             realmApp.currentUser()?.logOutAsync {
-                uiThreadRealmUserId.close()
-                uiThreadRealmExercices.close()
+                MongoTransactions.uiThreadRealmUserId.close()
+                MongoTransactions.uiThreadRealmExercices.close()
                 finishAffinity()
                 exitProcess(1)
             }
