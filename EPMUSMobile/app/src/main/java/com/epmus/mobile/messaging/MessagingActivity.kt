@@ -9,12 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.epmus.mobile.*
 import com.epmus.mobile.mongodbservice.MongoTransactions
 import com.epmus.mobile.R
+import com.epmus.mobile.mongodbservice.MongoTransactions.Companion.physioList
 import com.epmus.mobile.ui.login.realmApp
-import io.realm.mongodb.mongo.MongoClient
-import io.realm.mongodb.mongo.MongoCollection
-import io.realm.mongodb.mongo.MongoDatabase
-import org.bson.Document
-import org.bson.types.ObjectId
 import kotlin.system.exitProcess
 
 
@@ -27,29 +23,7 @@ class MessagingActivity : AppCompatActivity() {
         setSupportActionBar(findViewById(R.id.toolbar_Messaging))
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val users = realmApp.currentUser()?.customData?.get("physio_associe") as List<String>
-
-        val user = realmApp.currentUser()
-        val mongoClient: MongoClient =
-            user?.getMongoClient("mongodb-atlas")!!
-        val mongoDatabase: MongoDatabase =
-            mongoClient.getDatabase("iphysioBD-dev")!!
-        val mongoCollection: MongoCollection<Document> =
-            mongoDatabase.getCollection("physios")!!
-
-        val userList: MutableList<MessagingUser> = mutableListOf()
-        users.forEach { physio ->
-            mongoCollection.findOne(
-                Document("_id", ObjectId(physio))
-            ).getAsync { findResult ->
-                if (findResult.isSuccess) {
-                    val name = findResult.get()["name"].toString()
-                    val messagingUser = MessagingUser(physio, name)
-                    userList.add(messagingUser)
-                    setupRecyclerView(findViewById(R.id.recyclerview_newmessage), userList)
-                }
-            }
-        }
+        setupRecyclerView(findViewById(R.id.recyclerview_newmessage), physioList)
     }
 
 

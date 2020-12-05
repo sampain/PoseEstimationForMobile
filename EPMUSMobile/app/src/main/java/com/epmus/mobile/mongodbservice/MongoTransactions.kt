@@ -1,6 +1,7 @@
 package com.epmus.mobile.mongodbservice
 
 import com.epmus.mobile.*
+import com.epmus.mobile.messaging.MessagingUser
 import com.epmus.mobile.poseestimation.BodyPart
 import com.epmus.mobile.poseestimation.ExerciceStatistique
 import com.epmus.mobile.poseestimation.ExerciceType
@@ -15,7 +16,11 @@ import io.realm.annotations.PrimaryKey
 import io.realm.annotations.RealmClass
 import io.realm.kotlin.where
 import io.realm.mongodb.User
+import io.realm.mongodb.mongo.MongoClient
+import io.realm.mongodb.mongo.MongoCollection
+import io.realm.mongodb.mongo.MongoDatabase
 import io.realm.mongodb.sync.SyncConfiguration
+import org.bson.Document
 import org.bson.types.ObjectId
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -32,6 +37,7 @@ class MongoTransactions {
 
         var historic: MutableList<HistoryData> = mutableListOf()
         var exerciceList: MutableList<ExerciceData> = mutableListOf()
+        var physioList: MutableList<MessagingUser> = mutableListOf()
         var uiThreadRealmUserId: Realm
         var uiThreadRealmExercices: Realm
         private val configUserId: SyncConfiguration
@@ -50,6 +56,25 @@ class MongoTransactions {
             uiThreadRealmUserId = Realm.getInstance(configUserId)
             uiThreadRealmExercices = Realm.getInstance(configExercices)
             addChangeListenerToRealm()
+
+            val physios = user?.customData?.get("physio_associe") as List<String>
+
+            val mongoClient: MongoClient = user?.getMongoClient("mongodb-atlas")!!
+            val mongoDatabase: MongoDatabase = mongoClient.getDatabase("iphysioBD-dev")!!
+            val mongoCollection: MongoCollection<Document> =
+                mongoDatabase.getCollection("physios")!!
+
+            physios.forEach { physio ->
+                mongoCollection.findOne(
+                    Document("_id", ObjectId(physio))
+                ).getAsync { findResult ->
+                    if (findResult.isSuccess) {
+                        val name = findResult.get()["name"].toString()
+                        val messagingUser = MessagingUser(physio, name)
+                        physioList.add(messagingUser)
+                    }
+                }
+            }
         }
 
         fun historyEntry(stats: ExerciceStatistique) {
@@ -251,6 +276,10 @@ class MongoTransactions {
             val threads = Runtime.getRuntime().availableProcessors()
             val executorService: ExecutorService = Executors.newFixedThreadPool(threads)
             executorService.execute(task)
+        }
+
+        private fun findPhysioList(){
+
         }
 
         private fun addChangeListenerToRealm() {
