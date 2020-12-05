@@ -7,6 +7,4 @@ import kotlinx.android.parcel.Parcelize
 data class MessagingUser(
     val uid: String,
     val nickname: String,
-) : Parcelable {
-    constructor() : this("", "")
-}
+) : Parcelable

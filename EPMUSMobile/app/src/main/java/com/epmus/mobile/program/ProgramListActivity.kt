@@ -1,6 +1,5 @@
 package com.epmus.mobile.program
 
-import android.app.NotificationManager
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -36,15 +35,6 @@ class ProgramListActivity : AppCompatActivity() {
      * device.
      */
     private var twoPane: Boolean = false
-    private var notificationManager: NotificationManager? = null
-    val monday: MutableList<String> = mutableListOf()
-    val tuesday: MutableList<String> = mutableListOf()
-    val wednesday: MutableList<String> = mutableListOf()
-    val thursday: MutableList<String> = mutableListOf()
-    val friday: MutableList<String> = mutableListOf()
-    val saturday: MutableList<String> = mutableListOf()
-    val sunday: MutableList<String> = mutableListOf()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

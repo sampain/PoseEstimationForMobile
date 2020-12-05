@@ -12,7 +12,6 @@ import com.epmus.mobile.Messaging.DateUtils.getFormattedTimeChatLog
 import com.epmus.mobile.MongoDbService.MongoTransactions
 import com.epmus.mobile.R
 import com.epmus.mobile.SettingsActivity
-import com.epmus.mobile.models.ChatMessage
 import com.epmus.mobile.ui.login.realmApp
 import com.google.firebase.database.*
 import com.xwray.groupie.GroupAdapter
@@ -28,7 +27,7 @@ import kotlin.system.exitProcess
 class ChatLogActivity : AppCompatActivity() {
 
     companion object {
-        val TAG = ChatLogActivity::class.java.simpleName
+        val TAG: String = ChatLogActivity::class.java.simpleName
     }
 
     val adapter = GroupAdapter<ViewHolder>()
@@ -153,7 +152,7 @@ class ChatLogActivity : AppCompatActivity() {
 
 }
 
-class ChatFromItem(val text: String, val timestamp: Long) : Item<ViewHolder>() {
+class ChatFromItem(val text: String, private val timestamp: Long) : Item<ViewHolder>() {
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
 
@@ -167,7 +166,7 @@ class ChatFromItem(val text: String, val timestamp: Long) : Item<ViewHolder>() {
 
 }
 
-class ChatToItem(val text: String, val timestamp: Long) :
+class ChatToItem(val text: String, private val timestamp: Long) :
     Item<ViewHolder>() {
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
@@ -211,11 +210,11 @@ object DateUtils {
 
     }
 
-    fun isYesterday(d: Date): Boolean {
+    private fun isYesterday(d: Date): Boolean {
         return DateUtils.isToday(d.time + DateUtils.DAY_IN_MILLIS)
     }
 
-    fun isToday(d: Date): Boolean {
+    private fun isToday(d: Date): Boolean {
         return DateUtils.isToday(d.time)
     }
 }
