@@ -36,7 +36,6 @@
     <string name="debug">Debug : </string>
     <string name="hello">Hello </string>
 
-    <string name="title_activity_login">Se connecter</string>
     <string name="prompt_email">Adresse courriel</string>
     <string name="prompt_password">Mot de passe</string>
     <string name="action_sign_in">Se connecter</string>
@@ -48,20 +47,15 @@
     <string name="title_activity_program">"Programmes"</string>
     <string name="title_activity_statistics">"Statistiques"</string>
     <string name="title_activity_messaging">"Messagerie"</string>
-    <string name="title_activity_alerts">"Alertes"</string>
-    <string name="action_account">"Compte"</string>
     <string name="action_settings">"Paramètres"</string>
     <string name="action_history">"Historique"</string>
     <string name="action_logout">"Déconnexion"</string>
     <string name="action_create">"Créer le compte"</string>
 
-    <string name="title_activity_settings">Paramètres</string>
     <string name="language_setting">Option de langue</string>
-    <string name="account_settings">Options du compte</string>
     <string name="application_settings">Options de l\'application</string>
     <string name="language">Langue</string>
     <string name="audio_setting">Désactiver l\'audio</string>
-    <string name="visual_setting">Désactiver l\'aide visuel</string>
 
     <string name="message_hint">Écrire votre message</string>
     <string name="send">Envoyer</string>
