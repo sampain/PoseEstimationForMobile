@@ -49,14 +49,13 @@ class MongoTransactions {
             val exerciceType = stats.exerciceType
             val exerciceTypeEnum = ExerciceType.getEnumValue(exerciceType)
 
-            var nbrRepetitionOrHoldTime = 0.toString()
+            val nbrRepetitionOrHoldTime: String
 
             if (exerciceTypeEnum == ExerciceType.HOLD) {
-                nbrRepetitionOrHoldTime = 0.toString()
-            } else if(exerciceTypeEnum == ExerciceType.AMPLITUDE){
+                nbrRepetitionOrHoldTime = stats.holdtime.toString()
+            } else if (exerciceTypeEnum == ExerciceType.AMPLITUDE) {
                 nbrRepetitionOrHoldTime = stats.maxAngleAmplitude.toString()
-            }
-            else {
+            } else {
                 nbrRepetitionOrHoldTime = stats.numberOfRepetition.last().toString()
             }
 
@@ -91,7 +90,7 @@ class MongoTransactions {
 
         fun insertStatistics(stats: ExerciceStatistique) {
             //TODO Pretreat the data, realm will have an error if the realmlist is too long
-            val maxArray = 150
+            val maxArray = 50
 
             val HEAD: RealmList<pointPos> = RealmList<pointPos>()
             val NECK: RealmList<pointPos> = RealmList<pointPos>()
@@ -328,19 +327,21 @@ class MongoTransactions {
                             exerciceData.saturdayAlarm = exerciceProgram.samedi ?: false
                             exerciceData.sundayAlarm = exerciceProgram.dimanche ?: false
                             exerciceData.exercice.minExecutionTime =
-                                exerciceProgram.tempo?.min?.toFloat()
+                                exerciceProgram.tempo?.min?.toFloat() ?: 0F
                             exerciceData.exercice.maxExecutionTime =
-                                exerciceProgram.tempo?.max?.toFloat()
+                                exerciceProgram.tempo?.max?.toFloat() ?: 9999F
                             exerciceData.id = exerciceProgram.exerciceId
                             exerciceData.imagePath = exercice.imagePath
                             exerciceData.name = exerciceProgram.nom
                             exerciceData.description = exerciceProgram.description
                             exerciceData.exercice.exerciceType =
                                 ExerciceType.getEnumValue(exercice.type.toUpperCase(Locale.ROOT))
-                            exerciceData.exercice.targetHoldTime = exerciceProgram.tenir
+                                    ?: ExerciceType.REPETITION
+                            exerciceData.exercice.targetHoldTime = exerciceProgram.tenir ?: 0
                             exerciceData.exercice.numberOfRepetitionToDo =
-                                exerciceProgram.repetition
-                            exerciceData.exercice.allowedTimeForExercice = exerciceProgram.duree
+                                exerciceProgram.repetition ?: 0
+                            exerciceData.exercice.allowedTimeForExercice =
+                                exerciceProgram.duree ?: 0
                             exercice.movements?.forEachIndexed { index, movementValue ->
                                 val movement = Movement(
                                     BodyPart.getEnumValue(movementValue.bodyPart0)?.ordinal!!,
@@ -349,18 +350,18 @@ class MongoTransactions {
                                 )
                                 if (index == 0) {
                                     if (exerciceData.exercice.exerciceType == ExerciceType.HOLD) {
-                                        movement.endingAngle = exerciceProgram.angle?.hold
+                                        movement.endingAngle = exerciceProgram.angle?.hold ?: 0
                                     } else {
-                                        movement.endingAngle = exerciceProgram.angle?.fin
+                                        movement.endingAngle = exerciceProgram.angle?.fin ?: 0
                                     }
-                                    movement.startingAngle = exerciceProgram.angle?.debut
+                                    movement.startingAngle = exerciceProgram.angle?.debut ?: 0
                                     movement.isAngleClockWise =
-                                        exerciceProgram.angle?.isClockWise
+                                        exerciceProgram.angle?.isClockWise ?: false
                                 } else {
-                                    movement.startingAngle = exerciceProgram.angle2?.debut
-                                    movement.endingAngle = exerciceProgram.angle2?.fin
+                                    movement.startingAngle = exerciceProgram.angle2?.debut ?: 0
+                                    movement.endingAngle = exerciceProgram.angle2?.fin ?: 0
                                     movement.isAngleClockWise =
-                                        exerciceProgram.angle2?.isClockWise
+                                        exerciceProgram.angle2?.isClockWise ?: false
                                 }
                                 exerciceData.exercice.movementList.add(movement)
                             }

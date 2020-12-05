@@ -1134,14 +1134,16 @@ class Camera2BasicFragment : Fragment() {
             }
         }
 
-
         cleanStats.avgFps = ((s[cpt - 1].exerciceEndTime!!.toDouble() -
                 s[cpt - 1].exerciceStartTime!!.toDouble()) / 1000)
         cleanStats.avgFps = cleanStats.bodyPartPos.HEAD.count() / cleanStats.avgFps
 
+        cleanStats.holdtime = exerciceData.exercice.targetHoldTime.toString()
 
         MongoTransactions.historyEntry(cleanStats)
-        MongoTransactions.insertStatistics(cleanStats)
+
+        //Todo: Uncomment this line to send the statistics to MongoDB
+        //MongoTransactions.insertStatistics(cleanStats)
     }
 
     private fun showDebugUI(text: String) {

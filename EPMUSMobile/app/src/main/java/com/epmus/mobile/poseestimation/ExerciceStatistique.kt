@@ -7,6 +7,7 @@ class ExerciceStatistique : Serializable {
     var exerciceType = ""
     var exerciceID: String = ""
 
+    var holdtime: String? = null
     var timestampOfRepetition = ArrayList<String?>()
     var numberOfRepetition = ArrayList<Int?>()
 
