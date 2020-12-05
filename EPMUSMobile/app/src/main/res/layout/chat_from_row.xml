@@ -29,8 +29,7 @@
         android:layout_marginTop="4dp"
         android:paddingEnd="20dp"
         android:paddingStart="20dp"
-        android:text="16 Sep, 2:05 PM"
-        android:textSize="11sp"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/textView_from"
         app:layout_constraintTop_toBottomOf="@+id/textView_from"/>
