@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import com.epmus.mobile.MongoDbService.MongoTransactions
+import com.epmus.mobile.mongodbservice.MongoTransactions
 import com.epmus.mobile.R
 import com.epmus.mobile.poseestimation.ExerciceType
 

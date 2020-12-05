@@ -1,4 +1,4 @@
-package com.epmus.mobile.MongoDbService
+package com.epmus.mobile.mongodbservice
 
 import com.epmus.mobile.*
 import com.epmus.mobile.poseestimation.BodyPart

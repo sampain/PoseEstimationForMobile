@@ -1,4 +1,4 @@
-package com.epmus.mobile.Messaging
+package com.epmus.mobile.messaging
 
 class ChatMessage(
     val id: String,

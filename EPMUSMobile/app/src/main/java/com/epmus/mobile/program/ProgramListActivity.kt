@@ -11,8 +11,8 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.RecyclerView
 import com.epmus.mobile.*
-import com.epmus.mobile.Messaging.MessagingActivity
-import com.epmus.mobile.MongoDbService.MongoTransactions
+import com.epmus.mobile.messaging.MessagingActivity
+import com.epmus.mobile.mongodbservice.MongoTransactions
 import com.epmus.mobile.poseestimation.CameraActivity
 import com.epmus.mobile.poseestimation.ExerciceType
 import com.epmus.mobile.poseestimation.ExerciceTypeUI

@@ -42,7 +42,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
-import com.epmus.mobile.MongoDbService.MongoTransactions
+import com.epmus.mobile.mongodbservice.MongoTransactions
 import com.epmus.mobile.R
 import com.epmus.mobile.program.ExerciceData
 import kotlinx.coroutines.GlobalScope

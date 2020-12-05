@@ -12,7 +12,7 @@ import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.epmus.mobile.MongoDbService.MongoTransactions
+import com.epmus.mobile.mongodbservice.MongoTransactions
 import com.epmus.mobile.poseestimation.ExerciceType
 import com.epmus.mobile.poseestimation.ExerciceTypeUI
 import com.epmus.mobile.ui.login.realmApp

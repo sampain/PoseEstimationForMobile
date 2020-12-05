@@ -1,4 +1,4 @@
-package com.epmus.mobile.Messaging
+package com.epmus.mobile.messaging
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,8 +8,8 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import com.epmus.mobile.Messaging.DateUtils.getFormattedTimeChatLog
-import com.epmus.mobile.MongoDbService.MongoTransactions
+import com.epmus.mobile.messaging.DateUtils.getFormattedTimeChatLog
+import com.epmus.mobile.mongodbservice.MongoTransactions
 import com.epmus.mobile.R
 import com.epmus.mobile.SettingsActivity
 import com.epmus.mobile.ui.login.realmApp

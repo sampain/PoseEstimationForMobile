@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
-import com.epmus.mobile.MongoDbService.MongoTransactions
+import com.epmus.mobile.mongodbservice.MongoTransactions
 import com.epmus.mobile.poseestimation.ExerciceType
 import com.epmus.mobile.ui.login.realmApp
 import org.eazegraph.lib.charts.PieChart

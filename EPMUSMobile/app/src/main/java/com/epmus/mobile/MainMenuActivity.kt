@@ -5,9 +5,9 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
-import com.epmus.mobile.Messaging.MessagingActivity
+import com.epmus.mobile.messaging.MessagingActivity
 import androidx.appcompat.app.AppCompatActivity
-import com.epmus.mobile.MongoDbService.MongoTransactions
+import com.epmus.mobile.mongodbservice.MongoTransactions
 import com.epmus.mobile.program.ProgramListActivity
 import com.epmus.mobile.ui.login.realmApp
 import kotlin.system.exitProcess

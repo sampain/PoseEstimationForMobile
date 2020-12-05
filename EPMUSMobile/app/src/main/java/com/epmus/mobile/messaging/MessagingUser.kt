@@ -1,4 +1,4 @@
-package com.epmus.mobile.Messaging
+package com.epmus.mobile.messaging
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
