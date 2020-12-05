@@ -16,9 +16,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Messaging.ChatLogActivity"
-            android:parentActivityName=".Messaging.MessagingActivity">
-        </activity>
+        <activity
+            android:name=".Messaging.ChatLogActivity"
+            android:parentActivityName=".Messaging.MessagingActivity"></activity>
         <activity
             android:name=".CreateAccountActivity"
             android:label="@string/action_create"
@@ -61,7 +61,5 @@
         <activity
             android:name=".poseestimation.CameraActivity"
             android:screenOrientation="nosensor" />
-
-        <receiver android:name=".AlarmReceiver" />
     </application>
 </manifest>
