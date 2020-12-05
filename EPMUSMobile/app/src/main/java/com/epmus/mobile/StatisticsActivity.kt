@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
+import com.epmus.mobile.MongoDbService.MongoTransactions
 import com.epmus.mobile.poseestimation.ExerciceType
 import com.epmus.mobile.ui.login.realmApp
 import org.eazegraph.lib.charts.PieChart
@@ -74,7 +75,7 @@ class StatisticsActivity : AppCompatActivity() {
     }
 
     private fun setData() {
-        statisticCount.text = historic.count().toString()
+        statisticCount.text = MongoTransactions.historic.count().toString()
 
         var holdCount = 0
         var repetitionCount = 0
@@ -83,7 +84,7 @@ class StatisticsActivity : AppCompatActivity() {
         var count7 = 0
 
         val localDate = LocalDate.now()
-        historic.forEach {
+        MongoTransactions.historic.forEach {
 
             when (ExerciceType.getEnumValue(it.exerciceType)) {
                 ExerciceType.HOLD -> {
@@ -107,7 +108,7 @@ class StatisticsActivity : AppCompatActivity() {
 
         statisticCount7.text = count7.toString()
 
-        history.text = historic.count().toString()
+        history.text = MongoTransactions.historic.count().toString()
 
         pieChart.addPieSlice(
             PieModel(

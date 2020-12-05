@@ -9,8 +9,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import com.epmus.mobile.MongoDbService.MongoTransactions
 import com.epmus.mobile.R
-import com.epmus.mobile.globalExerciceList
 import com.epmus.mobile.poseestimation.ExerciceType
 
 /**
@@ -27,7 +27,7 @@ class ProgramDetailFragment : Fragment() {
 
         arguments?.let {
             if (it.containsKey(ARG_ITEM_ID)) {
-                globalExerciceList.forEach { exercice ->
+                MongoTransactions.exerciceList.forEach { exercice ->
                     if (exercice.id == it.getString(ARG_ITEM_ID)) {
                         item = exercice
                     }

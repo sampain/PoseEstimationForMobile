@@ -29,11 +29,14 @@ import java.util.concurrent.FutureTask
 
 class MongoTransactions {
     companion object {
-        private var programmesList: MutableList<programmes> = mutableListOf()
-        private var exercicesPhysiotecList: MutableList<exercicesPhysiotec> = mutableListOf()
+
+        var historic: MutableList<HistoryData> = mutableListOf()
+        var exerciceList: MutableList<ExerciceData> = mutableListOf()
         val configUserId: SyncConfiguration
         val configExercices: SyncConfiguration
-        val user: User? = realmApp.currentUser()
+        private val user: User? = realmApp.currentUser()
+        private var programmesList: MutableList<programmes> = mutableListOf()
+        private var exercicesPhysiotecList: MutableList<exercicesPhysiotec> = mutableListOf()
         private lateinit var historyListener: RealmResults<historique>
         private lateinit var programListener: RealmResults<programmes>
         private lateinit var exercicesPhysiotecListener: RealmResults<exercicesPhysiotec>
@@ -281,13 +284,13 @@ class MongoTransactions {
             programListener = realmUserId.where<programmes>().findAllAsync()
             programListener.addChangeListener { collection, _ ->
                 programmesList = realmUserId.copyFromRealm(collection)
-                globalExerciceList = exerciceList()
+                exerciceList = exerciceList()
             }
 
             exercicesPhysiotecListener = realmExercices.where<exercicesPhysiotec>().findAllAsync()
             exercicesPhysiotecListener.addChangeListener { collection, _ ->
                 exercicesPhysiotecList = realmExercices.copyFromRealm(collection)
-                globalExerciceList = exerciceList()
+                exerciceList = exerciceList()
             }
         }
 
@@ -404,6 +407,7 @@ class MongoTransactions {
         }
     }
 }
+
 
 open class historique(
     _exerciceName: String = "",

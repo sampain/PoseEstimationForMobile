@@ -14,7 +14,6 @@ import androidx.annotation.StringRes
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.epmus.mobile.MongoDbService.MongoTransactions
 import com.epmus.mobile.ui.login.*
 import io.realm.mongodb.Credentials
 import io.realm.mongodb.mongo.MongoClient
@@ -217,7 +216,7 @@ class CreateAccountActivity : AppCompatActivity() {
                         startActivity(intent)
                         finish()
 
-                        if (MongoTransactions.user?.customData?.get("_id") == null) {
+                        if (realmApp.currentUser()?.customData?.get("_id") == null) {
                             Toast.makeText(
                                 applicationContext,
                                 "Il y a eu une erreur lors de la création du compte",

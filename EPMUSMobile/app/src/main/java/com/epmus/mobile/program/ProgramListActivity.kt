@@ -13,6 +13,7 @@ import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.RecyclerView
 import com.epmus.mobile.*
 import com.epmus.mobile.Messaging.MessagingActivity
+import com.epmus.mobile.MongoDbService.MongoTransactions
 import com.epmus.mobile.poseestimation.CameraActivity
 import com.epmus.mobile.poseestimation.ExerciceType
 import com.epmus.mobile.poseestimation.ExerciceTypeUI
@@ -98,7 +99,7 @@ class ProgramListActivity : AppCompatActivity() {
 
     private fun setupRecyclerView(recyclerView: RecyclerView) {
         recyclerView.adapter =
-            SimpleItemRecyclerViewAdapter(this, globalExerciceList, twoPane)
+            SimpleItemRecyclerViewAdapter(this, MongoTransactions.exerciceList, twoPane)
     }
 
     class SimpleItemRecyclerViewAdapter(

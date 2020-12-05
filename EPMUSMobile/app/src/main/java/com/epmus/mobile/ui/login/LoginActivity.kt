@@ -14,7 +14,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.epmus.mobile.CreateAccountActivity
 import com.epmus.mobile.MainMenuActivity
-import com.epmus.mobile.MongoDbService.MongoTransactions
 import com.epmus.mobile.R
 import io.realm.mongodb.Credentials
 import io.realm.mongodb.mongo.MongoClient
@@ -168,7 +167,7 @@ class LoginActivity : AppCompatActivity() {
                 ).show()
             } else {
                 val user = realmApp.currentUser()
-                if (MongoTransactions.user?.customData?.get("_id") == null) {
+                if (realmApp.currentUser()?.customData?.get("_id") == null) {
                     findAndUpdateCustomData(username, password)
                 } else {
                     loginViewModel.login(user)
