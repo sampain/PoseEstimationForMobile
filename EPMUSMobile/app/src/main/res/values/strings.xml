@@ -56,6 +56,7 @@
     <string name="application_settings">Options de l\'application</string>
     <string name="language">Langue</string>
     <string name="audio_setting">Désactiver l\'audio</string>
+    <string name="alarms_setting">Désactiver les alarmes</string>
 
     <string name="message_hint">Écrire votre message</string>
     <string name="send">Envoyer</string>

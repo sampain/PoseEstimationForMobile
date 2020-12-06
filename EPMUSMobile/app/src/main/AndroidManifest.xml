@@ -61,5 +61,6 @@
         <activity
             android:name=".poseestimation.CameraActivity"
             android:screenOrientation="nosensor" />
+        <receiver android:name=".AlarmReceiver" />
     </application>
 </manifest>

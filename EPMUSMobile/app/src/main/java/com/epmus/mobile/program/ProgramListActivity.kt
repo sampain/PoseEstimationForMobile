@@ -1,5 +1,9 @@
 package com.epmus.mobile.program
 
+import android.app.AlarmManager
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -9,6 +13,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.widget.NestedScrollView
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import com.epmus.mobile.*
 import com.epmus.mobile.messaging.MessagingActivity
@@ -18,6 +23,8 @@ import com.epmus.mobile.poseestimation.ExerciseType
 import com.epmus.mobile.poseestimation.ExerciseTypeUI
 import com.epmus.mobile.ui.login.realmApp
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import java.time.DayOfWeek
+import java.util.*
 import kotlin.system.exitProcess
 
 /**
@@ -35,6 +42,14 @@ class ProgramListActivity : AppCompatActivity() {
      * device.
      */
     private var twoPane: Boolean = false
+    private var notificationManager: NotificationManager? = null
+    val monday: MutableList<String> = mutableListOf()
+    val tuesday: MutableList<String> = mutableListOf()
+    val wednesday: MutableList<String> = mutableListOf()
+    val thursday: MutableList<String> = mutableListOf()
+    val friday: MutableList<String> = mutableListOf()
+    val saturday: MutableList<String> = mutableListOf()
+    val sunday: MutableList<String> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +75,7 @@ class ProgramListActivity : AppCompatActivity() {
 
         //Fill exercise list
         setupRecyclerView(findViewById(R.id.program_list))
+        getExerciseDay()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -92,15 +108,15 @@ class ProgramListActivity : AppCompatActivity() {
 
     private fun setupRecyclerView(recyclerView: RecyclerView) {
         recyclerView.adapter =
-                SimpleItemRecyclerViewAdapter(this, MongoTransactions.exerciseList, twoPane)
+            SimpleItemRecyclerViewAdapter(this, MongoTransactions.exerciseList, twoPane)
     }
 
     class SimpleItemRecyclerViewAdapter(
-            private val parentActivity: ProgramListActivity,
-            private val values: List<ExerciseData>,
-            private val twoPane: Boolean
+        private val parentActivity: ProgramListActivity,
+        private val values: List<ExerciseData>,
+        private val twoPane: Boolean
     ) :
-            RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder>() {
+        RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder>() {
 
         private val onClickListenerDetails: View.OnClickListener
         private val onClickListenerPlay: View.OnClickListener
@@ -123,9 +139,9 @@ class ProgramListActivity : AppCompatActivity() {
                         }
                     }
                     parentActivity.supportFragmentManager
-                            .beginTransaction()
-                            .replace(R.id.program_detail_container, fragment)
-                            .commit()
+                        .beginTransaction()
+                        .replace(R.id.program_detail_container, fragment)
+                        .commit()
                 } else {
                     val intent = Intent(v.context, ProgramDetailActivity::class.java).apply {
                         putExtra(ProgramDetailFragment.ARG_ITEM_ID, item)
@@ -137,7 +153,7 @@ class ProgramListActivity : AppCompatActivity() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.program_list_content, parent, false)
+                .inflate(R.layout.program_list_content, parent, false)
             return ViewHolder(view)
         }
 
@@ -145,7 +161,7 @@ class ProgramListActivity : AppCompatActivity() {
             val item = values[position]
             holder.idView.text = item.name
             holder.contentView.text =
-                    ExerciseTypeUI.getEnumValue(item.exercise.exerciseType.toString()).toString()
+                ExerciseTypeUI.getEnumValue(item.exercise.exerciseType.toString()).toString()
 
             when (item.exercise.exerciseType) {
                 ExerciseType.HOLD -> {
@@ -180,5 +196,330 @@ class ProgramListActivity : AppCompatActivity() {
             val contentView: TextView = view.findViewById(R.id.content)
             val imageButton: ImageButton = view.findViewById(R.id.playButton)
         }
+    }
+
+    private fun createAlarms() {
+        val repeatInterval = AlarmManager.INTERVAL_DAY * 7
+
+        // 12h00
+        val hourOfDay = 12
+        val minuteOfDay = 0
+
+        val calendarMonday: Calendar = Calendar.getInstance().apply {
+            timeInMillis = System.currentTimeMillis()
+            set(Calendar.HOUR_OF_DAY, hourOfDay)
+            set(Calendar.MINUTE, minuteOfDay)
+            set(Calendar.DAY_OF_WEEK, DayOfWeek.MONDAY.ordinal)
+        }
+        val calendarTuesday: Calendar = Calendar.getInstance().apply {
+            timeInMillis = System.currentTimeMillis()
+            set(Calendar.HOUR_OF_DAY, hourOfDay)
+            set(Calendar.MINUTE, minuteOfDay)
+            set(Calendar.DAY_OF_WEEK, DayOfWeek.TUESDAY.ordinal)
+        }
+        val calendarWednesday: Calendar = Calendar.getInstance().apply {
+            timeInMillis = System.currentTimeMillis()
+            set(Calendar.HOUR_OF_DAY, hourOfDay)
+            set(Calendar.MINUTE, minuteOfDay)
+            set(Calendar.DAY_OF_WEEK, DayOfWeek.WEDNESDAY.ordinal)
+        }
+        val calendarThursday: Calendar = Calendar.getInstance().apply {
+            timeInMillis = System.currentTimeMillis()
+            set(Calendar.HOUR_OF_DAY, hourOfDay)
+            set(Calendar.MINUTE, minuteOfDay)
+            set(Calendar.DAY_OF_WEEK, DayOfWeek.THURSDAY.ordinal)
+        }
+        val calendarFriday: Calendar = Calendar.getInstance().apply {
+            timeInMillis = System.currentTimeMillis()
+            set(Calendar.HOUR_OF_DAY, hourOfDay)
+            set(Calendar.MINUTE, minuteOfDay)
+            set(Calendar.DAY_OF_WEEK, DayOfWeek.FRIDAY.ordinal)
+        }
+        val calendarSaturday: Calendar = Calendar.getInstance().apply {
+            timeInMillis = System.currentTimeMillis()
+            set(Calendar.HOUR_OF_DAY, hourOfDay)
+            set(Calendar.MINUTE, minuteOfDay)
+            set(Calendar.DAY_OF_WEEK, DayOfWeek.SATURDAY.ordinal)
+        }
+        val calendarSunday: Calendar = Calendar.getInstance().apply {
+            timeInMillis = System.currentTimeMillis()
+            set(Calendar.HOUR_OF_DAY, hourOfDay)
+            set(Calendar.MINUTE, minuteOfDay)
+            set(Calendar.DAY_OF_WEEK, DayOfWeek.SUNDAY.ordinal)
+        }
+
+
+        //Acces to saved preference (alarm on or off)
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+
+        notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager!!.cancelAll()
+
+        val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
+
+        val intent = Intent(this, AlarmReceiver::class.java)
+
+
+        // Verify if an alarm is up
+        val mondayUp = (PendingIntent.getBroadcast(
+            this,
+            NOTIFICATION_ID_MONDAY,
+            intent,
+            PendingIntent.FLAG_NO_CREATE
+        ) != null)
+
+        val tuesdayUp = (PendingIntent.getBroadcast(
+            this,
+            NOTIFICATION_ID_TUESDAY,
+            intent,
+            PendingIntent.FLAG_NO_CREATE
+        ) != null)
+
+        val wednesdayUp = (PendingIntent.getBroadcast(
+            this,
+            NOTIFICATION_ID_WEDNESDAY,
+            intent,
+            PendingIntent.FLAG_NO_CREATE
+        ) != null)
+
+        val thursdayUp = (PendingIntent.getBroadcast(
+            this,
+            NOTIFICATION_ID_THURSDAY,
+            intent,
+            PendingIntent.FLAG_NO_CREATE
+        ) != null)
+
+        val fridayUp = (PendingIntent.getBroadcast(
+            this,
+            NOTIFICATION_ID_FRIDAY,
+            intent,
+            PendingIntent.FLAG_NO_CREATE
+        ) != null)
+
+        val saturdayUp = (PendingIntent.getBroadcast(
+            this,
+            NOTIFICATION_ID_SATURDAY,
+            intent,
+            PendingIntent.FLAG_NO_CREATE
+        ) != null)
+
+        val sundayUp = (PendingIntent.getBroadcast(
+            this,
+            NOTIFICATION_ID_SUNDAY,
+            intent,
+            PendingIntent.FLAG_NO_CREATE
+        ) != null)
+
+
+        //Create alarm intent
+        val intentMonday =
+            PendingIntent.getBroadcast(
+                this,
+                NOTIFICATION_ID_MONDAY,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+            )
+
+        val intentTuesday =
+            PendingIntent.getBroadcast(
+                this,
+                NOTIFICATION_ID_TUESDAY,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+            )
+
+        val intentWednesday =
+            PendingIntent.getBroadcast(
+                this,
+                NOTIFICATION_ID_WEDNESDAY,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+            )
+
+        val intentThursday =
+            PendingIntent.getBroadcast(
+                this,
+                NOTIFICATION_ID_THURSDAY,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+            )
+
+        val intentFriday =
+            PendingIntent.getBroadcast(
+                this,
+                NOTIFICATION_ID_FRIDAY,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+            )
+
+        val intentSaturday =
+            PendingIntent.getBroadcast(
+                this,
+                NOTIFICATION_ID_SATURDAY,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+            )
+
+        val intentSunday =
+            PendingIntent.getBroadcast(
+                this,
+                NOTIFICATION_ID_SUNDAY,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+            )
+
+
+        //Create alarm
+        if (monday.isNotEmpty() && !sharedPreferences?.getBoolean("alarms_setting", false)!!) {
+            if (!mondayUp) {
+                alarmManager.setInexactRepeating(
+                    AlarmManager.RTC_WAKEUP,
+                    calendarMonday.timeInMillis, repeatInterval,
+                    intentMonday
+                )
+            }
+        } else {
+            alarmManager.cancel(intentMonday)
+        }
+
+        if (tuesday.isNotEmpty() && !sharedPreferences?.getBoolean("alarms_setting", false)!!) {
+            if (!tuesdayUp) {
+                alarmManager.setInexactRepeating(
+                    AlarmManager.RTC_WAKEUP,
+                    calendarTuesday.timeInMillis, repeatInterval,
+                    intentTuesday
+                )
+            }
+
+        } else {
+            alarmManager.cancel(intentTuesday)
+        }
+
+        if (wednesday.isNotEmpty() && !sharedPreferences?.getBoolean("alarms_setting", false)!!) {
+            if (!wednesdayUp) {
+                alarmManager.setInexactRepeating(
+                    AlarmManager.RTC_WAKEUP,
+                    calendarWednesday.timeInMillis, repeatInterval,
+                    intentWednesday
+                )
+            }
+        } else {
+            alarmManager.cancel(intentWednesday)
+        }
+
+        if (thursday.isNotEmpty() && !sharedPreferences?.getBoolean("alarms_setting", false)!!) {
+            if (!thursdayUp) {
+                alarmManager.setInexactRepeating(
+                    AlarmManager.RTC_WAKEUP,
+                    calendarThursday.timeInMillis, repeatInterval,
+                    intentThursday
+                )
+            }
+
+        } else {
+            alarmManager.cancel(intentThursday)
+        }
+
+        if (friday.isNotEmpty() && !sharedPreferences?.getBoolean("alarms_setting", false)!!) {
+            if (!fridayUp) {
+                alarmManager.setInexactRepeating(
+                    AlarmManager.RTC_WAKEUP,
+                    calendarFriday.timeInMillis, repeatInterval,
+                    intentFriday
+                )
+            }
+
+        } else {
+            alarmManager.cancel(intentFriday)
+        }
+
+        if (saturday.isNotEmpty() && !sharedPreferences?.getBoolean("alarms_setting", false)!!) {
+            if (!saturdayUp) {
+                alarmManager.setInexactRepeating(
+                    AlarmManager.RTC_WAKEUP,
+                    calendarSaturday.timeInMillis, repeatInterval,
+                    intentSaturday
+                )
+            }
+
+        } else {
+            alarmManager.cancel(intentSaturday)
+        }
+
+        if (sunday.isNotEmpty() && !sharedPreferences?.getBoolean("alarms_setting", false)!!) {
+            if (!sundayUp) {
+                alarmManager.setInexactRepeating(
+                    AlarmManager.RTC_WAKEUP,
+                    calendarSunday.timeInMillis, repeatInterval,
+                    intentSunday
+                )
+            }
+        } else {
+            alarmManager.cancel(intentSunday)
+        }
+
+        //Create notification if alarm is not disabled
+        if (!sharedPreferences?.getBoolean("alarms_setting", false)!!) {
+            createNotificationChannel()
+        }
+    }
+
+    private fun getExerciseDay() {
+        MongoTransactions.exerciseList.forEach { exerciseData ->
+            if (exerciseData.mondayAlarm) {
+                monday.add(exerciseData.name)
+            }
+            if (exerciseData.tuesdayAlarm) {
+                tuesday.add(exerciseData.name)
+            }
+            if (exerciseData.wednesdayAlarm) {
+                wednesday.add(exerciseData.name)
+            }
+            if (exerciseData.thursdayAlarm) {
+                thursday.add(exerciseData.name)
+            }
+            if (exerciseData.fridayAlarm) {
+                friday.add(exerciseData.name)
+            }
+            if (exerciseData.saturdayAlarm) {
+                saturday.add(exerciseData.name)
+            }
+            if (exerciseData.sundayAlarm) {
+                sunday.add(exerciseData.name)
+            }
+        }
+        createAlarms()
+    }
+
+    private fun createNotificationChannel() {
+
+        // Create a notification manager object.
+        notificationManager =
+            getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+
+        // Create the NotificationChannel with all the parameters.
+        val notificationChannel = NotificationChannel(
+            PRIMARY_CHANNEL_ID,
+            "Motification",
+            NotificationManager.IMPORTANCE_HIGH
+        )
+        notificationChannel.enableLights(true)
+        notificationChannel.lightColor = Color.RED
+        notificationChannel.enableVibration(true)
+
+        notificationManager!!.createNotificationChannel(notificationChannel)
+    }
+
+    companion object {
+        private const val PRIMARY_CHANNEL_ID = "primary_notification_channel"
+
+        // Notification ID.
+        private const val NOTIFICATION_ID_MONDAY = 0
+        private const val NOTIFICATION_ID_TUESDAY = 1
+        private const val NOTIFICATION_ID_WEDNESDAY = 2
+        private const val NOTIFICATION_ID_THURSDAY = 3
+        private const val NOTIFICATION_ID_FRIDAY = 4
+        private const val NOTIFICATION_ID_SATURDAY = 5
+        private const val NOTIFICATION_ID_SUNDAY = 6
     }
 }
