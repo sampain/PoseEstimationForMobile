@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
 import com.epmus.mobile.mongodbservice.MongoTransactions
-import com.epmus.mobile.poseestimation.ExerciceType
+import com.epmus.mobile.poseestimation.ExerciseType
 import com.epmus.mobile.ui.login.realmApp
 import org.eazegraph.lib.charts.PieChart
 import org.eazegraph.lib.models.PieModel
@@ -64,7 +64,7 @@ class StatisticsActivity : AppCompatActivity() {
         R.id.action_logout -> {
             realmApp.currentUser()?.logOutAsync {
                 MongoTransactions.uiThreadRealmUserId.close()
-                MongoTransactions.uiThreadRealmExercices.close()
+                MongoTransactions.uiThreadRealmExercises.close()
                 finishAffinity()
                 exitProcess(1)
             }
@@ -88,17 +88,17 @@ class StatisticsActivity : AppCompatActivity() {
         val localDate = LocalDate.now()
         MongoTransactions.exerciseHistory.forEach {
 
-            when (ExerciceType.getEnumValue(it.exerciceType)) {
-                ExerciceType.HOLD -> {
+            when (ExerciseType.getEnumValue(it.exerciseType)) {
+                ExerciseType.HOLD -> {
                     holdCount++
                 }
-                ExerciceType.REPETITION -> {
+                ExerciseType.REPETITION -> {
                     repetitionCount++
                 }
-                ExerciceType.AMPLITUDE -> {
+                ExerciseType.AMPLITUDE -> {
                     ampCount++
                 }
-                ExerciceType.CHRONO -> {
+                ExerciseType.CHRONO -> {
                     chronoCount++
                 }
             }

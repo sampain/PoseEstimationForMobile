@@ -72,8 +72,8 @@
     <string name="chono_stats">Type Chronomètre</string>
     <string name="amp_stats">Type Amplitude</string>
     <string name="summary_stats">Résumé</string>
-    <string name="exercice_stats">Nombre d\'exercices terminées</string>
-    <string name="exercice7_stats">Nombre d\'exercices terminées (7 derniers jours)</string>
+    <string name="exercise_stats">Nombre d\'exercices terminées</string>
+    <string name="exercise7_stats">Nombre d\'exercices terminées (7 derniers jours)</string>
     <string name="tempo_minimum">Tempo minimum (s) : </string>
     <string name="tempo_maximum">Tempo maximum (s) : </string>
     <string name="repet_nbr">Nombre de répétition : </string>

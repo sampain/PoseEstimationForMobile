@@ -44,7 +44,7 @@ import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
 import com.epmus.mobile.mongodbservice.MongoTransactions
 import com.epmus.mobile.R
-import com.epmus.mobile.program.ExerciceData
+import com.epmus.mobile.program.ExerciseData
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -60,8 +60,8 @@ import java.util.concurrent.TimeUnit
  */
 class Camera2BasicFragment : Fragment() {
     private var sharedPreferences: SharedPreferences? = null
-    private val rawStats = ArrayList<Exercice>()
-    private lateinit var exerciceData: ExerciceData
+    private val rawStats = ArrayList<Exercise>()
+    private lateinit var exerciseData: ExerciseData
 
     private val lock = Any()
     private var runClassifier = false
@@ -254,37 +254,24 @@ class Camera2BasicFragment : Fragment() {
         }
     }
 
-    private fun retroaction(exercise: Exercice) {
-        when (exercise.exerciceType) {
-            ExerciceType.CHRONO -> retroactionChrono(exercise)
-            ExerciceType.REPETITION -> retroactionRepetition(exercise)
-            ExerciceType.HOLD -> retroactionHold(exercise)
-            ExerciceType.AMPLITUDE -> retroactionAmplitude(exercise)
+    private fun retroaction(exercise: Exercise) {
+        when (exercise.exerciseType) {
+            ExerciseType.CHRONO -> retroactionChrono(exercise)
+            ExerciseType.REPETITION -> retroactionRepetition(exercise)
+            ExerciseType.HOLD -> retroactionHold(exercise)
+            ExerciseType.AMPLITUDE -> retroactionAmplitude(exercise)
             else -> {
             }
         }
     }
 
-    private fun retroactionAmplitude(exercise: Exercice) {
+    private fun retroactionAmplitude(exercise: Exercise) {
         if (exercise.warningCanBeDisplayed) {
             exercise.warningCanBeDisplayed = false
         }
     }
 
-    private fun retroactionChrono(exercise: Exercice) {
-        if (exercise.warningCanBeDisplayed) {
-            exercise.warningCanBeDisplayed = false
-            if (exercise.mouvementSpeedTime != null) {
-                if (exercise.mouvementSpeedTime!! < exercise.minExecutionTime!!) {
-                    playAndShowRetroaction("Ralentissez", R.raw.ralentissez)
-                } else if (exercise.mouvementSpeedTime!! > exercise.maxExecutionTime!!) {
-                    playAndShowRetroaction("Accélérez", R.raw.accelerez)
-                }
-            }
-        }
-    }
-
-    private fun retroactionRepetition(exercise: Exercice) {
+    private fun retroactionChrono(exercise: Exercise) {
         if (exercise.warningCanBeDisplayed) {
             exercise.warningCanBeDisplayed = false
             if (exercise.mouvementSpeedTime != null) {
@@ -297,7 +284,20 @@ class Camera2BasicFragment : Fragment() {
         }
     }
 
-    private fun retroactionHold(exercise: Exercice) {
+    private fun retroactionRepetition(exercise: Exercise) {
+        if (exercise.warningCanBeDisplayed) {
+            exercise.warningCanBeDisplayed = false
+            if (exercise.mouvementSpeedTime != null) {
+                if (exercise.mouvementSpeedTime!! < exercise.minExecutionTime!!) {
+                    playAndShowRetroaction("Ralentissez", R.raw.ralentissez)
+                } else if (exercise.mouvementSpeedTime!! > exercise.maxExecutionTime!!) {
+                    playAndShowRetroaction("Accélérez", R.raw.accelerez)
+                }
+            }
+        }
+    }
+
+    private fun retroactionHold(exercise: Exercise) {
         if (exercise.warningCanBeDisplayed) {
             exercise.warningCanBeDisplayed = false
             if (exercise.isHolding != null) {
@@ -364,7 +364,7 @@ class Camera2BasicFragment : Fragment() {
         }
     }
 
-    private fun showDebugValues(exercises: Exercice) {
+    private fun showDebugValues(exercises: Exercise) {
 
         var labelVitesse = ""
         if (exercises.mouvementSpeedTime != null) {
@@ -379,14 +379,14 @@ class Camera2BasicFragment : Fragment() {
 
         var text = ""
         var debug = ""
-        when (exercises.exerciceType) {
-            ExerciceType.HOLD -> {
+        when (exercises.exerciseType) {
+            ExerciseType.HOLD -> {
                 text =
                     "holdTime: " + ((exercises.holdTime + exercises.currentHoldTime) / 1000).toInt()
                 debug = "; Fini? " + exercises.exitStateReached
             }
 
-            ExerciceType.REPETITION -> {
+            ExerciseType.REPETITION -> {
                 text = "ϴ: " + exercises.movementList[0].angleAvg +
                         "; État: " + exercises.movementList[0].movementState.ordinal +
                         "; Vit.: " + exercises.mouvementSpeedTime + " s (" + labelVitesse + ")"
@@ -395,7 +395,7 @@ class Camera2BasicFragment : Fragment() {
                         "; Fini? " + exercises.exitStateReached
             }
 
-            ExerciceType.CHRONO -> {
+            ExerciseType.CHRONO -> {
                 text = "ϴ: " + exercises.movementList[0].angleAvg +
                         "; État: " + exercises.movementList[0].movementState.ordinal +
                         "; Vit.: " + exercises.mouvementSpeedTime + " s (" + labelVitesse + ")"
@@ -418,11 +418,11 @@ class Camera2BasicFragment : Fragment() {
 
     }
 
-    private fun showExerciseInformation(exercises: Exercice) {
+    private fun showExerciseInformation(exercises: Exercise) {
         var infoLeft = ""
         var infoRight = ""
-        when (exercises.exerciceType) {
-            ExerciceType.HOLD -> {
+        when (exercises.exerciseType) {
+            ExerciseType.HOLD -> {
                 val holdValue = if (exercises.isHolding) {
                     "<font color='#00A600'>" + ((exercises.holdTime + exercises.currentHoldTime) / 1000).toInt() +
                             "</font>/" + exercises.targetHoldTime
@@ -435,13 +435,13 @@ class Camera2BasicFragment : Fragment() {
                 infoLeft = "Temps maintenu: $holdValue"
             }
 
-            ExerciceType.REPETITION -> {
+            ExerciseType.REPETITION -> {
                 infoLeft =
                     "Nombre de répétition: " + exercises.numberOfRepetition + "/" + exercises.numberOfRepetitionToDo
                 infoRight = ""
             }
 
-            ExerciceType.CHRONO -> {
+            ExerciseType.CHRONO -> {
                 infoLeft = "Temps restant: " + exercises.chronoTime!!
                 infoRight = "Nombre de répétition: " + exercises.numberOfRepetition
             }
@@ -481,8 +481,8 @@ class Camera2BasicFragment : Fragment() {
         layoutFrame = view.findViewById(R.id.layout_frame)
         drawView = view.findViewById(R.id.drawview)
 
-        exerciceData = activity?.intent?.extras?.getParcelable("exercice")!!
-        drawView!!.exercice = exerciceData.exercice
+        exerciseData = activity?.intent?.extras?.getParcelable("exercise")!!
+        drawView!!.exercise = exerciseData.exercise
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.context)
     }
 
@@ -896,30 +896,30 @@ class Camera2BasicFragment : Fragment() {
         drawView!!.setDrawPoint(classifier!!.mPrintPointArray!!, 0.5f)
 
         //initialize bodyparts
-        if (drawView!!.exercice!!.initList.count() == 0) {
+        if (drawView!!.exercise!!.initList.count() == 0) {
             repeat(enumValues<BodyPart>().count()) {
                 val pF = PointF(-1.0f, -1.0f)
                 val aList = arrayListOf(pF)
-                drawView!!.exercice!!.initList.add(aList)
-                drawView!!.exercice!!.notMovingInitList.add(false)
+                drawView!!.exercise!!.initList.add(aList)
+                drawView!!.exercise!!.notMovingInitList.add(false)
             }
         }
 
-        drawView!!.exercice!!.updateTimeStamp(drawView!!)
+        drawView!!.exercise!!.updateTimeStamp(drawView!!)
 
 
         //if not initialized yet
-        if (drawView!!.exercice?.isInit == false) {
+        if (drawView!!.exercise?.isInit == false) {
             showToast("")
             showDebugUI("")
-            rawStats.add(drawView!!.exercice!!.copy())
+            rawStats.add(drawView!!.exercise!!.copy())
 
-            drawView!!.exercice?.initialisationVerification(drawView!!)
+            drawView!!.exercise?.initialisationVerification(drawView!!)
             //debug
-            if (drawView!!.exercice!!.initList[0].count() > 1) {
+            if (drawView!!.exercise!!.initList[0].count() > 1) {
                 // show timer to start
-                if (drawView!!.exercice!!.notMovingTimer < drawView!!.exercice!!.targetTime.toInt() / 1000 &&
-                    drawView!!.exercice!!.notMovingTimer >= 0
+                if (drawView!!.exercise!!.notMovingTimer < drawView!!.exercise!!.targetTime.toInt() / 1000 &&
+                    drawView!!.exercise!!.notMovingTimer >= 0
                 ) {
                     val activity = activity
                     activity?.runOnUiThread {
@@ -928,7 +928,7 @@ class Camera2BasicFragment : Fragment() {
                         textViewBackground!!.alpha = 0.5F
 
                         val textViewCountdown: TextView? = view?.findViewById(R.id.countdown)
-                        textViewCountdown!!.text = drawView!!.exercice!!.notMovingTimer.toString()
+                        textViewCountdown!!.text = drawView!!.exercise!!.notMovingTimer.toString()
                         textViewCountdown.alpha = 1.0F
 
                         val textViewInstruction: TextView? = view?.findViewById(R.id.instructions)
@@ -955,7 +955,7 @@ class Camera2BasicFragment : Fragment() {
             }
         }
         // Done -> exit exercise
-        else if (drawView!!.exercice!!.exitStateReached && !isClosing) {
+        else if (drawView!!.exercise!!.exitStateReached && !isClosing) {
             isClosing = true
 
             adjustStats(rawStats)
@@ -1010,17 +1010,17 @@ class Camera2BasicFragment : Fragment() {
             }
 
             // Verify angle
-            drawView!!.exercice!!.exerciceVerification(drawView!!)
+            drawView!!.exercise!!.exerciseVerification(drawView!!)
 
             if (debugMode) {
-                showDebugValues(drawView!!.exercice!!)
+                showDebugValues(drawView!!.exercise!!)
             }
 
-            showExerciseInformation(drawView!!.exercice!!)
+            showExerciseInformation(drawView!!.exercise!!)
 
-            retroaction(drawView!!.exercice!!)
+            retroaction(drawView!!.exercise!!)
 
-            rawStats.add(drawView!!.exercice!!.copy())
+            rawStats.add(drawView!!.exercise!!.copy())
         }
     }
 
@@ -1031,16 +1031,16 @@ class Camera2BasicFragment : Fragment() {
     }
 
 
-    private fun adjustStats(s: ArrayList<Exercice>) {
-        val cleanStats = ExerciceStatistique()
+    private fun adjustStats(s: ArrayList<Exercise>) {
+        val cleanStats = ExerciseStatistics()
 
-        cleanStats.exerciceID = exerciceData.id
-        cleanStats.exerciceName = exerciceData.name
-        cleanStats.exerciceType = exerciceData.exercice.exerciceType.toString()
+        cleanStats.exerciseID = exerciseData.id
+        cleanStats.exerciseName = exerciseData.name
+        cleanStats.exerciseType = exerciseData.exercise.exerciseType.toString()
 
         // initialize the movements list
         val tmpMovStats = MovementStatistics()
-        repeat(drawView!!.exercice!!.movementList.size) {
+        repeat(drawView!!.exercise!!.movementList.size) {
             cleanStats.movements.add(tmpMovStats)
         }
 
@@ -1049,15 +1049,15 @@ class Camera2BasicFragment : Fragment() {
         cleanStats.maxAngleAmplitude = s[cpt - 1].maxAngleReached
 
         cleanStats.initStartTime = convertLongToTime(s[cpt - 1].initStartTimer!!)
-        cleanStats.exerciceStartTime = convertLongToTime(s[cpt - 1].exerciceStartTime!!)
-        cleanStats.exerciceEndTime = convertLongToTime(s[cpt - 1].exerciceEndTime!!)
+        cleanStats.exerciseStartTime = convertLongToTime(s[cpt - 1].exerciseStartTime!!)
+        cleanStats.exerciseEndTime = convertLongToTime(s[cpt - 1].exerciseEndTime!!)
 
         // Remove few values to have around 5 fps for bodyPart.
         // Needed or the the insert to DB will make the DB crash
         val delayOfFrameTarget: Long = 170 // ~5fps
         var delayTimer: Long = s[0].timeStamp!!
 
-        var exerciceStarted = false
+        var exerciseStarted = false
         var lastRepetition = -1
         var isHolding = false
         val lastState = ArrayList<MovementState?>()
@@ -1066,14 +1066,14 @@ class Camera2BasicFragment : Fragment() {
         }
         // Add all infos
         s.forEach {
-            if (exerciceStarted) {
-                if (cleanStats.exerciceType == "REPETITION" || cleanStats.exerciceType == "CHRONO") {
+            if (exerciseStarted) {
+                if (cleanStats.exerciseType == "REPETITION" || cleanStats.exerciseType == "CHRONO") {
                     if (lastRepetition != it.numberOfRepetition) {
                         cleanStats.timestampOfRepetition.add(convertLongToTime(it.timeStamp!!))
                         cleanStats.numberOfRepetition.add(it.numberOfRepetition)
                         lastRepetition = it.numberOfRepetition
                     }
-                } else if (cleanStats.exerciceType == "HOLD") {
+                } else if (cleanStats.exerciseType == "HOLD") {
                     if (isHolding != it.isHolding) {
                         if (it.isHolding) {
                             cleanStats.holdTimeStartTime.add(convertLongToTime(it.timeStamp!!))
@@ -1084,13 +1084,13 @@ class Camera2BasicFragment : Fragment() {
                     }
                 }
             } else {
-                if (it.exerciceStartTime != null) {
-                    if (cleanStats.exerciceType == "REPETITION" || cleanStats.exerciceType == "CHRONO") {
+                if (it.exerciseStartTime != null) {
+                    if (cleanStats.exerciseType == "REPETITION" || cleanStats.exerciseType == "CHRONO") {
                         cleanStats.timestampOfRepetition.add(convertLongToTime(it.timeStamp!!))
                         cleanStats.numberOfRepetition.add(0)
                         lastRepetition = 0
                     }
-                    exerciceStarted = true
+                    exerciseStarted = true
                 }
             }
 
@@ -1102,7 +1102,7 @@ class Camera2BasicFragment : Fragment() {
                 }
             }
 
-            if (exerciceStarted) {
+            if (exerciseStarted) {
                 if (it.timeStamp!! >= delayTimer) {
                     cleanStats.bodyPartPos.HEAD.add(PointPos(it.bp.HEAD.X, it.bp.HEAD.Y))
                     cleanStats.bodyPartPos.NECK.add(PointPos(it.bp.NECK.X, it.bp.NECK.Y))
@@ -1134,11 +1134,11 @@ class Camera2BasicFragment : Fragment() {
             }
         }
 
-        cleanStats.avgFps = ((s[cpt - 1].exerciceEndTime!!.toDouble() -
-                s[cpt - 1].exerciceStartTime!!.toDouble()) / 1000)
+        cleanStats.avgFps = ((s[cpt - 1].exerciseEndTime!!.toDouble() -
+                s[cpt - 1].exerciseStartTime!!.toDouble()) / 1000)
         cleanStats.avgFps = cleanStats.bodyPartPos.HEAD.count() / cleanStats.avgFps
 
-        cleanStats.holdtime = exerciceData.exercice.targetHoldTime.toString()
+        cleanStats.holdtime = exerciseData.exercise.targetHoldTime.toString()
 
         MongoTransactions.historyEntry(cleanStats)
 
@@ -1288,7 +1288,7 @@ class Camera2BasicFragment : Fragment() {
             val myFragment = Camera2BasicFragment()
 
             val args = Bundle()
-            args.putParcelable("exercice", exerice)
+            args.putParcelable("exercise", exerice)
             myFragment.arguments = args
 
             return myFragment

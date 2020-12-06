@@ -3,10 +3,10 @@ package com.epmus.mobile.mongodbservice
 import com.epmus.mobile.*
 import com.epmus.mobile.messaging.MessagingUser
 import com.epmus.mobile.poseestimation.BodyPart
-import com.epmus.mobile.poseestimation.ExerciceStatistique
-import com.epmus.mobile.poseestimation.ExerciceType
+import com.epmus.mobile.poseestimation.ExerciseStatistics
+import com.epmus.mobile.poseestimation.ExerciseType
 import com.epmus.mobile.poseestimation.Movement
-import com.epmus.mobile.program.ExerciceData
+import com.epmus.mobile.program.ExerciseData
 import com.epmus.mobile.ui.login.realmApp
 import io.realm.Realm
 import io.realm.RealmList
@@ -36,12 +36,12 @@ class MongoTransactions {
     companion object {
 
         var exerciseHistory: MutableList<HistoryData> = mutableListOf()
-        var exerciceList: MutableList<ExerciceData> = mutableListOf()
+        var exerciseList: MutableList<ExerciseData> = mutableListOf()
         var physioList: MutableList<MessagingUser> = mutableListOf()
         var uiThreadRealmUserId: Realm
-        var uiThreadRealmExercices: Realm
+        var uiThreadRealmExercises: Realm
         private val configUserId: SyncConfiguration
-        private val configExercices: SyncConfiguration
+        private val configExercises: SyncConfiguration
         private var programmesList: MutableList<programmes> = mutableListOf()
         private var exercicesPhysiotecList: MutableList<exercicesPhysiotec> = mutableListOf()
         private lateinit var historyListener: RealmResults<historique>
@@ -52,9 +52,9 @@ class MongoTransactions {
             val user: User? = realmApp.currentUser()
             configUserId =
                     SyncConfiguration.Builder(user, user?.customData?.get("_id").toString()).build()
-            configExercices = SyncConfiguration.Builder(user, "exercices").build()
+            configExercises = SyncConfiguration.Builder(user, "exercices").build()
             uiThreadRealmUserId = Realm.getInstance(configUserId)
-            uiThreadRealmExercices = Realm.getInstance(configExercices)
+            uiThreadRealmExercises = Realm.getInstance(configExercises)
             addChangeListenerToRealm()
 
             val physios = user?.customData?.get("physio_associe") as List<String>
@@ -77,23 +77,23 @@ class MongoTransactions {
             }
         }
 
-        fun historyEntry(stats: ExerciceStatistique) {
-            val exerciceType = stats.exerciceType
-            val exerciceTypeEnum = ExerciceType.getEnumValue(exerciceType)
+        fun historyEntry(stats: ExerciseStatistics) {
+            val exerciseType = stats.exerciseType
+            val exerciseTypeEnum = ExerciseType.getEnumValue(exerciseType)
 
             val nbrRepetitionOrHoldTime: String
 
-            if (exerciceTypeEnum == ExerciceType.HOLD) {
+            if (exerciseTypeEnum == ExerciseType.HOLD) {
                 nbrRepetitionOrHoldTime = stats.holdtime.toString()
-            } else if (exerciceTypeEnum == ExerciceType.AMPLITUDE) {
+            } else if (exerciseTypeEnum == ExerciseType.AMPLITUDE) {
                 nbrRepetitionOrHoldTime = stats.maxAngleAmplitude.toString()
             } else {
                 nbrRepetitionOrHoldTime = stats.numberOfRepetition.last().toString()
             }
 
             val dates = SimpleDateFormat("yyyy-mm-dd hh:mm:ss")
-            val timeEnd: Date? = dates.parse(stats.exerciceEndTime!!)
-            val timeStart: Date? = dates.parse(stats.exerciceStartTime!!)
+            val timeEnd: Date? = dates.parse(stats.exerciseEndTime!!)
+            val timeStart: Date? = dates.parse(stats.exerciseStartTime!!)
 
             var timeDiff: Long = 0
             if (timeEnd != null && timeStart != null) {
@@ -102,8 +102,8 @@ class MongoTransactions {
 
             val histoEntry =
                     historique(
-                            stats.exerciceName,
-                            exerciceType,
+                            stats.exerciseName,
+                            exerciseType,
                             stats.initStartTime,
                             formatTime(timeDiff),
                             nbrRepetitionOrHoldTime
@@ -120,7 +120,7 @@ class MongoTransactions {
             executorService.execute(task)
         }
 
-        fun insertStatistics(stats: ExerciceStatistique) {
+        fun insertStatistics(stats: ExerciseStatistics) {
             //TODO Pretreat the data, realm will have an error if the realmlist is too long
             val maxArray = 50
 
@@ -250,17 +250,17 @@ class MongoTransactions {
 
 
             val statistics = statistics(
-                    stats.exerciceName,
-                    stats.exerciceType,
-                    stats.exerciceID,
+                    stats.exerciseName,
+                    stats.exerciseType,
+                    stats.exerciseID,
                     timestampOfRepetition,
                     numberOfRepetition,
                     holdTimeStartTime,
                     holdTimeEndTime,
                     stats.maxAngleAmplitude,
                     stats.initStartTime,
-                    stats.exerciceStartTime,
-                    stats.exerciceEndTime,
+                    stats.exerciseStartTime,
+                    stats.exerciseEndTime,
                     movementRealm,
                     stats.avgFps,
                     bodypartObj
@@ -312,14 +312,14 @@ class MongoTransactions {
             programListener = uiThreadRealmUserId.where<programmes>().findAllAsync()
             programListener.addChangeListener { collection, _ ->
                 programmesList = uiThreadRealmUserId.copyFromRealm(collection)
-                exerciceList = exerciceList()
+                exerciseList = exerciseList()
             }
 
             exercicesPhysiotecListener =
-                    uiThreadRealmExercices.where<exercicesPhysiotec>().findAllAsync()
+                    uiThreadRealmExercises.where<exercicesPhysiotec>().findAllAsync()
             exercicesPhysiotecListener.addChangeListener { collection, _ ->
-                exercicesPhysiotecList = uiThreadRealmExercices.copyFromRealm(collection)
-                exerciceList = exerciceList()
+                exercicesPhysiotecList = uiThreadRealmExercises.copyFromRealm(collection)
+                exerciseList = exerciseList()
             }
         }
 
@@ -342,67 +342,67 @@ class MongoTransactions {
             return cleanTime
         }
 
-        private fun exerciceList(): MutableList<ExerciceData> {
-            val exerciceDataList: MutableList<ExerciceData> = mutableListOf()
+        private fun exerciseList(): MutableList<ExerciseData> {
+            val exerciseDataList: MutableList<ExerciseData> = mutableListOf()
             val currentProgrammesList = programmesList
-            val currentExerciceList = exercicesPhysiotecList
+            val currentExerciseList = exercicesPhysiotecList
             currentProgrammesList.forEach { programme ->
-                programme.exercices?.forEach { exerciceProgram ->
-                    currentExerciceList.forEach { exercice ->
-                        val exerciceData = ExerciceData()
-                        if (exerciceProgram.exerciceId == exercice._id.toString()) {
-                            exerciceData.mondayAlarm = exerciceProgram.lundi ?: false
-                            exerciceData.tuesdayAlarm = exerciceProgram.mardi ?: false
-                            exerciceData.wednesdayAlarm = exerciceProgram.mercredi ?: false
-                            exerciceData.thursdayAlarm = exerciceProgram.jeudi ?: false
-                            exerciceData.fridayAlarm = exerciceProgram.vendredi ?: false
-                            exerciceData.saturdayAlarm = exerciceProgram.samedi ?: false
-                            exerciceData.sundayAlarm = exerciceProgram.dimanche ?: false
-                            exerciceData.exercice.minExecutionTime =
-                                    exerciceProgram.tempo?.min?.toFloat() ?: 0F
-                            exerciceData.exercice.maxExecutionTime =
-                                    exerciceProgram.tempo?.max?.toFloat() ?: 9999F
-                            exerciceData.id = exerciceProgram.exerciceId
-                            exerciceData.imagePath = exercice.imagePath
-                            exerciceData.name = exerciceProgram.nom
-                            exerciceData.description = exerciceProgram.description
-                            exerciceData.exercice.exerciceType =
-                                    ExerciceType.getEnumValue(exercice.type.toUpperCase(Locale.ROOT))
-                                            ?: ExerciceType.REPETITION
-                            exerciceData.exercice.targetHoldTime = exerciceProgram.tenir ?: 0
-                            exerciceData.exercice.numberOfRepetitionToDo =
-                                    exerciceProgram.repetition ?: 0
-                            exerciceData.exercice.allowedTimeForExercice =
-                                    exerciceProgram.duree ?: 0
-                            exercice.movements?.forEachIndexed { index, movementValue ->
+                programme.exercices?.forEach { exerciseProgram ->
+                    currentExerciseList.forEach { exercise ->
+                        val exerciseData = ExerciseData()
+                        if (exerciseProgram.exerciceId == exercise._id.toString()) {
+                            exerciseData.mondayAlarm = exerciseProgram.lundi ?: false
+                            exerciseData.tuesdayAlarm = exerciseProgram.mardi ?: false
+                            exerciseData.wednesdayAlarm = exerciseProgram.mercredi ?: false
+                            exerciseData.thursdayAlarm = exerciseProgram.jeudi ?: false
+                            exerciseData.fridayAlarm = exerciseProgram.vendredi ?: false
+                            exerciseData.saturdayAlarm = exerciseProgram.samedi ?: false
+                            exerciseData.sundayAlarm = exerciseProgram.dimanche ?: false
+                            exerciseData.exercise.minExecutionTime =
+                                    exerciseProgram.tempo?.min?.toFloat() ?: 0F
+                            exerciseData.exercise.maxExecutionTime =
+                                    exerciseProgram.tempo?.max?.toFloat() ?: 9999F
+                            exerciseData.id = exerciseProgram.exerciceId
+                            exerciseData.imagePath = exercise.imagePath
+                            exerciseData.name = exerciseProgram.nom
+                            exerciseData.description = exerciseProgram.description
+                            exerciseData.exercise.exerciseType =
+                                    ExerciseType.getEnumValue(exercise.type.toUpperCase(Locale.ROOT))
+                                            ?: ExerciseType.REPETITION
+                            exerciseData.exercise.targetHoldTime = exerciseProgram.tenir ?: 0
+                            exerciseData.exercise.numberOfRepetitionToDo =
+                                    exerciseProgram.repetition ?: 0
+                            exerciseData.exercise.allowedTimeForExercise =
+                                    exerciseProgram.duree ?: 0
+                            exercise.movements?.forEachIndexed { index, movementValue ->
                                 val movement = Movement(
                                         BodyPart.getEnumValue(movementValue.bodyPart0)?.ordinal!!,
                                         BodyPart.getEnumValue(movementValue.bodyPart1)?.ordinal!!,
                                         BodyPart.getEnumValue(movementValue.bodyPart2)?.ordinal!!
                                 )
                                 if (index == 0) {
-                                    if (exerciceData.exercice.exerciceType == ExerciceType.HOLD) {
-                                        movement.endingAngle = exerciceProgram.angle?.hold ?: 0
+                                    if (exerciseData.exercise.exerciseType == ExerciseType.HOLD) {
+                                        movement.endingAngle = exerciseProgram.angle?.hold ?: 0
                                     } else {
-                                        movement.endingAngle = exerciceProgram.angle?.fin ?: 0
+                                        movement.endingAngle = exerciseProgram.angle?.fin ?: 0
                                     }
-                                    movement.startingAngle = exerciceProgram.angle?.debut ?: 0
+                                    movement.startingAngle = exerciseProgram.angle?.debut ?: 0
                                     movement.isAngleClockWise =
-                                            exerciceProgram.angle?.isClockWise ?: false
+                                            exerciseProgram.angle?.isClockWise ?: false
                                 } else {
-                                    movement.startingAngle = exerciceProgram.angle2?.debut ?: 0
-                                    movement.endingAngle = exerciceProgram.angle2?.fin ?: 0
+                                    movement.startingAngle = exerciseProgram.angle2?.debut ?: 0
+                                    movement.endingAngle = exerciseProgram.angle2?.fin ?: 0
                                     movement.isAngleClockWise =
-                                            exerciceProgram.angle2?.isClockWise ?: false
+                                            exerciseProgram.angle2?.isClockWise ?: false
                                 }
-                                exerciceData.exercice.movementList.add(movement)
+                                exerciseData.exercise.movementList.add(movement)
                             }
-                            exerciceDataList.add(exerciceData)
+                            exerciseDataList.add(exerciseData)
                         }
                     }
                 }
             }
-            return exerciceDataList
+            return exerciseDataList
         }
     }
 

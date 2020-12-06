@@ -13,8 +13,8 @@ import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.epmus.mobile.mongodbservice.MongoTransactions
-import com.epmus.mobile.poseestimation.ExerciceType
-import com.epmus.mobile.poseestimation.ExerciceTypeUI
+import com.epmus.mobile.poseestimation.ExerciseType
+import com.epmus.mobile.poseestimation.ExerciseTypeUI
 import com.epmus.mobile.ui.login.realmApp
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -54,7 +54,7 @@ class HistoryActivity : AppCompatActivity() {
         R.id.action_logout -> {
             realmApp.currentUser()?.logOutAsync {
                 MongoTransactions.uiThreadRealmUserId.close()
-                MongoTransactions.uiThreadRealmExercices.close()
+                MongoTransactions.uiThreadRealmExercises.close()
                 finishAffinity()
                 exitProcess(1)
             }
@@ -72,9 +72,9 @@ class HistoryActivity : AppCompatActivity() {
     }
 
     class SimpleItemRecyclerViewAdapter(
-            private val values: List<HistoryData>,
+        private val values: List<HistoryData>,
     ) :
-            RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder>() {
+        RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder>() {
 
         private val onClickListenerDetails: View.OnClickListener
 
@@ -86,8 +86,8 @@ class HistoryActivity : AppCompatActivity() {
                     moreDetails.visibility = View.GONE
                 } else {
                     TransitionManager.beginDelayedTransition(
-                            v as CardView,
-                            AutoTransition()
+                        v as CardView,
+                        AutoTransition()
                     )
                     moreDetails.visibility = View.VISIBLE
                 }
@@ -96,41 +96,41 @@ class HistoryActivity : AppCompatActivity() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.history_list_content, parent, false)
+                .inflate(R.layout.history_list_content, parent, false)
             return ViewHolder(view)
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val item = values[position]
-            holder.idView.text = item.exerciceName
+            holder.idView.text = item.exerciseName
             holder.contentView.text = item.date.toString()
-            holder.exerciceType.text = ExerciceTypeUI.getEnumValue(item.exerciceType).toString()
+            holder.exerciseType.text = ExerciseTypeUI.getEnumValue(item.exerciseType).toString()
             holder.time.text = item.duree
             holder.nbr.text = item.nbrRepetitionOrHoldTime
 
             val formatterTo = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
             holder.contentView.text = item.date?.format(formatterTo) ?: ""
 
-            when (ExerciceType.getEnumValue(item.exerciceType)) {
-                ExerciceType.HOLD -> {
+            when (ExerciseType.getEnumValue(item.exerciseType)) {
+                ExerciseType.HOLD -> {
                     holder.nbrText.text = "Temps soutenu"
                     holder.idView.setTextColor(Color.parseColor("#66BB6A"))
-                    holder.exerciceType.setTextColor(Color.parseColor("#66BB6A"))
+                    holder.exerciseType.setTextColor(Color.parseColor("#66BB6A"))
                 }
-                ExerciceType.REPETITION -> {
+                ExerciseType.REPETITION -> {
                     holder.nbrText.text = "Nombre de répétitions"
                     holder.idView.setTextColor(Color.parseColor("#FF9800"))
-                    holder.exerciceType.setTextColor(Color.parseColor("#FF9800"))
+                    holder.exerciseType.setTextColor(Color.parseColor("#FF9800"))
                 }
-                ExerciceType.CHRONO -> {
+                ExerciseType.CHRONO -> {
                     holder.nbrText.text = "Nombre de répétitions"
                     holder.idView.setTextColor(Color.parseColor("#29B6F6"))
-                    holder.exerciceType.setTextColor(Color.parseColor("#29B6F6"))
+                    holder.exerciseType.setTextColor(Color.parseColor("#29B6F6"))
                 }
-                ExerciceType.AMPLITUDE -> {
+                ExerciseType.AMPLITUDE -> {
                     holder.nbrText.text = "Angle maximal (°)"
                     holder.idView.setTextColor(Color.parseColor("#774C55"))
-                    holder.exerciceType.setTextColor(Color.parseColor("#774C55"))
+                    holder.exerciseType.setTextColor(Color.parseColor("#774C55"))
                 }
             }
 
@@ -145,7 +145,7 @@ class HistoryActivity : AppCompatActivity() {
         inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             val idView: TextView = view.findViewById(R.id.id_text_history)
             val contentView: TextView = view.findViewById(R.id.content_history)
-            val exerciceType: TextView = view.findViewById(R.id.history_type)
+            val exerciseType: TextView = view.findViewById(R.id.history_type)
             val time: TextView = view.findViewById(R.id.history_time)
             val nbr: TextView = view.findViewById(R.id.history_nbr)
             val nbrText: TextView = view.findViewById(R.id.history_nbr_text)
@@ -155,19 +155,19 @@ class HistoryActivity : AppCompatActivity() {
 }
 
 class HistoryData(
-        _exerciceName: String = "",
-        _exerciceType: String = "",
-        _date: LocalDateTime? = null,
-        _duree: String = "",
-        _nbrRepetitionOrHoldTime: String = ""
+    _exerciseName: String = "",
+    _exerciseType: String = "",
+    _date: LocalDateTime? = null,
+    _duree: String = "",
+    _nbrRepetitionOrHoldTime: String = ""
 ) {
     var date = _date
 
     var duree = _duree
 
-    var exerciceName = _exerciceName
+    var exerciseName = _exerciseName
 
-    var exerciceType = _exerciceType
+    var exerciseType = _exerciseType
 
     var nbrRepetitionOrHoldTime = _nbrRepetitionOrHoldTime
 }

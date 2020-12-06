@@ -2,14 +2,14 @@ package com.epmus.mobile.program
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.epmus.mobile.poseestimation.Exercice
+import com.epmus.mobile.poseestimation.Exercise
 
-class ExerciceData() : Parcelable {
+class ExerciseData() : Parcelable {
     var id: String = ""
     var name: String = ""
     var description: String = ""
     var imagePath: String = ""
-    var exercice: Exercice = Exercice()
+    var exercise: Exercise = Exercise()
     var mondayAlarm : Boolean = false
     var tuesdayAlarm : Boolean = false
     var wednesdayAlarm : Boolean = false
@@ -22,26 +22,26 @@ class ExerciceData() : Parcelable {
         id = parcel.readString().toString()
         name = parcel.readString().toString()
         description = parcel.readString().toString()
-        exercice = parcel.readParcelable(Exercice::class.java.classLoader)!!
+        exercise = parcel.readParcelable(Exercise::class.java.classLoader)!!
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(id)
         parcel.writeString(name)
         parcel.writeString(description)
-        parcel.writeParcelable(exercice, flags)
+        parcel.writeParcelable(exercise, flags)
     }
 
     override fun describeContents(): Int {
         return 0
     }
 
-    companion object CREATOR : Parcelable.Creator<ExerciceData> {
-        override fun createFromParcel(parcel: Parcel): ExerciceData {
-            return ExerciceData(parcel)
+    companion object CREATOR : Parcelable.Creator<ExerciseData> {
+        override fun createFromParcel(parcel: Parcel): ExerciseData {
+            return ExerciseData(parcel)
         }
 
-        override fun newArray(size: Int): Array<ExerciceData?> {
+        override fun newArray(size: Int): Array<ExerciseData?> {
             return arrayOfNulls(size)
         }
     }

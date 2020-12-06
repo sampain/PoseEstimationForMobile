@@ -6,7 +6,7 @@ import android.os.Parcelable
 import java.util.ArrayList
 import kotlin.math.*
 
-class Exercice() : Parcelable {
+class Exercise() : Parcelable {
     // add to fun .copy() if there is a modif
     var maxExecutionTime: Float? = null
     var minExecutionTime: Float? = null
@@ -25,18 +25,18 @@ class Exercice() : Parcelable {
     var initList = ArrayList<ArrayList<PointF>>()
     var notMovingInitList = ArrayList<Boolean>()
     var isInit: Boolean = false
-    var exerciceStartTime: Long? = null
+    var exerciseStartTime: Long? = null
     private var notMovingStartTime: Long? = null
     var notMovingTimer: Int = -1
     var targetTime: Long = 4000
     private var stdMax: Int = 150
-    var exerciceEndTime: Long? = null
+    var exerciseEndTime: Long? = null
 
-    var exerciceType: ExerciceType? = null
+    var exerciseType: ExerciseType? = null
 
     //Variable for type CHRONO
     var chronoTime: Int? = 0
-    var allowedTimeForExercice: Int? = null
+    var allowedTimeForExercise: Int? = null
 
     //Variable for type HOLD
     var targetHoldTime: Int? = null
@@ -74,10 +74,10 @@ class Exercice() : Parcelable {
         notMovingTimer = parcel.readInt()
         targetTime = parcel.readLong()
         stdMax = parcel.readInt()
-        exerciceType = parcel.readSerializable() as ExerciceType?
+        exerciseType = parcel.readSerializable() as ExerciseType?
         chronoTime = parcel.readValue(Int::class.java.classLoader) as? Int
-        allowedTimeForExercice = parcel.readValue(Int::class.java.classLoader) as? Int
-        exerciceStartTime = parcel.readValue(Long::class.java.classLoader) as? Long
+        allowedTimeForExercise = parcel.readValue(Int::class.java.classLoader) as? Int
+        exerciseStartTime = parcel.readValue(Long::class.java.classLoader) as? Long
         targetHoldTime = parcel.readValue(Int::class.java.classLoader) as? Int
         holdTime = parcel.readLong()
         wasHolding = parcel.readByte() != 0.toByte()
@@ -200,7 +200,7 @@ class Exercice() : Parcelable {
                     targetTime.toInt() / 1000 - ((currentTime - notMovingStartTime!!) / 1000).toInt()
                 if (currentTime - notMovingStartTime!! >= targetTime) {
                     isInit = true
-                    exerciceStartTime = System.currentTimeMillis()
+                    exerciseStartTime = System.currentTimeMillis()
                 }
             }
         } else {
@@ -209,20 +209,20 @@ class Exercice() : Parcelable {
         }
     }
 
-    // Verify the state in which every movement is for the given exercice
-    fun exerciceVerification(drawView: DrawView) {
-        when (this.exerciceType) {
-            ExerciceType.CHRONO -> exerciceVerificationChrono(drawView)
-            ExerciceType.REPETITION -> exerciceVerificationRepetition(drawView)
-            ExerciceType.HOLD -> exerciceVerificationHold(drawView)
-            ExerciceType.AMPLITUDE -> exerciceVerificationAmplitude(drawView)
+    // Verify the state in which every movement is for the given exercise
+    fun exerciseVerification(drawView: DrawView) {
+        when (this.exerciseType) {
+            ExerciseType.CHRONO -> exerciseVerificationChrono(drawView)
+            ExerciseType.REPETITION -> exerciseVerificationRepetition(drawView)
+            ExerciseType.HOLD -> exerciseVerificationHold(drawView)
+            ExerciseType.AMPLITUDE -> exerciseVerificationAmplitude(drawView)
             else -> {
             }
         }
     }
 
-    //Verify the state for an exercice type in Amplitude
-    private fun exerciceVerificationAmplitude(drawView: DrawView) {
+    //Verify the state for an exercise type in Amplitude
+    private fun exerciseVerificationAmplitude(drawView: DrawView) {
         movementList.forEach()
         {
 
@@ -260,14 +260,14 @@ class Exercice() : Parcelable {
             if (maxAngleReachedTime != null) {
                 if (timeAllowedToReachNewMax < (System.currentTimeMillis() - maxAngleReachedTime!!) / 1000) {
                     exitStateReached = true
-                    exerciceEndTime = System.currentTimeMillis()
+                    exerciseEndTime = System.currentTimeMillis()
                 }
             }
         }
     }
 
-    //Verify the state for an exercice type in CHRONO
-    private fun exerciceVerificationChrono(drawView: DrawView) {
+    //Verify the state for an exercise type in CHRONO
+    private fun exerciseVerificationChrono(drawView: DrawView) {
         movementList.forEach()
         {
 
@@ -302,7 +302,7 @@ class Exercice() : Parcelable {
         }
 
         //Verifies if repetition is done and changes state of movements to ENDING_ANGLE_REACHED
-        if (isRepetitionSimultaneousExerciceDone(movementList)) {
+        if (isRepetitionSimultaneousExerciseDone(movementList)) {
             movementList.forEach()
             {
                 it.movementState = MovementState.ENDING_ANGLE_REACHED
@@ -313,7 +313,7 @@ class Exercice() : Parcelable {
         }
 
         //Verifies if each movement is at startingAngle is done and changes state of movements to ENDING_ANGLE_REACHED
-        if (isInStartingPositionSimultaneousExercice(movementList)) {
+        if (isInStartingPositionSimultaneousExercise(movementList)) {
             movementList.forEach()
             {
                 it.movementState = MovementState.STARTING_ANGLE_REACHED
@@ -321,21 +321,21 @@ class Exercice() : Parcelable {
         }
 
         //Calculates remaining chrono time
-        chronoTime = ((System.currentTimeMillis() - exerciceStartTime!!) / 1000).toInt()
-        chronoTime = allowedTimeForExercice!! - chronoTime!!
+        chronoTime = ((System.currentTimeMillis() - exerciseStartTime!!) / 1000).toInt()
+        chronoTime = allowedTimeForExercise!! - chronoTime!!
 
-        //If no time is left, then the exercice is done
+        //If no time is left, then the exercise is done
         if (chronoTime!! == 0) {
             exitStateReached = true
-            exerciceEndTime = System.currentTimeMillis()
+            exerciseEndTime = System.currentTimeMillis()
         }
     }
 
-    private fun exerciceVerificationHold(drawView: DrawView) {
+    private fun exerciseVerificationHold(drawView: DrawView) {
         movementList.forEach()
         {
 
-            //Sets initial value of movement state to STARTING_ANGLE_REACHED since startingAngle is not used for this exercice type
+            //Sets initial value of movement state to STARTING_ANGLE_REACHED since startingAngle is not used for this exercise type
             if (it.movementState == MovementState.INIT) {
                 it.movementState = MovementState.STARTING_ANGLE_REACHED
             }
@@ -379,7 +379,7 @@ class Exercice() : Parcelable {
 
             if (((holdTime + currentHoldTime) / 1000).toInt() >= targetHoldTime!!) {
                 exitStateReached = true
-                exerciceEndTime = System.currentTimeMillis()
+                exerciseEndTime = System.currentTimeMillis()
                 holdTime += currentHoldTime
                 isHolding = false
                 currentHoldTime = 0
@@ -399,7 +399,7 @@ class Exercice() : Parcelable {
         this.isHolding = isHolding
     }
 
-    private fun exerciceVerificationRepetition(drawView: DrawView) {
+    private fun exerciseVerificationRepetition(drawView: DrawView) {
         movementList.forEach()
         {
 
@@ -434,7 +434,7 @@ class Exercice() : Parcelable {
         }
 
         //Verifies if repetition is done and changes state of movements to ENDING_ANGLE_REACHED
-        if (isRepetitionSimultaneousExerciceDone(movementList)) {
+        if (isRepetitionSimultaneousExerciseDone(movementList)) {
             movementList.forEach()
             {
                 it.movementState = MovementState.ENDING_ANGLE_REACHED
@@ -445,7 +445,7 @@ class Exercice() : Parcelable {
         }
 
         //Verifies if each movement is at startingAngle is done and changes state of movements to ENDING_ANGLE_REACHED
-        if (isInStartingPositionSimultaneousExercice(movementList)) {
+        if (isInStartingPositionSimultaneousExercise(movementList)) {
             movementList.forEach()
             {
                 it.movementState = MovementState.STARTING_ANGLE_REACHED
@@ -456,7 +456,7 @@ class Exercice() : Parcelable {
         if (numberOfRepetitionToDo != null) {
             if (numberOfRepetitionToDo == numberOfRepetition) {
                 exitStateReached = true
-                exerciceEndTime = System.currentTimeMillis()
+                exerciseEndTime = System.currentTimeMillis()
             }
         }
     }
@@ -493,8 +493,8 @@ class Exercice() : Parcelable {
         }
     }
 
-    //Verify if every movement for a given exercice is in state WAITING_FOR_OTHER_MOVEMENT_STARTING_ANGLE
-    private fun isInStartingPositionSimultaneousExercice(movementList: ArrayList<Movement>): Boolean {
+    //Verify if every movement for a given exercise is in state WAITING_FOR_OTHER_MOVEMENT_STARTING_ANGLE
+    private fun isInStartingPositionSimultaneousExercise(movementList: ArrayList<Movement>): Boolean {
         var inStartingPosition = true
         movementList.forEach()
         {
@@ -558,8 +558,8 @@ class Exercice() : Parcelable {
 
     }
 
-    //Verify if every movement for a given exercice is in state WAITING_FOR_OTHER_MOVEMENT_ENDING_ANGLE
-    private fun isRepetitionSimultaneousExerciceDone(movementList: ArrayList<Movement>): Boolean {
+    //Verify if every movement for a given exercise is in state WAITING_FOR_OTHER_MOVEMENT_ENDING_ANGLE
+    private fun isRepetitionSimultaneousExerciseDone(movementList: ArrayList<Movement>): Boolean {
         var repetitionDone = true
         movementList.forEach()
         {
@@ -734,18 +734,18 @@ class Exercice() : Parcelable {
     }
 
 
-    fun copy(): Exercice {
-        val exercices = Exercice()
-        exercices.maxExecutionTime = maxExecutionTime
-        exercices.minExecutionTime = minExecutionTime
-        exercices.mouvementStartTimer = mouvementStartTimer
-        exercices.mouvementSpeedTime = mouvementSpeedTime
+    fun copy(): Exercise {
+        val exercise = Exercise()
+        exercise.maxExecutionTime = maxExecutionTime
+        exercise.minExecutionTime = minExecutionTime
+        exercise.mouvementStartTimer = mouvementStartTimer
+        exercise.mouvementSpeedTime = mouvementSpeedTime
 
-        exercices.timeStamp = timeStamp
+        exercise.timeStamp = timeStamp
 
-        exercices.numberOfRepetitionToDo = numberOfRepetitionToDo
-        exercices.numberOfRepetition = numberOfRepetition
-        exercices.exitStateReached = exitStateReached
+        exercise.numberOfRepetitionToDo = numberOfRepetitionToDo
+        exercise.numberOfRepetition = numberOfRepetition
+        exercise.exitStateReached = exitStateReached
 
         movementList.forEach {
             val tmpMovement = Movement(it.bodyPart0_Index, it.bodyPart1_Index, it.bodyPart2_Index)
@@ -762,70 +762,70 @@ class Exercice() : Parcelable {
             tmpMovement.angleOffsetLastFrames = it.angleOffsetLastFrames
             tmpMovement.angleValuesLastFrames = it.angleValuesLastFrames
 
-            exercices.movementList.add(tmpMovement)
+            exercise.movementList.add(tmpMovement)
         }
 
-        exercices.initStartTimer = initStartTimer
-        exercices.initList = initList
-        exercices.notMovingInitList = notMovingInitList
-        exercices.isInit = isInit
-        exercices.exerciceStartTime = exerciceStartTime
-        exercices.notMovingStartTime = notMovingStartTime
-        exercices.notMovingTimer = notMovingTimer
-        exercices.targetTime = targetTime
-        exercices.stdMax = stdMax
-        exercices.exerciceEndTime = exerciceEndTime
+        exercise.initStartTimer = initStartTimer
+        exercise.initList = initList
+        exercise.notMovingInitList = notMovingInitList
+        exercise.isInit = isInit
+        exercise.exerciseStartTime = exerciseStartTime
+        exercise.notMovingStartTime = notMovingStartTime
+        exercise.notMovingTimer = notMovingTimer
+        exercise.targetTime = targetTime
+        exercise.stdMax = stdMax
+        exercise.exerciseEndTime = exerciseEndTime
 
-        exercices.exerciceType = exerciceType
+        exercise.exerciseType = exerciseType
 
-        exercices.chronoTime = chronoTime
-        exercices.allowedTimeForExercice = allowedTimeForExercice
+        exercise.chronoTime = chronoTime
+        exercise.allowedTimeForExercise = allowedTimeForExercise
 
-        exercices.targetHoldTime = targetHoldTime
-        exercices.holdTime = holdTime
-        exercices.wasHolding = wasHolding
-        exercices.isHolding = isHolding
-        exercices.holdingStartTime = holdingStartTime
-        exercices.currentHoldTime = currentHoldTime
+        exercise.targetHoldTime = targetHoldTime
+        exercise.holdTime = holdTime
+        exercise.wasHolding = wasHolding
+        exercise.isHolding = isHolding
+        exercise.holdingStartTime = holdingStartTime
+        exercise.currentHoldTime = currentHoldTime
 
-        exercices.maxAngleReached = maxAngleReached
-        exercices.maxAngleReachedTime = maxAngleReachedTime
-        exercices.timeAllowedToReachNewMax = timeAllowedToReachNewMax
+        exercise.maxAngleReached = maxAngleReached
+        exercise.maxAngleReachedTime = maxAngleReachedTime
+        exercise.timeAllowedToReachNewMax = timeAllowedToReachNewMax
 
-        exercices.warningCanBeDisplayed = warningCanBeDisplayed
+        exercise.warningCanBeDisplayed = warningCanBeDisplayed
 
-        exercices.bp.HEAD.X = bp.HEAD.X
-        exercices.bp.HEAD.Y = bp.HEAD.Y
-        exercices.bp.NECK.X = bp.NECK.X
-        exercices.bp.NECK.Y = bp.NECK.Y
-        exercices.bp.L_SHOULDER.X = bp.L_SHOULDER.X
-        exercices.bp.L_SHOULDER.Y = bp.L_SHOULDER.Y
-        exercices.bp.L_ELBOW.X = bp.L_ELBOW.X
-        exercices.bp.L_ELBOW.Y = bp.L_ELBOW.Y
-        exercices.bp.L_WRIST.X = bp.L_WRIST.X
-        exercices.bp.L_WRIST.Y = bp.L_WRIST.Y
-        exercices.bp.R_SHOULDER.X = bp.R_SHOULDER.X
-        exercices.bp.R_SHOULDER.Y = bp.R_SHOULDER.Y
-        exercices.bp.R_ELBOW.X = bp.R_ELBOW.X
-        exercices.bp.R_ELBOW.Y = bp.R_ELBOW.Y
-        exercices.bp.R_WRIST.X = bp.R_WRIST.X
-        exercices.bp.R_WRIST.Y = bp.R_WRIST.Y
-        exercices.bp.L_HIP.X = bp.L_HIP.X
-        exercices.bp.L_HIP.Y = bp.L_HIP.Y
-        exercices.bp.L_KNEE.X = bp.L_KNEE.X
-        exercices.bp.L_KNEE.Y = bp.L_KNEE.Y
-        exercices.bp.L_ANKLE.X = bp.L_ANKLE.X
-        exercices.bp.L_ANKLE.Y = bp.L_ANKLE.Y
-        exercices.bp.R_HIP.X = bp.R_HIP.X
-        exercices.bp.R_HIP.Y = bp.R_HIP.Y
-        exercices.bp.R_KNEE.X = bp.R_KNEE.X
-        exercices.bp.R_KNEE.Y = bp.R_KNEE.Y
-        exercices.bp.R_ANKLE.X = bp.R_ANKLE.X
-        exercices.bp.R_ANKLE.Y = bp.R_ANKLE.Y
-        exercices.bp.HIP.X = bp.HIP.X
-        exercices.bp.HIP.Y = bp.HIP.Y
+        exercise.bp.HEAD.X = bp.HEAD.X
+        exercise.bp.HEAD.Y = bp.HEAD.Y
+        exercise.bp.NECK.X = bp.NECK.X
+        exercise.bp.NECK.Y = bp.NECK.Y
+        exercise.bp.L_SHOULDER.X = bp.L_SHOULDER.X
+        exercise.bp.L_SHOULDER.Y = bp.L_SHOULDER.Y
+        exercise.bp.L_ELBOW.X = bp.L_ELBOW.X
+        exercise.bp.L_ELBOW.Y = bp.L_ELBOW.Y
+        exercise.bp.L_WRIST.X = bp.L_WRIST.X
+        exercise.bp.L_WRIST.Y = bp.L_WRIST.Y
+        exercise.bp.R_SHOULDER.X = bp.R_SHOULDER.X
+        exercise.bp.R_SHOULDER.Y = bp.R_SHOULDER.Y
+        exercise.bp.R_ELBOW.X = bp.R_ELBOW.X
+        exercise.bp.R_ELBOW.Y = bp.R_ELBOW.Y
+        exercise.bp.R_WRIST.X = bp.R_WRIST.X
+        exercise.bp.R_WRIST.Y = bp.R_WRIST.Y
+        exercise.bp.L_HIP.X = bp.L_HIP.X
+        exercise.bp.L_HIP.Y = bp.L_HIP.Y
+        exercise.bp.L_KNEE.X = bp.L_KNEE.X
+        exercise.bp.L_KNEE.Y = bp.L_KNEE.Y
+        exercise.bp.L_ANKLE.X = bp.L_ANKLE.X
+        exercise.bp.L_ANKLE.Y = bp.L_ANKLE.Y
+        exercise.bp.R_HIP.X = bp.R_HIP.X
+        exercise.bp.R_HIP.Y = bp.R_HIP.Y
+        exercise.bp.R_KNEE.X = bp.R_KNEE.X
+        exercise.bp.R_KNEE.Y = bp.R_KNEE.Y
+        exercise.bp.R_ANKLE.X = bp.R_ANKLE.X
+        exercise.bp.R_ANKLE.Y = bp.R_ANKLE.Y
+        exercise.bp.HIP.X = bp.HIP.X
+        exercise.bp.HIP.Y = bp.HIP.Y
 
-        return exercices
+        return exercise
     }
 
 
@@ -846,10 +846,10 @@ class Exercice() : Parcelable {
         parcel.writeInt(notMovingTimer)
         parcel.writeLong(targetTime)
         parcel.writeInt(stdMax)
-        parcel.writeSerializable(exerciceType)
+        parcel.writeSerializable(exerciseType)
         parcel.writeValue(chronoTime)
-        parcel.writeValue(allowedTimeForExercice)
-        parcel.writeValue(exerciceStartTime)
+        parcel.writeValue(allowedTimeForExercise)
+        parcel.writeValue(exerciseStartTime)
         parcel.writeValue(targetHoldTime)
         parcel.writeLong(holdTime)
         parcel.writeByte(if (wasHolding) 1 else 0)
@@ -863,12 +863,12 @@ class Exercice() : Parcelable {
         return 0
     }
 
-    companion object CREATOR : Parcelable.Creator<Exercice> {
-        override fun createFromParcel(parcel: Parcel): Exercice {
-            return Exercice(parcel)
+    companion object CREATOR : Parcelable.Creator<Exercise> {
+        override fun createFromParcel(parcel: Parcel): Exercise {
+            return Exercise(parcel)
         }
 
-        override fun newArray(size: Int): Array<Exercice?> {
+        override fun newArray(size: Int): Array<Exercise?> {
             return arrayOfNulls(size)
         }
     }

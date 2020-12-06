@@ -180,7 +180,7 @@
                             android:autoSizeTextType="uniform"
                             android:fontFamily="sans-serif-light"
                             android:maxLines="2"
-                            android:text="@string/exercice_stats" />
+                            android:text="@string/exercise_stats" />
 
                         <TextView
                             android:id="@+id/statistic_count"
@@ -223,7 +223,7 @@
                             android:maxLines="2"
                             android:paddingStart="0dp"
                             android:paddingEnd="30dp"
-                            android:text="@string/exercice7_stats" />
+                            android:text="@string/exercise7_stats" />
 
                         <TextView
                             android:id="@+id/statistic_count_7"

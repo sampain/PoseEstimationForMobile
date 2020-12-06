@@ -60,7 +60,7 @@ class MainMenuActivity : AppCompatActivity() {
         R.id.action_logout -> {
             realmApp.currentUser()?.logOutAsync {
                 MongoTransactions.uiThreadRealmUserId.close()
-                MongoTransactions.uiThreadRealmExercices.close()
+                MongoTransactions.uiThreadRealmExercises.close()
                 finishAffinity()
                 exitProcess(1)
             }

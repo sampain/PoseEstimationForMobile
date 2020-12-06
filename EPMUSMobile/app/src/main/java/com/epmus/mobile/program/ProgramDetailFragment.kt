@@ -11,7 +11,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.epmus.mobile.mongodbservice.MongoTransactions
 import com.epmus.mobile.R
-import com.epmus.mobile.poseestimation.ExerciceType
+import com.epmus.mobile.poseestimation.ExerciseType
 
 /**
  * A fragment representing a single Program detail screen.
@@ -20,16 +20,16 @@ import com.epmus.mobile.poseestimation.ExerciceType
  * on handsets.
  */
 class ProgramDetailFragment : Fragment() {
-    private var item: ExerciceData? = null
+    private var item: ExerciseData? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         arguments?.let {
             if (it.containsKey(ARG_ITEM_ID)) {
-                MongoTransactions.exerciceList.forEach { exercice ->
-                    if (exercice.id == it.getString(ARG_ITEM_ID)) {
-                        item = exercice
+                MongoTransactions.exerciseList.forEach { exercise ->
+                    if (exercise.id == it.getString(ARG_ITEM_ID)) {
+                        item = exercise
                     }
                 }
 
@@ -48,7 +48,7 @@ class ProgramDetailFragment : Fragment() {
 
         item?.let {
             rootView.findViewById<TextView>(R.id.program_detail).text = it.description
-            it.exercice.movementList.forEachIndexed { index, movement ->
+            it.exercise.movementList.forEachIndexed { index, movement ->
                 if (index == 0) {
                     rootView.findViewById<TextView>(R.id.angleStart).text =
                         movement.startingAngle.toString()
@@ -65,35 +65,35 @@ class ProgramDetailFragment : Fragment() {
                         movement.endingAngle.toString()
                 }
             }
-            when (it.exercice.exerciceType) {
-                ExerciceType.HOLD -> {
+            when (it.exercise.exerciseType) {
+                ExerciseType.HOLD -> {
                     rootView.findViewById<TextView>(R.id.repetitionOrHold_text).text =
                         "Temps de maintient : "
                     rootView.findViewById<TextView>(R.id.repetitionOrHold).text =
-                        it.exercice.targetHoldTime.toString()
+                        it.exercise.targetHoldTime.toString()
                 }
-                ExerciceType.CHRONO -> {
+                ExerciseType.CHRONO -> {
                     rootView.findViewById<TextView>(R.id.repetitionOrHold_text).text =
                         "Temps (s): "
                     rootView.findViewById<TextView>(R.id.repetitionOrHold).text =
-                        it.exercice.allowedTimeForExercice.toString()
+                        it.exercise.allowedTimeForExercise.toString()
                 }
-                ExerciceType.AMPLITUDE -> {
+                ExerciseType.AMPLITUDE -> {
                     rootView.findViewById<LinearLayout>(R.id.repetition_layout).visibility =
                         View.GONE
                 }
-                ExerciceType.REPETITION -> {
+                ExerciseType.REPETITION -> {
                     rootView.findViewById<TextView>(R.id.repetitionOrHold).text =
-                        it.exercice.numberOfRepetitionToDo.toString()
+                        it.exercise.numberOfRepetitionToDo.toString()
                 }
             }
             rootView.findViewById<TextView>(R.id.tempoMin).text =
-                it.exercice.minExecutionTime.toString()
-            if (it.exercice.maxExecutionTime!! > 999.0) {
+                it.exercise.minExecutionTime.toString()
+            if (it.exercise.maxExecutionTime!! > 999.0) {
                 rootView.findViewById<LinearLayout>(R.id.tempoMax_layout).visibility = View.GONE
             }
             rootView.findViewById<TextView>(R.id.tempoMax).text =
-                it.exercice.maxExecutionTime.toString()
+                it.exercise.maxExecutionTime.toString()
             val id = resources.getIdentifier(
                 it.imagePath, "drawable",
                 activity?.packageName

@@ -2,10 +2,10 @@ package com.epmus.mobile.poseestimation
 
 import java.io.Serializable
 
-class ExerciceStatistique : Serializable {
-    var exerciceName = ""
-    var exerciceType = ""
-    var exerciceID: String = ""
+class ExerciseStatistics : Serializable {
+    var exerciseName = ""
+    var exerciseType = ""
+    var exerciseID: String = ""
 
     var holdtime: String? = null
     var timestampOfRepetition = ArrayList<String?>()
@@ -17,8 +17,8 @@ class ExerciceStatistique : Serializable {
     var maxAngleAmplitude: Int? = null
 
     var initStartTime: String? = null
-    var exerciceStartTime: String? = null
-    var exerciceEndTime: String? = null
+    var exerciseStartTime: String? = null
+    var exerciseEndTime: String? = null
 
     var movements = ArrayList<MovementStatistics>()
 

@@ -32,7 +32,7 @@ import java.util.ArrayList
 
 class DrawView : View {
 
-    var exercice: Exercice? = null
+    var exercise: Exercise? = null
     val frameCounterMax: Int = 5
     val frameCounterMaxInit: Int = 10
     val nearPointFInit: Float = 50.0f
@@ -156,7 +156,7 @@ class DrawView : View {
     }
 
     private fun movementIndicator(canvas: Canvas) {
-        this.exercice!!.movementList.forEach()
+        this.exercise!!.movementList.forEach()
         {
             if (mDrawPoint[it.bodyPart1_Index] != null) {
                 val pX = mDrawPoint[it.bodyPart1_Index].x
@@ -218,7 +218,7 @@ class DrawView : View {
                     }
                 }
 
-                this.exercice!!.calculateAngleHorizontalOffset(
+                this.exercise!!.calculateAngleHorizontalOffset(
                     it,
                     this,
                     it.bodyPart1_Index,

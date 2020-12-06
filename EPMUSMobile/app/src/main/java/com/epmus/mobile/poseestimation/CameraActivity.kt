@@ -18,7 +18,7 @@ package com.epmus.mobile.poseestimation
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.epmus.mobile.R
-import com.epmus.mobile.program.ExerciceData
+import com.epmus.mobile.program.ExerciseData
 import org.opencv.android.BaseLoaderCallback
 import org.opencv.android.LoaderCallbackInterface
 import org.opencv.android.OpenCVLoader
@@ -51,11 +51,11 @@ class CameraActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
-        val exerciceData: ExerciceData? = intent.extras?.getParcelable("exercice")
+        val exerciseData: ExerciseData? = intent.extras?.getParcelable("exercise")
         if (null == savedInstanceState) {
             supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.container, Camera2BasicFragment.newInstance(exerciceData))
+                .replace(R.id.container, Camera2BasicFragment.newInstance(exerciseData))
                 .commit()
         }
 

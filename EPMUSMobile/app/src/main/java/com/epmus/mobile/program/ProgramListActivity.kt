@@ -14,8 +14,8 @@ import com.epmus.mobile.*
 import com.epmus.mobile.messaging.MessagingActivity
 import com.epmus.mobile.mongodbservice.MongoTransactions
 import com.epmus.mobile.poseestimation.CameraActivity
-import com.epmus.mobile.poseestimation.ExerciceType
-import com.epmus.mobile.poseestimation.ExerciceTypeUI
+import com.epmus.mobile.poseestimation.ExerciseType
+import com.epmus.mobile.poseestimation.ExerciseTypeUI
 import com.epmus.mobile.ui.login.realmApp
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlin.system.exitProcess
@@ -78,7 +78,7 @@ class ProgramListActivity : AppCompatActivity() {
         R.id.action_logout -> {
             realmApp.currentUser()?.logOutAsync {
                 MongoTransactions.uiThreadRealmUserId.close()
-                MongoTransactions.uiThreadRealmExercices.close()
+                MongoTransactions.uiThreadRealmExercises.close()
                 finishAffinity()
                 exitProcess(1)
             }
@@ -92,12 +92,12 @@ class ProgramListActivity : AppCompatActivity() {
 
     private fun setupRecyclerView(recyclerView: RecyclerView) {
         recyclerView.adapter =
-                SimpleItemRecyclerViewAdapter(this, MongoTransactions.exerciceList, twoPane)
+                SimpleItemRecyclerViewAdapter(this, MongoTransactions.exerciseList, twoPane)
     }
 
     class SimpleItemRecyclerViewAdapter(
             private val parentActivity: ProgramListActivity,
-            private val values: List<ExerciceData>,
+            private val values: List<ExerciseData>,
             private val twoPane: Boolean
     ) :
             RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder>() {
@@ -108,14 +108,14 @@ class ProgramListActivity : AppCompatActivity() {
 
         init {
             onClickListenerPlay = View.OnClickListener { v ->
-                val item = v.tag as ExerciceData
+                val item = v.tag as ExerciseData
                 val intent = Intent(v.context, CameraActivity::class.java)
-                intent.putExtra("exercice", item)
+                intent.putExtra("exercise", item)
                 v.context.startActivity(intent)
             }
 
             onClickListenerDetails = View.OnClickListener { v ->
-                val item = v.tag as ExerciceData
+                val item = v.tag as ExerciseData
                 if (twoPane) {
                     val fragment = ProgramDetailFragment().apply {
                         arguments = Bundle().apply {
@@ -145,19 +145,19 @@ class ProgramListActivity : AppCompatActivity() {
             val item = values[position]
             holder.idView.text = item.name
             holder.contentView.text =
-                    ExerciceTypeUI.getEnumValue(item.exercice.exerciceType.toString()).toString()
+                    ExerciseTypeUI.getEnumValue(item.exercise.exerciseType.toString()).toString()
 
-            when (item.exercice.exerciceType) {
-                ExerciceType.HOLD -> {
+            when (item.exercise.exerciseType) {
+                ExerciseType.HOLD -> {
                     holder.contentView.setTextColor(Color.parseColor("#66BB6A"))
                 }
-                ExerciceType.REPETITION -> {
+                ExerciseType.REPETITION -> {
                     holder.contentView.setTextColor(Color.parseColor("#FF9800"))
                 }
-                ExerciceType.CHRONO -> {
+                ExerciseType.CHRONO -> {
                     holder.contentView.setTextColor(Color.parseColor("#29B6F6"))
                 }
-                ExerciceType.AMPLITUDE -> {
+                ExerciseType.AMPLITUDE -> {
                     holder.contentView.setTextColor(Color.parseColor("#774C55"))
                 }
             }

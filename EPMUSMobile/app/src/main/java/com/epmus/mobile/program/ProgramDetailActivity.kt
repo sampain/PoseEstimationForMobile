@@ -21,11 +21,11 @@ class ProgramDetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_program_detail)
         setSupportActionBar(findViewById(R.id.detail_toolbar))
 
-        val exercice = intent.getParcelableExtra<ExerciceData>(ProgramDetailFragment.ARG_ITEM_ID)
+        val exercise = intent.getParcelableExtra<ExerciseData>(ProgramDetailFragment.ARG_ITEM_ID)
 
         findViewById<FloatingActionButton>(R.id.fab_play).setOnClickListener { view ->
             val intent = Intent(view.context, CameraActivity::class.java)
-            intent.putExtra("exercice", exercice)
+            intent.putExtra("exercise", exercise)
             startActivity(intent)
         }
 
@@ -48,7 +48,7 @@ class ProgramDetailActivity : AppCompatActivity() {
                 arguments = Bundle().apply {
                     putString(
                         ProgramDetailFragment.ARG_ITEM_ID,
-                        exercice?.id
+                        exercise?.id
                     )
                 }
             }
