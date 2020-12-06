@@ -23,6 +23,7 @@ class MessagingActivity : AppCompatActivity() {
         setSupportActionBar(findViewById(R.id.toolbar_Messaging))
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        MongoTransactions.updatePhysioList()
         setupRecyclerView(findViewById(R.id.recyclerview_newmessage), physioList)
     }
 
