@@ -30,11 +30,16 @@ Utilisation
 -
 L'utilisation de l'application implique qu'un utilisateur "Client" a été créé à partir de l'application Web.
 
-Modification de la base de donnée MongoDB Realm
+Modification de la base de données MongoDB Realm
 -
-Il est possible d'utiliser votre propre base de donnée MongoDB Realm.
+Il est possible d'utiliser votre propre base de données MongoDB Realm.
 Pour ce faire, modifiez ceci avec vortre propre App id dans le build.gradle de l'application
 ```
 //Realm Id
 def appId = "iphysio-app-wjkhj"
 ```
+
+Modification de la base de données Firebase
+-
+Firebase est utilisé pour la partie messagerie de l'application.
+Pour utiliser votre propre base de données, générez le fichier google-services.json et remplacez celui dans app/src/
