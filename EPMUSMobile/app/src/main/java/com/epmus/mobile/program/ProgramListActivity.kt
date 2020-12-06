@@ -40,6 +40,7 @@ class ProgramListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_program_list)
 
+        //Set toolbar
         val toolbar = findViewById<Toolbar>(R.id.toolbar_Program)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -57,6 +58,7 @@ class ProgramListActivity : AppCompatActivity() {
             twoPane = true
         }
 
+        //Fill exercise list
         setupRecyclerView(findViewById(R.id.program_list))
     }
 
@@ -65,6 +67,7 @@ class ProgramListActivity : AppCompatActivity() {
         return true
     }
 
+    //Toolbar options
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.action_settings -> {
             val intent = Intent(this, SettingsActivity::class.java)
@@ -89,15 +92,15 @@ class ProgramListActivity : AppCompatActivity() {
 
     private fun setupRecyclerView(recyclerView: RecyclerView) {
         recyclerView.adapter =
-            SimpleItemRecyclerViewAdapter(this, MongoTransactions.exerciceList, twoPane)
+                SimpleItemRecyclerViewAdapter(this, MongoTransactions.exerciceList, twoPane)
     }
 
     class SimpleItemRecyclerViewAdapter(
-        private val parentActivity: ProgramListActivity,
-        private val values: List<ExerciceData>,
-        private val twoPane: Boolean
+            private val parentActivity: ProgramListActivity,
+            private val values: List<ExerciceData>,
+            private val twoPane: Boolean
     ) :
-        RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder>() {
+            RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder>() {
 
         private val onClickListenerDetails: View.OnClickListener
         private val onClickListenerPlay: View.OnClickListener
@@ -120,9 +123,9 @@ class ProgramListActivity : AppCompatActivity() {
                         }
                     }
                     parentActivity.supportFragmentManager
-                        .beginTransaction()
-                        .replace(R.id.program_detail_container, fragment)
-                        .commit()
+                            .beginTransaction()
+                            .replace(R.id.program_detail_container, fragment)
+                            .commit()
                 } else {
                     val intent = Intent(v.context, ProgramDetailActivity::class.java).apply {
                         putExtra(ProgramDetailFragment.ARG_ITEM_ID, item)
@@ -134,7 +137,7 @@ class ProgramListActivity : AppCompatActivity() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.program_list_content, parent, false)
+                    .inflate(R.layout.program_list_content, parent, false)
             return ViewHolder(view)
         }
 
@@ -142,7 +145,7 @@ class ProgramListActivity : AppCompatActivity() {
             val item = values[position]
             holder.idView.text = item.name
             holder.contentView.text =
-                ExerciceTypeUI.getEnumValue(item.exercice.exerciceType.toString()).toString()
+                    ExerciceTypeUI.getEnumValue(item.exercice.exerciceType.toString()).toString()
 
             when (item.exercice.exerciceType) {
                 ExerciceType.HOLD -> {

@@ -28,6 +28,7 @@ class HistoryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_history)
 
+        //Set toolbar
         val toolbar = findViewById<Toolbar>(R.id.toolbar_History)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -41,6 +42,8 @@ class HistoryActivity : AppCompatActivity() {
         return true
     }
 
+
+    //Toolbar options
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.action_settings -> {
             val intent = Intent(this, SettingsActivity::class.java)
@@ -64,13 +67,14 @@ class HistoryActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView(recyclerView: RecyclerView) {
-        recyclerView.adapter = SimpleItemRecyclerViewAdapter(MongoTransactions.historic)
+        //Set exercise history list
+        recyclerView.adapter = SimpleItemRecyclerViewAdapter(MongoTransactions.exerciseHistory)
     }
 
     class SimpleItemRecyclerViewAdapter(
-        private val values: List<HistoryData>,
+            private val values: List<HistoryData>,
     ) :
-        RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder>() {
+            RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder>() {
 
         private val onClickListenerDetails: View.OnClickListener
 
@@ -82,8 +86,8 @@ class HistoryActivity : AppCompatActivity() {
                     moreDetails.visibility = View.GONE
                 } else {
                     TransitionManager.beginDelayedTransition(
-                        v as CardView,
-                        AutoTransition()
+                            v as CardView,
+                            AutoTransition()
                     )
                     moreDetails.visibility = View.VISIBLE
                 }
@@ -92,7 +96,7 @@ class HistoryActivity : AppCompatActivity() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.history_list_content, parent, false)
+                    .inflate(R.layout.history_list_content, parent, false)
             return ViewHolder(view)
         }
 
@@ -107,34 +111,24 @@ class HistoryActivity : AppCompatActivity() {
             val formatterTo = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
             holder.contentView.text = item.date?.format(formatterTo) ?: ""
 
-            val exerciceTypeEnum = ExerciceType.getEnumValue(item.exerciceType)
-
-            when (exerciceTypeEnum) {
-                ExerciceType.HOLD -> {
-                    holder.nbrText.text = "Temps soutenu"
-                }
-                ExerciceType.AMPLITUDE -> {
-                    holder.nbrText.text = "Angle maximal (°)"
-                }
-                else -> {
-                    holder.nbrText.text = "Nombre de répétitions"
-                }
-            }
-
             when (ExerciceType.getEnumValue(item.exerciceType)) {
                 ExerciceType.HOLD -> {
+                    holder.nbrText.text = "Temps soutenu"
                     holder.idView.setTextColor(Color.parseColor("#66BB6A"))
                     holder.exerciceType.setTextColor(Color.parseColor("#66BB6A"))
                 }
                 ExerciceType.REPETITION -> {
+                    holder.nbrText.text = "Nombre de répétitions"
                     holder.idView.setTextColor(Color.parseColor("#FF9800"))
                     holder.exerciceType.setTextColor(Color.parseColor("#FF9800"))
                 }
                 ExerciceType.CHRONO -> {
+                    holder.nbrText.text = "Nombre de répétitions"
                     holder.idView.setTextColor(Color.parseColor("#29B6F6"))
                     holder.exerciceType.setTextColor(Color.parseColor("#29B6F6"))
                 }
                 ExerciceType.AMPLITUDE -> {
+                    holder.nbrText.text = "Angle maximal (°)"
                     holder.idView.setTextColor(Color.parseColor("#774C55"))
                     holder.exerciceType.setTextColor(Color.parseColor("#774C55"))
                 }
@@ -161,11 +155,11 @@ class HistoryActivity : AppCompatActivity() {
 }
 
 class HistoryData(
-    _exerciceName: String = "",
-    _exerciceType: String = "",
-    _date: LocalDateTime? = null,
-    _duree: String = "",
-    _nbrRepetitionOrHoldTime: String = ""
+        _exerciceName: String = "",
+        _exerciceType: String = "",
+        _date: LocalDateTime? = null,
+        _duree: String = "",
+        _nbrRepetitionOrHoldTime: String = ""
 ) {
     var date = _date
 

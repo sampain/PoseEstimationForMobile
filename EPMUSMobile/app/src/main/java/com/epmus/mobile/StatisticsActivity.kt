@@ -28,6 +28,7 @@ class StatisticsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_statistics)
 
+        //Set toolbar
         val toolbar = findViewById<Toolbar>(R.id.toolbar_Statistics)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -52,6 +53,7 @@ class StatisticsActivity : AppCompatActivity() {
         return true
     }
 
+    //Toolbar options
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.action_settings -> {
             val intent = Intent(this, SettingsActivity::class.java)
@@ -75,7 +77,7 @@ class StatisticsActivity : AppCompatActivity() {
     }
 
     private fun setData() {
-        statisticCount.text = MongoTransactions.historic.count().toString()
+        statisticCount.text = MongoTransactions.exerciseHistory.count().toString()
 
         var holdCount = 0
         var repetitionCount = 0
@@ -84,7 +86,7 @@ class StatisticsActivity : AppCompatActivity() {
         var count7 = 0
 
         val localDate = LocalDate.now()
-        MongoTransactions.historic.forEach {
+        MongoTransactions.exerciseHistory.forEach {
 
             when (ExerciceType.getEnumValue(it.exerciceType)) {
                 ExerciceType.HOLD -> {
@@ -108,7 +110,7 @@ class StatisticsActivity : AppCompatActivity() {
 
         statisticCount7.text = count7.toString()
 
-        history.text = MongoTransactions.historic.count().toString()
+        history.text = MongoTransactions.exerciseHistory.count().toString()
 
         pieChart.addPieSlice(
             PieModel(

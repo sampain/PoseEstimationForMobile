@@ -19,7 +19,6 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
     val loginResult: LiveData<LoginResult> = _loginResult
 
     fun login(user: User?) {
-        // can be launched in a separate asynchronous job
         val result = loginRepository.login(user)
 
         if (result is Result.Success) {

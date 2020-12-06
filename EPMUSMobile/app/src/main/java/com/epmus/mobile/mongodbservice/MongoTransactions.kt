@@ -35,7 +35,7 @@ import java.util.concurrent.FutureTask
 class MongoTransactions {
     companion object {
 
-        var historic: MutableList<HistoryData> = mutableListOf()
+        var exerciseHistory: MutableList<HistoryData> = mutableListOf()
         var exerciceList: MutableList<ExerciceData> = mutableListOf()
         var physioList: MutableList<MessagingUser> = mutableListOf()
         var uiThreadRealmUserId: Realm
@@ -51,7 +51,7 @@ class MongoTransactions {
         init {
             val user: User? = realmApp.currentUser()
             configUserId =
-                SyncConfiguration.Builder(user, user?.customData?.get("_id").toString()).build()
+                    SyncConfiguration.Builder(user, user?.customData?.get("_id").toString()).build()
             configExercices = SyncConfiguration.Builder(user, "exercices").build()
             uiThreadRealmUserId = Realm.getInstance(configUserId)
             uiThreadRealmExercices = Realm.getInstance(configExercices)
@@ -62,11 +62,11 @@ class MongoTransactions {
             val mongoClient: MongoClient = user?.getMongoClient("mongodb-atlas")!!
             val mongoDatabase: MongoDatabase = mongoClient.getDatabase("iphysioBD-dev")!!
             val mongoCollection: MongoCollection<Document> =
-                mongoDatabase.getCollection("physios")!!
+                    mongoDatabase.getCollection("physios")!!
 
             physios.forEach { physio ->
                 mongoCollection.findOne(
-                    Document("_id", ObjectId(physio))
+                        Document("_id", ObjectId(physio))
                 ).getAsync { findResult ->
                     if (findResult.isSuccess) {
                         val name = findResult.get()["name"].toString()
@@ -101,21 +101,21 @@ class MongoTransactions {
             }
 
             val histoEntry =
-                historique(
-                    stats.exerciceName,
-                    exerciceType,
-                    stats.initStartTime,
-                    formatTime(timeDiff),
-                    nbrRepetitionOrHoldTime
-                )
+                    historique(
+                            stats.exerciceName,
+                            exerciceType,
+                            stats.initStartTime,
+                            formatTime(timeDiff),
+                            nbrRepetitionOrHoldTime
+                    )
 
             val task: FutureTask<String> =
-                FutureTask(
-                    BackgroundInsertEntry(
-                        configUserId,
-                        histoEntry
-                    ), "Succeeded History"
-                )
+                    FutureTask(
+                            BackgroundInsertEntry(
+                                    configUserId,
+                                    histoEntry
+                            ), "Succeeded History"
+                    )
             val executorService: ExecutorService = Executors.newFixedThreadPool(1)
             executorService.execute(task)
         }
@@ -188,21 +188,21 @@ class MongoTransactions {
             }
 
             val bodypartObj = bodyPartPos(
-                HEAD,
-                NECK,
-                L_SHOULDER,
-                L_ELBOW,
-                L_WRIST,
-                R_SHOULDER,
-                R_ELBOW,
-                R_WRIST,
-                L_HIP,
-                L_KNEE,
-                L_ANKLE,
-                R_HIP,
-                R_KNEE,
-                R_ANKLE,
-                HIP
+                    HEAD,
+                    NECK,
+                    L_SHOULDER,
+                    L_ELBOW,
+                    L_WRIST,
+                    R_SHOULDER,
+                    R_ELBOW,
+                    R_WRIST,
+                    L_HIP,
+                    L_KNEE,
+                    L_ANKLE,
+                    R_HIP,
+                    R_KNEE,
+                    R_ANKLE,
+                    HIP
             )
 
             val timestampOfRepetition = RealmList<simpleString>()
@@ -250,64 +250,62 @@ class MongoTransactions {
 
 
             val statistics = statistics(
-                stats.exerciceName,
-                stats.exerciceType,
-                stats.exerciceID,
-                timestampOfRepetition,
-                numberOfRepetition,
-                holdTimeStartTime,
-                holdTimeEndTime,
-                stats.maxAngleAmplitude,
-                stats.initStartTime,
-                stats.exerciceStartTime,
-                stats.exerciceEndTime,
-                movementRealm,
-                stats.avgFps,
-                bodypartObj
+                    stats.exerciceName,
+                    stats.exerciceType,
+                    stats.exerciceID,
+                    timestampOfRepetition,
+                    numberOfRepetition,
+                    holdTimeStartTime,
+                    holdTimeEndTime,
+                    stats.maxAngleAmplitude,
+                    stats.initStartTime,
+                    stats.exerciceStartTime,
+                    stats.exerciceEndTime,
+                    movementRealm,
+                    stats.avgFps,
+                    bodypartObj
             )
 
             val task: FutureTask<String> =
-                FutureTask(
-                    BackgroundInsertStatsEntry(
-                        configUserId,
-                        statistics
-                    ), "Succeeded Statistics"
-                )
+                    FutureTask(
+                            BackgroundInsertStatsEntry(
+                                    configUserId,
+                                    statistics
+                            ), "Succeeded Statistics"
+                    )
             val threads = Runtime.getRuntime().availableProcessors()
             val executorService: ExecutorService = Executors.newFixedThreadPool(threads)
             executorService.execute(task)
-        }
-
-        private fun findPhysioList(){
-
         }
 
         private fun addChangeListenerToRealm() {
             historyListener = uiThreadRealmUserId.where<historique>().findAllAsync()
             historyListener.addChangeListener { collection, _ ->
 
-                val historicSort = mutableListOf<HistoryData>()
+                val historySorted = mutableListOf<HistoryData>()
                 collection.forEach {
                     val formatterFrom = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
                     val dateTime = LocalDateTime.parse(it.date!!, formatterFrom)
-                    historicSort.add(
-                        HistoryData(
-                            it.exerciceName,
-                            it.exerciceType,
-                            dateTime,
-                            it.duree,
-                            it.nbrRepetitionOrHoldTime
-                        )
+                    historySorted.add(
+                            HistoryData(
+                                    it.exerciceName,
+                                    it.exerciceType,
+                                    dateTime,
+                                    it.duree,
+                                    it.nbrRepetitionOrHoldTime
+                            )
                     )
                 }
 
-                historicSort.sortByDescending { it.date }
+                //Sort list by date
+                historySorted.sortByDescending { it.date }
 
-                historic = historicSort
+                exerciseHistory = historySorted
 
+                //Update exercise history as soon as there is a changer
                 if (historyView != null) {
                     historyView!!.adapter =
-                        HistoryActivity.SimpleItemRecyclerViewAdapter(historic)
+                            HistoryActivity.SimpleItemRecyclerViewAdapter(exerciseHistory)
                 }
             }
 
@@ -318,7 +316,7 @@ class MongoTransactions {
             }
 
             exercicesPhysiotecListener =
-                uiThreadRealmExercices.where<exercicesPhysiotec>().findAllAsync()
+                    uiThreadRealmExercices.where<exercicesPhysiotec>().findAllAsync()
             exercicesPhysiotecListener.addChangeListener { collection, _ ->
                 exercicesPhysiotecList = uiThreadRealmExercices.copyFromRealm(collection)
                 exerciceList = exerciceList()
@@ -361,26 +359,26 @@ class MongoTransactions {
                             exerciceData.saturdayAlarm = exerciceProgram.samedi ?: false
                             exerciceData.sundayAlarm = exerciceProgram.dimanche ?: false
                             exerciceData.exercice.minExecutionTime =
-                                exerciceProgram.tempo?.min?.toFloat() ?: 0F
+                                    exerciceProgram.tempo?.min?.toFloat() ?: 0F
                             exerciceData.exercice.maxExecutionTime =
-                                exerciceProgram.tempo?.max?.toFloat() ?: 9999F
+                                    exerciceProgram.tempo?.max?.toFloat() ?: 9999F
                             exerciceData.id = exerciceProgram.exerciceId
                             exerciceData.imagePath = exercice.imagePath
                             exerciceData.name = exerciceProgram.nom
                             exerciceData.description = exerciceProgram.description
                             exerciceData.exercice.exerciceType =
-                                ExerciceType.getEnumValue(exercice.type.toUpperCase(Locale.ROOT))
-                                    ?: ExerciceType.REPETITION
+                                    ExerciceType.getEnumValue(exercice.type.toUpperCase(Locale.ROOT))
+                                            ?: ExerciceType.REPETITION
                             exerciceData.exercice.targetHoldTime = exerciceProgram.tenir ?: 0
                             exerciceData.exercice.numberOfRepetitionToDo =
-                                exerciceProgram.repetition ?: 0
+                                    exerciceProgram.repetition ?: 0
                             exerciceData.exercice.allowedTimeForExercice =
-                                exerciceProgram.duree ?: 0
+                                    exerciceProgram.duree ?: 0
                             exercice.movements?.forEachIndexed { index, movementValue ->
                                 val movement = Movement(
-                                    BodyPart.getEnumValue(movementValue.bodyPart0)?.ordinal!!,
-                                    BodyPart.getEnumValue(movementValue.bodyPart1)?.ordinal!!,
-                                    BodyPart.getEnumValue(movementValue.bodyPart2)?.ordinal!!
+                                        BodyPart.getEnumValue(movementValue.bodyPart0)?.ordinal!!,
+                                        BodyPart.getEnumValue(movementValue.bodyPart1)?.ordinal!!,
+                                        BodyPart.getEnumValue(movementValue.bodyPart2)?.ordinal!!
                                 )
                                 if (index == 0) {
                                     if (exerciceData.exercice.exerciceType == ExerciceType.HOLD) {
@@ -390,12 +388,12 @@ class MongoTransactions {
                                     }
                                     movement.startingAngle = exerciceProgram.angle?.debut ?: 0
                                     movement.isAngleClockWise =
-                                        exerciceProgram.angle?.isClockWise ?: false
+                                            exerciceProgram.angle?.isClockWise ?: false
                                 } else {
                                     movement.startingAngle = exerciceProgram.angle2?.debut ?: 0
                                     movement.endingAngle = exerciceProgram.angle2?.fin ?: 0
                                     movement.isAngleClockWise =
-                                        exerciceProgram.angle2?.isClockWise ?: false
+                                            exerciceProgram.angle2?.isClockWise ?: false
                                 }
                                 exerciceData.exercice.movementList.add(movement)
                             }
@@ -409,10 +407,10 @@ class MongoTransactions {
     }
 
     class BackgroundInsertEntry(
-        private val config: SyncConfiguration,
-        private val histoEntry: historique
+            private val config: SyncConfiguration,
+            private val histoEntry: historique
     ) :
-        Runnable {
+            Runnable {
         override fun run() {
             val realmInstance = Realm.getInstance(config)
 
@@ -425,10 +423,10 @@ class MongoTransactions {
     }
 
     class BackgroundInsertStatsEntry(
-        private val config: SyncConfiguration,
-        private val histoEntry: statistics
+            private val config: SyncConfiguration,
+            private val histoEntry: statistics
     ) :
-        Runnable {
+            Runnable {
         override fun run() {
             val realmInstance = Realm.getInstance(config)
             realmInstance.executeTransaction { transactionRealm ->
@@ -441,13 +439,13 @@ class MongoTransactions {
 
 
 open class historique(
-    _exerciceName: String = "",
-    _exerciceType: String = "",
-    _date: String? = null,
-    _duree: String = "",
-    _nbrRepetitionOrHoldTime: String = ""
+        _exerciceName: String = "",
+        _exerciceType: String = "",
+        _date: String? = null,
+        _duree: String = "",
+        _nbrRepetitionOrHoldTime: String = ""
 ) :
-    RealmObject() {
+        RealmObject() {
     @PrimaryKey
     var _id: ObjectId = ObjectId()
 
@@ -463,22 +461,22 @@ open class historique(
 }
 
 open class statistics(
-    _exerciceName: String = "",
-    _exerciceType: String = "",
-    _exerciceID: String = "",
-    _timestampOfRepetition: RealmList<simpleString> = RealmList<simpleString>(),
-    _numberOfRepetition: RealmList<simpleInt> = RealmList<simpleInt>(),
-    _holdTimeStartTime: RealmList<simpleString> = RealmList<simpleString>(),
-    _holdTimeEndTime: RealmList<simpleString> = RealmList<simpleString>(),
-    _maxAngleAmplitude: Int? = 0,
-    _initStartTime: String? = null,
-    _exerciceStartTime: String? = null,
-    _exerciceEndTime: String? = null,
-    _movement: RealmList<movement> = RealmList<movement>(),
-    _avgFPS: Double = -1.0,
-    _bodyPartPos: bodyPartPos? = bodyPartPos(),
+        _exerciceName: String = "",
+        _exerciceType: String = "",
+        _exerciceID: String = "",
+        _timestampOfRepetition: RealmList<simpleString> = RealmList<simpleString>(),
+        _numberOfRepetition: RealmList<simpleInt> = RealmList<simpleInt>(),
+        _holdTimeStartTime: RealmList<simpleString> = RealmList<simpleString>(),
+        _holdTimeEndTime: RealmList<simpleString> = RealmList<simpleString>(),
+        _maxAngleAmplitude: Int? = 0,
+        _initStartTime: String? = null,
+        _exerciceStartTime: String? = null,
+        _exerciceEndTime: String? = null,
+        _movement: RealmList<movement> = RealmList<movement>(),
+        _avgFPS: Double = -1.0,
+        _bodyPartPos: bodyPartPos? = bodyPartPos(),
 ) :
-    RealmObject() {
+        RealmObject() {
     @PrimaryKey
     var _id: ObjectId = ObjectId()
 
@@ -506,33 +504,33 @@ open class statistics(
 
 @RealmClass(embedded = true)
 open class movement(
-    _timestampState: RealmList<simpleString> = RealmList<simpleString>(),
-    _state: RealmList<simpleString> = RealmList<simpleString>(),
+        _timestampState: RealmList<simpleString> = RealmList<simpleString>(),
+        _state: RealmList<simpleString> = RealmList<simpleString>(),
 ) :
-    RealmObject() {
+        RealmObject() {
     var timestampState = _timestampState
     var state = _state
 }
 
 @RealmClass(embedded = true)
 open class bodyPartPos(
-    _HEAD: RealmList<pointPos>? = null,
-    _NECK: RealmList<pointPos>? = null,
-    _L_SHOULDER: RealmList<pointPos>? = null,
-    _L_ELBOW: RealmList<pointPos>? = null,
-    _L_WRIST: RealmList<pointPos>? = null,
-    _R_SHOULDER: RealmList<pointPos>? = null,
-    _R_ELBOW: RealmList<pointPos>? = null,
-    _R_WRIST: RealmList<pointPos>? = null,
-    _L_HIP: RealmList<pointPos>? = null,
-    _L_KNEE: RealmList<pointPos>? = null,
-    _L_ANKLE: RealmList<pointPos>? = null,
-    _R_HIP: RealmList<pointPos>? = null,
-    _R_KNEE: RealmList<pointPos>? = null,
-    _R_ANKLE: RealmList<pointPos>? = null,
-    _HIP: RealmList<pointPos>? = null
+        _HEAD: RealmList<pointPos>? = null,
+        _NECK: RealmList<pointPos>? = null,
+        _L_SHOULDER: RealmList<pointPos>? = null,
+        _L_ELBOW: RealmList<pointPos>? = null,
+        _L_WRIST: RealmList<pointPos>? = null,
+        _R_SHOULDER: RealmList<pointPos>? = null,
+        _R_ELBOW: RealmList<pointPos>? = null,
+        _R_WRIST: RealmList<pointPos>? = null,
+        _L_HIP: RealmList<pointPos>? = null,
+        _L_KNEE: RealmList<pointPos>? = null,
+        _L_ANKLE: RealmList<pointPos>? = null,
+        _R_HIP: RealmList<pointPos>? = null,
+        _R_KNEE: RealmList<pointPos>? = null,
+        _R_ANKLE: RealmList<pointPos>? = null,
+        _HIP: RealmList<pointPos>? = null
 ) :
-    RealmObject() {
+        RealmObject() {
     var HEAD = _HEAD
     var NECK = _NECK
     var L_SHOULDER = _L_SHOULDER
@@ -552,33 +550,33 @@ open class bodyPartPos(
 
 @RealmClass(embedded = true)
 open class pointPos(
-    _X: Int = 0,
-    _Y: Int = 0,
+        _X: Int = 0,
+        _Y: Int = 0,
 ) :
-    RealmObject() {
+        RealmObject() {
     var X = _X
     var Y = _Y
 }
 
 @RealmClass(embedded = true)
 open class simpleInt(
-    _value: Int = 0,
+        _value: Int = 0,
 ) :
-    RealmObject() {
+        RealmObject() {
     var value = _value
 }
 
 @RealmClass(embedded = true)
 open class simpleString(
-    _value: String = "",
+        _value: String = "",
 ) :
-    RealmObject() {
+        RealmObject() {
     var value = _value
 }
 
 open class programmes(
-    _nom: String = "",
-    _exercices: RealmList<exercices>? = null
+        _nom: String = "",
+        _exercices: RealmList<exercices>? = null
 ) : RealmObject() {
     @PrimaryKey
     var _id: ObjectId = ObjectId()
@@ -589,22 +587,22 @@ open class programmes(
 
 @RealmClass(embedded = true)
 open class exercices(
-    _nom: String = "",
-    _angle: angle? = null,
-    _angle2: angle? = null,
-    _description: String = "",
-    _exerciceId: String = "",
-    _repetition: Int? = null,
-    _tenir: Int? = null,
-    _tempo: tempo? = null,
-    _duree: Int? = null,
-    _dimanche: Boolean? = null,
-    _lundi: Boolean? = null,
-    _mardi: Boolean? = null,
-    _mercredi: Boolean? = null,
-    _jeudi: Boolean? = null,
-    _vendredi: Boolean? = null,
-    _samedi: Boolean? = null,
+        _nom: String = "",
+        _angle: angle? = null,
+        _angle2: angle? = null,
+        _description: String = "",
+        _exerciceId: String = "",
+        _repetition: Int? = null,
+        _tenir: Int? = null,
+        _tempo: tempo? = null,
+        _duree: Int? = null,
+        _dimanche: Boolean? = null,
+        _lundi: Boolean? = null,
+        _mardi: Boolean? = null,
+        _mercredi: Boolean? = null,
+        _jeudi: Boolean? = null,
+        _vendredi: Boolean? = null,
+        _samedi: Boolean? = null,
 ) : RealmObject() {
     var nom = _nom
     var angle = _angle
@@ -626,10 +624,10 @@ open class exercices(
 
 @RealmClass(embedded = true)
 open class angle(
-    _debut: Int = 0,
-    _fin: Int = 0,
-    _hold: Int? = null,
-    _isClockWise: Boolean = false,
+        _debut: Int = 0,
+        _fin: Int = 0,
+        _hold: Int? = null,
+        _isClockWise: Boolean = false,
 ) : RealmObject() {
     var debut = _debut
     var fin = _fin
@@ -639,9 +637,9 @@ open class angle(
 
 @RealmClass(embedded = true)
 open class tempo(
-    _max: Int = 0,
-    _min: Int = 0,
-    _value: Int = 0
+        _max: Int = 0,
+        _min: Int = 0,
+        _value: Int = 0
 ) : RealmObject() {
     var max = _max
     var min = _min
@@ -649,13 +647,13 @@ open class tempo(
 }
 
 open class exercicesPhysiotec(
-    _name: String = "",
-    _description: String = "",
-    _options: options? = null,
-    _imagePath: String = "",
-    _isActive: Boolean? = null,
-    _type: String = "",
-    _movements: RealmList<movements>? = null
+        _name: String = "",
+        _description: String = "",
+        _options: options? = null,
+        _imagePath: String = "",
+        _isActive: Boolean? = null,
+        _type: String = "",
+        _movements: RealmList<movements>? = null
 ) : RealmObject() {
     @PrimaryKey
     var _id: ObjectId = ObjectId()
@@ -671,9 +669,9 @@ open class exercicesPhysiotec(
 
 @RealmClass(embedded = true)
 open class movements(
-    _bodyPart0: String = "",
-    _bodyPart1: String = "",
-    _bodyPart2: String = ""
+        _bodyPart0: String = "",
+        _bodyPart1: String = "",
+        _bodyPart2: String = ""
 ) : RealmObject() {
     var bodyPart0 = _bodyPart0
     var bodyPart1 = _bodyPart1
@@ -682,9 +680,9 @@ open class movements(
 
 @RealmClass(embedded = true)
 open class options(
-    _repetition: Boolean = false,
-    _compteur: Boolean = false,
-    _angle: Boolean = false
+        _repetition: Boolean = false,
+        _compteur: Boolean = false,
+        _angle: Boolean = false
 ) : RealmObject() {
     var repetition = _repetition
     var compteur = _compteur

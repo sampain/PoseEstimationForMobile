@@ -30,17 +30,19 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
+        //Bypass the login activity if the user is already connected
         if (realmApp.currentUser() != null) {
+            //Verify that the user contains the custom data
             if (realmApp.currentUser()!!.customData == null) {
                 realmApp.currentUser()!!.logOutAsync {
                     Toast.makeText(
-                        baseContext,
-                        "Veuillez vous reconnecter",
-                        Toast.LENGTH_LONG
+                            baseContext,
+                            "Veuillez vous reconnecter",
+                            Toast.LENGTH_LONG
                     ).show()
                 }
             } else {
-
                 val welcome = getString(R.string.welcome)
                 val displayName = realmApp.currentUser()!!.customData["name"]
 
@@ -48,9 +50,9 @@ class LoginActivity : AppCompatActivity() {
                 startActivity(intent)
                 finish()
                 Toast.makeText(
-                    applicationContext,
-                    "$welcome $displayName",
-                    Toast.LENGTH_LONG
+                        applicationContext,
+                        "$welcome $displayName",
+                        Toast.LENGTH_LONG
                 ).show()
             }
         }
@@ -64,13 +66,14 @@ class LoginActivity : AppCompatActivity() {
         val loading = findViewById<ProgressBar>(R.id.loading)
         val createAccount = findViewById<TextView>(R.id.createAccount)
 
+        //Go to the CreateAccountActivity when clicked
         createAccount.setOnClickListener {
             val intent = Intent(this@LoginActivity, CreateAccountActivity::class.java)
             startActivity(intent)
         }
 
         loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
-            .get(LoginViewModel::class.java)
+                .get(LoginViewModel::class.java)
 
         loginViewModel.loginFormState.observe(this@LoginActivity, Observer {
             val loginState = it ?: return@Observer
@@ -108,16 +111,16 @@ class LoginActivity : AppCompatActivity() {
 
         username.afterTextChanged {
             loginViewModel.loginDataChanged(
-                username.text.toString(),
-                password.text.toString()
+                    username.text.toString(),
+                    password.text.toString()
             )
         }
 
         password.apply {
             afterTextChanged {
                 loginViewModel.loginDataChanged(
-                    username.text.toString(),
-                    password.text.toString()
+                        username.text.toString(),
+                        password.text.toString()
                 )
             }
 
@@ -136,6 +139,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    //Go to MainMenuActivity when the login succeeded
     private fun updateUiWithUser(model: LoggedInUserView) {
         val welcome = getString(R.string.welcome)
         val displayName = model.displayName
@@ -145,9 +149,9 @@ class LoginActivity : AppCompatActivity() {
         finish()
 
         Toast.makeText(
-            applicationContext,
-            "$welcome $displayName",
-            Toast.LENGTH_LONG
+                applicationContext,
+                "$welcome $displayName",
+                Toast.LENGTH_LONG
         ).show()
     }
 
@@ -161,9 +165,9 @@ class LoginActivity : AppCompatActivity() {
             if (!it.isSuccess) {
                 loginViewModel.login(null)
                 Toast.makeText(
-                    baseContext,
-                    it.error.errorMessage ?: "Mot de passe et/ou nom d'utilisateur invalide",
-                    Toast.LENGTH_LONG
+                        baseContext,
+                        it.error.errorMessage ?: "Mot de passe et/ou nom d'utilisateur invalide",
+                        Toast.LENGTH_LONG
                 ).show()
             } else {
                 val user = realmApp.currentUser()
@@ -177,18 +181,19 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    //Update patientId field in MongoDB patients collection with the realm user id
     private fun findAndUpdateCustomData(username: String, password: String) {
         val user = realmApp.currentUser() ?: return
 
         val mongoClient: MongoClient =
-            user.getMongoClient("mongodb-atlas")!!
+                user.getMongoClient("mongodb-atlas")!!
         val mongoDatabase: MongoDatabase =
-            mongoClient.getDatabase("iphysioBD-dev")!!
+                mongoClient.getDatabase("iphysioBD-dev")!!
         val mongoCollection: MongoCollection<Document> =
-            mongoDatabase.getCollection("patients")!!
+                mongoDatabase.getCollection("patients")!!
 
         mongoCollection.findOne(
-            Document("email", username)
+                Document("email", username)
         ).getAsync { findResult ->
             if (findResult.isSuccess) {
                 val document = findResult.get()
@@ -196,36 +201,36 @@ class LoginActivity : AppCompatActivity() {
                     user.logOutAsync {
                         loading.visibility = View.GONE
                         Toast.makeText(
-                            baseContext,
-                            "Il n'y a pas de compte pour faire le lien",
-                            Toast.LENGTH_LONG
+                                baseContext,
+                                "Il n'y a pas de compte pour faire le lien",
+                                Toast.LENGTH_LONG
                         ).show()
                     }
                 } else {
                     document["patientId"] = user.id.toString()
 
                     mongoCollection.updateOne(Document("email", username), document)
-                        .getAsync { updateResult ->
-                            if (updateResult.isSuccess) {
-                                logoutLogin(username, password)
-                            } else {
-                                Toast.makeText(
-                                    baseContext,
-                                    updateResult.error.errorMessage
-                                        ?: "Impossible de faire lien",
-                                    Toast.LENGTH_LONG
-                                ).show()
+                            .getAsync { updateResult ->
+                                if (updateResult.isSuccess) {
+                                    logoutLogin(username, password)
+                                } else {
+                                    Toast.makeText(
+                                            baseContext,
+                                            updateResult.error.errorMessage
+                                                    ?: "Impossible de faire lien",
+                                            Toast.LENGTH_LONG
+                                    ).show()
+                                }
                             }
-                        }
                 }
             } else {
                 user.logOutAsync {
                     loading.visibility = View.GONE
                     Toast.makeText(
-                        baseContext,
-                        findResult.error.errorMessage
-                            ?: "Il n'y a pas de compte pour faire le lien",
-                        Toast.LENGTH_LONG
+                            baseContext,
+                            findResult.error.errorMessage
+                                    ?: "Il n'y a pas de compte pour faire le lien",
+                            Toast.LENGTH_LONG
                     ).show()
                 }
             }

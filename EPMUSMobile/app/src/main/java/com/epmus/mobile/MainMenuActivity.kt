@@ -18,7 +18,7 @@ class MainMenuActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_menu)
 
-        // toolbar support
+        //Set toolbar
         setSupportActionBar(findViewById(R.id.toolbar_MainMenu))
 
         val program = findViewById<Button>(R.id.activity_program)
@@ -40,6 +40,7 @@ class MainMenuActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        //Initialize MongoTransactions
         MongoTransactions
     }
 
@@ -48,6 +49,7 @@ class MainMenuActivity : AppCompatActivity() {
         return true
     }
 
+    //Toolbar options
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.action_settings -> {
             val intent = Intent(this, SettingsActivity::class.java)

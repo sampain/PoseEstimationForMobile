@@ -30,6 +30,7 @@ class CreateAccountActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_account)
 
+        //Set toolbar
         val toolbar = findViewById<Toolbar>(R.id.toolbar_Create)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -40,7 +41,7 @@ class CreateAccountActivity : AppCompatActivity() {
         val createAccoutButtonDisabled = findViewById<Button>(R.id.createAccountButtonDisabled)
 
         loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
-            .get(LoginViewModel::class.java)
+                .get(LoginViewModel::class.java)
 
         loginViewModel.loginFormState.observe(this, Observer {
             val loginState = it ?: return@Observer
@@ -75,16 +76,16 @@ class CreateAccountActivity : AppCompatActivity() {
 
         username.afterTextChanged {
             loginViewModel.loginDataChanged(
-                username.text.toString(),
-                password.text.toString()
+                    username.text.toString(),
+                    password.text.toString()
             )
         }
 
         password.apply {
             afterTextChanged {
                 loginViewModel.loginDataChanged(
-                    username.text.toString(),
-                    password.text.toString()
+                        username.text.toString(),
+                        password.text.toString()
                 )
             }
 
@@ -103,14 +104,16 @@ class CreateAccountActivity : AppCompatActivity() {
         }
     }
 
+    //Toolbar options
     override fun onOptionsItemSelected(item: MenuItem) =
-        when (item.itemId) {
-            android.R.id.home -> {
-                finish()
-                true
+            when (item.itemId) {
+                //Back arrow
+                android.R.id.home -> {
+                    finish()
+                    true
+                }
+                else -> super.onOptionsItemSelected(item)
             }
-            else -> super.onOptionsItemSelected(item)
-        }
 
     private fun showLoginFailed(@StringRes errorString: Int) {
         Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()
@@ -123,10 +126,10 @@ class CreateAccountActivity : AppCompatActivity() {
             } else {
                 loadingCreate.visibility = View.GONE
                 Toast.makeText(
-                    baseContext,
-                    registerResult.error.errorMessage
-                        ?: "Compte déjà existant / La connexion n'a pas réussi",
-                    Toast.LENGTH_LONG
+                        baseContext,
+                        registerResult.error.errorMessage
+                                ?: "Compte déjà existant / La connexion n'a pas réussi",
+                        Toast.LENGTH_LONG
                 ).show()
             }
         }
@@ -139,9 +142,9 @@ class CreateAccountActivity : AppCompatActivity() {
             } else {
                 loadingCreate.visibility = View.GONE
                 Toast.makeText(
-                    baseContext,
-                    loginResult.error.errorMessage ?: "La connexion n'a pas réussi",
-                    Toast.LENGTH_LONG
+                        baseContext,
+                        loginResult.error.errorMessage ?: "La connexion n'a pas réussi",
+                        Toast.LENGTH_LONG
                 ).show()
             }
         }
@@ -150,14 +153,14 @@ class CreateAccountActivity : AppCompatActivity() {
     private fun findAndUpdateCustomData(username: String, password: String) {
         val user = realmApp.currentUser()
         val mongoClient: MongoClient =
-            user?.getMongoClient("mongodb-atlas")!!
+                user?.getMongoClient("mongodb-atlas")!!
         val mongoDatabase: MongoDatabase =
-            mongoClient.getDatabase("iphysioBD-dev")!!
+                mongoClient.getDatabase("iphysioBD-dev")!!
         val mongoCollection: MongoCollection<Document> =
-            mongoDatabase.getCollection("patients")!!
+                mongoDatabase.getCollection("patients")!!
 
         mongoCollection.findOne(
-            Document("email", username)
+                Document("email", username)
         ).getAsync { findResult ->
             if (findResult.isSuccess) {
                 val document = findResult.get()
@@ -165,44 +168,45 @@ class CreateAccountActivity : AppCompatActivity() {
                     user.logOutAsync {
                         loadingCreate.visibility = View.GONE
                         Toast.makeText(
-                            baseContext,
-                            "Il n'y a pas de compte pour faire le lien",
-                            Toast.LENGTH_LONG
+                                baseContext,
+                                "Il n'y a pas de compte pour faire le lien",
+                                Toast.LENGTH_LONG
                         ).show()
                     }
                 } else {
                     document["patientId"] = user.id.toString()
 
                     mongoCollection.updateOne(Document("email", username), document)
-                        .getAsync { updateResult ->
-                            if (updateResult.isSuccess) {
-                                logoutLogin(username, password)
-                            } else {
-                                user.logOutAsync {
-                                    Toast.makeText(
-                                        baseContext,
-                                        updateResult.error.errorMessage
-                                            ?: "Impossible de faire lien",
-                                        Toast.LENGTH_LONG
-                                    ).show()
+                            .getAsync { updateResult ->
+                                if (updateResult.isSuccess) {
+                                    logoutLogin(username, password)
+                                } else {
+                                    user.logOutAsync {
+                                        Toast.makeText(
+                                                baseContext,
+                                                updateResult.error.errorMessage
+                                                        ?: "Impossible de faire lien",
+                                                Toast.LENGTH_LONG
+                                        ).show()
+                                    }
                                 }
                             }
-                        }
                 }
             } else {
                 user.logOutAsync {
                     loadingCreate.visibility = View.GONE
                     Toast.makeText(
-                        baseContext,
-                        findResult.error.errorMessage
-                            ?: "Il n'y a pas de compte pour faire le lien",
-                        Toast.LENGTH_LONG
+                            baseContext,
+                            findResult.error.errorMessage
+                                    ?: "Il n'y a pas de compte pour faire le lien",
+                            Toast.LENGTH_LONG
                     ).show()
                 }
             }
         }
     }
 
+    //Logout and Login to be sure that the custom data is loaded correctly after updating patientId
     private fun logoutLogin(username: String, password: String) {
         realmApp.currentUser()?.logOutAsync { logoutUser ->
             if (logoutUser.isSuccess) {
@@ -218,15 +222,15 @@ class CreateAccountActivity : AppCompatActivity() {
 
                         if (realmApp.currentUser()?.customData?.get("_id") == null) {
                             Toast.makeText(
-                                applicationContext,
-                                "Il y a eu une erreur lors de la création du compte",
-                                Toast.LENGTH_LONG
+                                    applicationContext,
+                                    "Il y a eu une erreur lors de la création du compte",
+                                    Toast.LENGTH_LONG
                             ).show()
                         } else {
                             Toast.makeText(
-                                applicationContext,
-                                "$welcome ${user?.customData?.get("name").toString()}",
-                                Toast.LENGTH_LONG
+                                    applicationContext,
+                                    "$welcome ${user?.customData?.get("name").toString()}",
+                                    Toast.LENGTH_LONG
                             ).show()
                         }
                     }
