@@ -41,9 +41,11 @@ class ChatLogActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_log)
 
+        //Setup toolbar
         val toolbar = findViewById<Toolbar>(R.id.toolbar_ChatLogMessaging)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         recyclerview_chat_log.adapter = adapter
 
         supportActionBar?.title = toUser.nickname
@@ -60,6 +62,7 @@ class ChatLogActivity : AppCompatActivity() {
         return true
     }
 
+    //Toolbar options
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.action_settings -> {
             val intent = Intent(this, SettingsActivity::class.java)
@@ -128,6 +131,7 @@ class ChatLogActivity : AppCompatActivity() {
     private fun performSendMessage() {
         val text = Text_chat_log.text.toString()
 
+        //Prevent from sending messages with only spaces
         if (text.trim().isEmpty()) {
             return
         }

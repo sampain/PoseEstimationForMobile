@@ -20,6 +20,7 @@ class MessagingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_messaging)
 
+        //Set toolbar
         setSupportActionBar(findViewById(R.id.toolbar_Messaging))
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -33,7 +34,9 @@ class MessagingActivity : AppCompatActivity() {
         return true
     }
 
+    //Toolbar options
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        //Back arrow
         android.R.id.home -> {
             finish()
             true

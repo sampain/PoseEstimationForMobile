@@ -4,7 +4,6 @@ import io.realm.mongodb.User
 
 class LoginRepository(val dataSource: LoginDataSource) {
 
-    // in-memory cache of the loggedInUser object
     var user: User? = null
         private set
 
@@ -13,7 +12,6 @@ class LoginRepository(val dataSource: LoginDataSource) {
     }
 
     fun login(user: User?): Result<User> {
-        // handle login
         val result = dataSource.login(user)
 
         if (result is Result.Success) {

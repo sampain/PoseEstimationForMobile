@@ -32,9 +32,10 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.FutureTask
 
+// Class that handles the read and write with Realm Sync
 class MongoTransactions {
-    companion object {
 
+    companion object {
         var exerciseHistory: MutableList<HistoryData> = mutableListOf()
         var exerciseList: MutableList<ExerciseData> = mutableListOf()
         var physioList: MutableList<MessagingUser> = mutableListOf()
