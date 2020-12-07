@@ -21,7 +21,7 @@ Par contre, il est possible d'utiliser un émulateur x86 pour tester le restant 
 Pour ce faire, commentez ceci dans le build.gradle de l'application
 ```
 ndk {
-    //Comments this line to test UI with Emulator x86
+    //Comment out this line to test the UI with a x86 Emulator
     abiFilters 'armeabi-v7a', 'arm64-v8a'
 }
 ```
