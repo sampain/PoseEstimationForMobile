@@ -2,7 +2,6 @@ package com.epmus.mobile.ui.login
 
 
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.click
@@ -34,11 +33,9 @@ class Test_messaging {
             onView(withText("Déconnexion")).check(matches(isDisplayed()))
             onView(withText("Déconnexion")).perform(click())
             Thread.sleep(1000)
-        }
-        catch (e: Exception){
+        } catch (e: Exception) {
 
-        }
-        finally {
+        } finally {
             // Connection
             onView(withId(R.id.loginDisabled)).check(matches(isDisplayed()))
             onView(withId(R.id.username)).perform(typeText("a@a.com"))

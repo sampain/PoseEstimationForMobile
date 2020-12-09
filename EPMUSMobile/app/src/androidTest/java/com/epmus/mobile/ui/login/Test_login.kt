@@ -30,11 +30,9 @@ class Test_login {
             onView(withText("Déconnexion")).check(matches(isDisplayed()))
             onView(withText("Déconnexion")).perform(click())
             Thread.sleep(1000)
-        }
-        catch (e: Exception){
+        } catch (e: Exception) {
 
-        }
-        finally {
+        } finally {
             // Connection
             onView(withId(R.id.loginDisabled)).check(matches(isDisplayed()))
             onView(withId(R.id.username)).perform(typeText("a@a.com"))

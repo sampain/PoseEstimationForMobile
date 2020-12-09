@@ -34,11 +34,9 @@ class Test_exercises {
             onView(withText("Déconnexion")).check(matches(isDisplayed()))
             onView(withText("Déconnexion")).perform(click())
             Thread.sleep(1000)
-        }
-        catch (e: Exception){
+        } catch (e: Exception) {
 
-        }
-        finally {
+        } finally {
             // Connection
             onView(withId(R.id.loginDisabled)).check(matches(isDisplayed()))
             onView(withId(R.id.username)).perform(typeText("a@a.com"))
@@ -57,9 +55,16 @@ class Test_exercises {
             pressBack()
             // Access to one exercice
             onView(withText("Plier le bras gauche (Rep)")).check(matches(isDisplayed()))
-            onView(withId(R.id.program_list)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
+            onView(withId(R.id.program_list)).perform(
+                actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                    0,
+                    click()
+                )
+            )
             onView(withId(R.id.program_detail)).check(matches(isDisplayed()))
-            onView(withText("Assoyez-vous bien droit sur une chaise avec le bras allongé le long du corps.  Pliez le coude en gardant la paume de votre main vers le haut.  Redescendez lentement et répétez.")).check(matches(isDisplayed()))
+            onView(withText("Assoyez-vous bien droit sur une chaise avec le bras allongé le long du corps.  Pliez le coude en gardant la paume de votre main vers le haut.  Redescendez lentement et répétez.")).check(
+                matches(isDisplayed())
+            )
             onView(withId(R.id.fab_play)).check(matches(isDisplayed()))
             // Disconnection
             pressBack()
