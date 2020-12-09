@@ -20,7 +20,7 @@ import org.junit.runner.RunWith
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
-class Test_exercices {
+class Test_exercises {
 
     @Rule
     @JvmField
@@ -39,42 +39,35 @@ class Test_exercices {
 
         }
         finally {
-            // Connexion
-            onView(withId(R.id.login)).check(matches(isDisplayed()))
-            onView(withId(R.id.username)).perform(typeText("admin1"))
-            onView(withId(R.id.password)).perform(typeText("admin1"))
+            // Connection
+            onView(withId(R.id.loginDisabled)).check(matches(isDisplayed()))
+            onView(withId(R.id.username)).perform(typeText("a@a.com"))
+            onView(withId(R.id.password)).perform(typeText("aaaaaa"))
             onView(withId(R.id.login)).perform(click())
             Thread.sleep(1000)
-            // Accès au programme d'exercice
+            // Access to exercise program
             onView(withId(R.id.activity_program)).check(matches(isDisplayed()))
             onView(withId(R.id.activity_program)).perform(click())
             onView(withId(R.id.fab_messaging)).check(matches(isDisplayed()))
             onView(withId(R.id.program_list)).check(matches(isDisplayed()))
             onView(allOf(isDisplayed(), withId(R.id.playButton)))
-
-            // checks des boutons non fonctionnels // A DELETE
-            // onView(withId(R.id.playButton)).check(matches(isDisplayed()))
-            // onView(withContentDescription("Play Button")).check(matches(isDisplayed()))
-            // onView(allOf(withId(R.id.playButton), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).check(matches(isDisplayed()))
-            // onData(withId(R.id.playButton)).inAdapterView(withId(R.id.program_list)).atPosition(0).check(matches(isDisplayed()))
-
-            // Accès à la messagerie
+            // Access to messaging
             onView(withId(R.id.fab_messaging)).perform(click())
             onView(withId(R.id.recyclerview_newmessage)).check(matches(isDisplayed()))
             pressBack()
-            // Accès à un exercice
+            // Access to one exercice
+            onView(withText("Plier le bras gauche (Rep)")).check(matches(isDisplayed()))
             onView(withId(R.id.program_list)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
             onView(withId(R.id.program_detail)).check(matches(isDisplayed()))
+            onView(withText("Assoyez-vous bien droit sur une chaise avec le bras allongé le long du corps.  Pliez le coude en gardant la paume de votre main vers le haut.  Redescendez lentement et répétez.")).check(matches(isDisplayed()))
             onView(withId(R.id.fab_play)).check(matches(isDisplayed()))
-            // Deconnexion
+            // Disconnection
             pressBack()
             pressBack()
             onView(withContentDescription("More options")).check(matches(isDisplayed()))
             onView(withContentDescription("More options")).perform(click())
             onView(withText("Déconnexion")).check(matches(isDisplayed()))
             onView(withText("Déconnexion")).perform(click())
-            Thread.sleep(1000)
-            onView(withId(R.id.login)).check(matches(isDisplayed()))
         }
     }
 }
