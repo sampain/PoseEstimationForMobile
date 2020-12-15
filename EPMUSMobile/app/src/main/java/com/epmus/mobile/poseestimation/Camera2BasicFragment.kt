@@ -1141,9 +1141,7 @@ class Camera2BasicFragment : Fragment() {
         cleanStats.holdtime = exerciseData.exercise.targetHoldTime.toString()
 
         MongoTransactions.historyEntry(cleanStats)
-
-        //Todo: Uncomment this line to send the statistics to MongoDB
-        //MongoTransactions.insertStatistics(cleanStats)
+        MongoTransactions.insertStatistics(cleanStats)
     }
 
     private fun showDebugUI(text: String) {

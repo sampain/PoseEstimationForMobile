@@ -111,7 +111,7 @@ class MongoTransactions {
 
         fun insertStatistics(stats: ExerciseStatistics) {
             //TODO Pretreat the data, realm will have an error if the realmlist is too long
-            val maxArray = 50
+            val maxArray = 150
 
             val HEAD: RealmList<pointPos> = RealmList<pointPos>()
             val NECK: RealmList<pointPos> = RealmList<pointPos>()
